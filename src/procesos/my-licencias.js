@@ -6,6 +6,7 @@ import { UtilsMixin } from '../mixins/utils-mixin.js';
 
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 
 class MyLicencias extends UtilsMixin(PolymerElement) {
     static get template() {
@@ -16,23 +17,23 @@ class MyLicencias extends UtilsMixin(PolymerElement) {
                 }
             </style>
             
-            <div class="card">
+            <div class="separador">
                 <h1>seguimiento</h1>
-
                 
-                <paper-input label="gestor"></paper-input>
+                <vaadin-combo-box placeholder="gestor asignado" selected-item="{{gestor}}" items="[[listaGestores]]"
+                item-value-path="codigo" item-label-path="nombre"></vaadin-combo-box>
                 
-                <paper-input label="aplica srv"></paper-input>
+                <paper-checkbox checked>aplica SRV</paper-checkbox>
                 
                 <paper-input label="usuario"></paper-input>
                 
                 <paper-input label="contraseña"></paper-input>
                 
-                <paper-input label="fecha de ingreso"></paper-input>
+                <vaadin-date-picker label="fecha de ingreso"></vaadin-date-picker>
                 
-                <paper-input label="envio de acuse"></paper-input>
+                <paper-checkbox checked>envio de acuse</paper-checkbox>
                 
-                <paper-input label="subsanado"></paper-input>
+                <paper-checkbox checked>subsanado</paper-checkbox>
                 
                 <paper-input label="impresion de carpeta"></paper-input>
                 
@@ -44,20 +45,19 @@ class MyLicencias extends UtilsMixin(PolymerElement) {
                 
                 <paper-input label="NRA"></paper-input>
                 
-                <paper-input label="respaldo en drive"></paper-input>
+                <paper-checkbox checked>respaldo en drive</paper-checkbox>
+                
 
             </div>
 
-            <div class="card">
+            <div class="separador">
                 <h1>estatus del sa en el portal</h1>
                 
-                <paper-input label="estatus en portal ope"></paper-input>
+                <vaadin-combo-box label="estatus portal OPE" selected-item="{{estatus_OPE}}" items="[[estatus_lf]]"
+                item-value-path="nombre" item-label-path="significado"></vaadin-combo-box>
                 
-                <paper-input label="fecha ultimo estatus"></paper-input>
+                <vaadin-date-picker label="fecha ultimo estatus"></vaadin-date-picker>
                 
-                
-                
-
             </div>
 
         `;

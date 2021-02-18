@@ -34,21 +34,7 @@ let internalMixinUtils = function(superClass) {
 					{nombre:"BELEN HERNÁNDEZ TIMOTEO",codigo:"BELN"}
 
 				]},
-
-					
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
+				
 				estatus_lf:{type:Array, notify:true,value:[
 					{nombre:"RECEPCIÓN DE INFORMACIÓN",significado:"EN PROCESO DE ASIGNACIÓN DE EVALUADOR POR ASEA"},
 					{nombre:"EVALUACIÓN/ELABORACIÓN DE RESPUESTA",significado:"EN PROCESO DE EVALUACIÓN DE LA SOLICITUD Y ELABORACIÓN DE OFICIO DE RESPUESTA."},
@@ -71,17 +57,7 @@ let internalMixinUtils = function(superClass) {
 					{nombre:"SISTEMAS DETENIDOS",significado:"-"},
 					{nombre:"ACTUALIZACIÓN DE CONTRASEÑA",significado:"-"},
 				]},
-
-		
-		
-	 	
-		
- 		
- 		
-		
-		
-		
-
+				
 				_ventaPor:{type:Array, notify:true, value:[
 					{codigo:"GK",nombre:"GRUPO KHALIA"},
 					{codigo:"GSINT",nombre:"GAS INTEGRAL"},
@@ -90,6 +66,7 @@ let internalMixinUtils = function(superClass) {
 					{codigo:"PTEC",nombre:"PETROTEC"},
 					{codigo:"JC",nombre:"JAIME"},
 				]},
+				
 				_estados:{type:Array, notify:true, value:[
 					{nombre:"AGUASCALIENTES",codigo:"AGS"},
 					{nombre:"BAJA CALIFORNIA NORTE",codigo:"BCN"},

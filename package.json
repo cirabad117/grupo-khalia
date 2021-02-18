@@ -32,6 +32,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-combo-box": "^6.0.0",
     "@vaadin/vaadin-date-picker": "^5.0.0",
+    "@vaadin/vaadin-select": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.0.0"
   },
   "devDependencies": {
