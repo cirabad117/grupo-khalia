@@ -15,6 +15,9 @@ class MyNuevoCliente extends UtilsMixin(DialogLayoutMixin(PolymerElement)) {
                 }
             </style>
 
+            <vaadin-combo-box placeholder="venta por" selected-item="{{objVenta}}" items="[[_ventaPor]]"
+            item-value-path="codigo" item-label-path="nombre"></vaadin-combo-box>
+
             
             <paper-input label="número de estación" value="{{noEs}}"></paper-input>
             
@@ -22,6 +25,8 @@ class MyNuevoCliente extends UtilsMixin(DialogLayoutMixin(PolymerElement)) {
             
             <vaadin-combo-box placeholder="Seleccione un estado" selected-item="{{estado}}" items="[[_estados]]"
             item-value-path="codigo" item-label-path="nombre"></vaadin-combo-box>
+
+            
 
             
             <paper-input label="Nombre" value="{{nombre}}"></paper-input>
