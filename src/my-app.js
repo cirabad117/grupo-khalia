@@ -104,6 +104,7 @@ class MyApp extends NavigationMixin(PolymerElement) {
 						<my-inicio name="inicio"></my-inicio>
 						<my-clientes-main name="lista-clientes"></my-clientes-main>
 						<my-cliente name="cliente"></my-cliente>
+						<my-nuevo-cliente name="nuevo-cliente"></my-nuevo-cliente>
 						
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
@@ -119,7 +120,7 @@ class MyApp extends NavigationMixin(PolymerElement) {
 				reflectToAttribute: true,
 				observer: '_pageChanged'
 			},
-			paginas:{type:Array, notify:true, value:['inicio','lista-clientes','cliente']},
+			paginas:{type:Array, notify:true, value:['inicio','lista-clientes','cliente','nuevo-cliente']},
 			routeData: Object,
 			subroute: Object
 		};
@@ -177,6 +178,9 @@ class MyApp extends NavigationMixin(PolymerElement) {
 			
 			case 'cliente':
 				import('./clientes/my-cliente.js');
+				break;
+			case 'nuevo-cliente':
+				import ('./clientes/my-nuevo-cliente.js');
 				break;
 			
 			case 'view404':

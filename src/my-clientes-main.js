@@ -65,24 +65,25 @@ class MyClientesMain extends PolymerElement {
     }
 
     abreNuevoCliente(){
-        PolymerUtils.Dialog.createAndShow({
-			type: "modal",
-			element:"my-nuevo-cliente",
+        NavigationUtils.navigate("nuevo-cliente");
+        // PolymerUtils.Dialog.createAndShow({
+		// 	type: "modal",
+		// 	element:"my-nuevo-cliente",
 			
-			style:"width:400px;max-width:95%;",
-			positiveButton: {
-                text: "Crear",
-                action: function(dialog, element) {
-                    element.guardaCliente();
-                }
-            },
-            negativeButton: {
-                text: "Cerrar",
-                action: function(dialog, element) {
-                    dialog.close();
-                }
-            }
-		});
+		// 	style:"width:400px;max-width:95%;",
+		// 	positiveButton: {
+        //         text: "Crear",
+        //         action: function(dialog, element) {
+        //             element.guardaCliente();
+        //         }
+        //     },
+        //     negativeButton: {
+        //         text: "Cerrar",
+        //         action: function(dialog, element) {
+        //             dialog.close();
+        //         }
+        //     }
+		// });
     }
 }
 
