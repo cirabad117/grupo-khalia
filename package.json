@@ -29,6 +29,7 @@
     "@polymer/paper-input": "^3.2.1",
     "@polymer/paper-item": "^3.0.1",
     "@polymer/paper-tabs": "^3.1.0",
+    "@polymer/paper-toast": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-combo-box": "^6.0.0",
     "@vaadin/vaadin-date-picker": "^5.0.0",

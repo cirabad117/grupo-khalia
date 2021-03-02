@@ -7,6 +7,7 @@ import { NotificacionMixin } from '../mixins/notificacion-mixin.js';
 import '@polymer/paper-input/paper-input.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
 
 import './item-contacto.js';
 
@@ -41,19 +42,23 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
                     </div>
                     
                     <div class="col-md-6">
-                        <h6>contacto del cliente</h6>
+                        <div style="display:flex; align-items:center;justify-content:space-between;">
+                            <div>
+                                <h6>contacto del cliente</h6>
+                                <template is="dom-if" if="{{!revisaContactos(listaContactos,listaContactos.*)}}">
+                                    <p>no hay contactos registrados</p>
+                                </template>
+                            </div>
+                            <!--<paper-button raised on-click="toggleContacto"> agregar contacto</paper-button>-->
+                            <paper-icon-button style="border:solid 1px var(--paper-blue-500);border-radius:50%;" icon="add" on-click="toggleContacto"></paper-icon-button>
+                        </div>
                         
-                        <template is="dom-if" if="{{!revisaContactos(listaContactos,listaContactos.*)}}">
-                            <p>no hay contactos registrados</p>
-                        </template>
-
                         <paper-listbox>
                             <template is="dom-repeat" items="[[listaContactos]]">
                                 <item-contacto datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
                             </template>
                         </paper-listbox>
                         
-                        <paper-button raised on-click="toggleContacto"> agregar contacto</paper-button>
                         
                         <template is="dom-if" if="[[bolContacto]]">
 
@@ -147,6 +152,7 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 
 
         this.push("listaContactos",nuevo);
+        this.limpiaCamposContacto();
     }
 
     guardaCliente(){
@@ -214,6 +220,13 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
         this.set("estado",null);
         this.set("objVenta",null);
         this.set("listaContactos",[]);
+        this.limpiaCamposContacto();
+    }
+
+    limpiaCamposContacto(){
+        this.set("nombre",null);
+        this.set("tel",null);
+        this.set("email",null);
     }
 
     regresa(){
