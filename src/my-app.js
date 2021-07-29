@@ -6,7 +6,7 @@
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
- */
+*/
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
@@ -22,6 +22,11 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
+
 import './my-icons.js';
 
 // Gesture events like tap and track generated from touch will not be
@@ -85,8 +90,17 @@ class MyApp extends NavigationMixin(PolymerElement) {
 				<app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
 					<app-toolbar>Menu</app-toolbar>
 					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-						<a name="inicio" href="[[rootPath]]inicio">Inicio</a>
-						<a name="lista-clientes" href="[[rootPath]]lista-clientes">Mis Clientes</a>
+						<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+						<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+						<hr>
+						<a name="clientes" href="[[rootPath]]clientes">Administración y ventas</a>
+						<a name="clientes" href="[[rootPath]]clientes">SASISOPA</a>
+						<a name="clientes" href="[[rootPath]]clientes">Sistemas de gestion de medicion</a>
+						<a name="clientes" href="[[rootPath]]clientes">emisiones a la atmosfera</a>
+						<a name="clientes" href="[[rootPath]]clientes">seguridad</a>
+						<hr>
+						<a name="clientes" href="[[rootPath]]clientes">Configuracion</a>
+						<!-- <a name="lista-clientes" href="[[rootPath]]lista-clientes">Mis Clientes</a> -->
 					</iron-selector>
 				</app-drawer>
 
@@ -101,10 +115,14 @@ class MyApp extends NavigationMixin(PolymerElement) {
 					</app-header>
 
 					<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-						<my-inicio name="inicio"></my-inicio>
-						<my-clientes-main name="lista-clientes"></my-clientes-main>
+						<my-prospectos-main name="prospectos"></my-prospectos-main>
+						<my-prospecto name="prospecto"></my-prospecto>
+						<my-clientes-main name="clientes"></my-clientes-main>
 						<my-cliente name="cliente"></my-cliente>
-						<my-nuevo-cliente name="nuevo-cliente"></my-nuevo-cliente>
+						<!-- <my-inicio name="inicio"></my-inicio>
+						<my-clientes-main name="lista-clientes"></my-clientes-main>
+						
+						<my-nuevo-cliente name="nuevo-cliente"></my-nuevo-cliente> -->
 						
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
@@ -120,7 +138,7 @@ class MyApp extends NavigationMixin(PolymerElement) {
 				reflectToAttribute: true,
 				observer: '_pageChanged'
 			},
-			paginas:{type:Array, notify:true, value:['inicio','lista-clientes','cliente','nuevo-cliente']},
+			paginas:{type:Array, notify:true, value:['prospecto','prospectos','clientes','cliente']},
 			routeData: Object,
 			subroute: Object
 		};
@@ -149,7 +167,7 @@ class MyApp extends NavigationMixin(PolymerElement) {
 		 // If no page was found in the route data, page will be an empty string.
 		 // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
 		if (!page) {
-			this.page = 'inicio';
+			this.page = 'prospectos';
 		} else if (this.paginas.indexOf(page) !== -1) {
 			this.page = page;
 		} else {
@@ -168,20 +186,29 @@ class MyApp extends NavigationMixin(PolymerElement) {
 		// Note: `polymer build` doesn't like string concatenation in the import
 		// statement, so break it up.
 		switch (page) {
-			case 'inicio':
-				import('./my-inicio.js');
-				break;
-
-			case 'lista-clientes':
+			case 'prospectos':
+				import('./my-prospectos-main.js');
+			break;
+			case 'prospecto':
+				import('./prospectos/my-prospecto.js');
+			break;
+			case 'clientes':
 				import('./my-clientes-main.js');
-				break;
+			break;
+			// case 'inicio':
+			// 	import('./my-inicio.js');
+			// 	break;
+
+			// case 'lista-clientes':
+			// 	import('./my-clientes-main.js');
+			// 	break;
 			
 			case 'cliente':
 				import('./clientes/my-cliente.js');
-				break;
-			case 'nuevo-cliente':
-				import ('./clientes/my-nuevo-cliente.js');
-				break;
+			break;
+			// case 'nuevo-cliente':
+			// 	import ('./clientes/my-nuevo-cliente.js');
+			// 	break;
 			
 			case 'view404':
 				import('./my-view404.js');

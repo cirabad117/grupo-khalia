@@ -3,13 +3,13 @@ import { UtilsMixin } from '../mixins/utils-mixin.js';
 import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
 import { NotificacionMixin } from '../mixins/notificacion-mixin.js';
 
-
+import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 
-import './item-contacto.js';
+//import './item-contacto.js';
 
 import '../bootstrap.js';
 
@@ -32,8 +32,7 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 
                         <paper-input id="txtEstacion" label="número de estación" value="{{noEs}}" error-message="valor inválido"></paper-input>
                         
-                        <vaadin-combo-box id="comboEstado" placeholder="Estado" selected-item="{{estado}}" items="[[_estados]]"
-                        item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+                        
 
                         <vaadin-combo-box id="comboVenta"  placeholder="venta por" selected-item="{{objVenta}}" items="[[_ventaPor]]"
                         item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
@@ -50,7 +49,7 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
                                 </template>
                             </div>
                             <!--<paper-button raised on-click="toggleContacto"> agregar contacto</paper-button>-->
-                            <paper-icon-button style="border:solid 1px var(--paper-blue-500);border-radius:50%;" icon="add" on-click="toggleContacto"></paper-icon-button>
+                            <paper-icon-button style="border:solid 1px var(--paper-blue-500);border-radius:50%;" icon="[[devuelveIcono(bolContacto)]]" on-click="toggleContacto"></paper-icon-button>
                         </div>
                         
                         <paper-listbox>
@@ -97,7 +96,7 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
             nombre:{type:String, notify:true},
             email:{type:String, notify:true},
             tel:{type:String, notify:true},
-            listaContactos:{type:Array, notify:true, value:[]},
+           
             bolContacto:{type:Boolean, notify:true, value:false}
         }
     }
@@ -112,6 +111,14 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 
     toggleContacto(){
         this.set("bolContacto",!this.bolContacto);
+    }
+
+    devuelveIcono(bol){
+        if(bol==true){
+            return "clear";
+        }else{
+            return "add";
+        }
     }
 
     revisaContactos(arr){

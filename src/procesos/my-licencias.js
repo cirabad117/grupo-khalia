@@ -69,6 +69,8 @@ class MyLicencias extends UtilsMixin(PolymerElement) {
 
     static get properties() {
         return {
+           cliente:{type:String, notify:true, observer:"_consultaDoc"},
+           objetoDoc:{type:Object, notify:true}
 
         }
     }
@@ -79,6 +81,27 @@ class MyLicencias extends UtilsMixin(PolymerElement) {
 
     ready() {
         super.ready();
+    }
+
+    _consultaDoc(id){
+        if(id && id!=null && id.trim()!=""){
+            
+            if(this.lastAbonosQuery){
+                this.lastAbonosQuery();
+            }
+            
+            this.set("lastAbonosQuery",DataHelper.queryDocument(this,{
+                doc: "_clientes-khalia/"+id+"/documentos/licencia-f",
+                observer:function(obj){
+                    if(obj){
+                        t.set("objetoDoc",obj);
+                        
+                    }else{
+                        t.set("objetoDoc",null);
+                    }
+                }
+            }));
+        }
     }
 }
 

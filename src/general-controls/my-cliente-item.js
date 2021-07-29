@@ -3,6 +3,8 @@ import { UtilsMixin } from '../mixins/utils-mixin';
 import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-item/paper-item-body';
+
+import '../clientes/my-crea-cliente.js';
 class MyClienteItem extends UtilsMixin(PolymerElement) {
     
     static get template() {
@@ -42,18 +44,26 @@ class MyClienteItem extends UtilsMixin(PolymerElement) {
                     height: 48px !important;
                     margin-right: 8px;
                 }
+
+                .datos:hover{
+                    cursor:pointer;
+                }
 			</style>
             
             <div class="carta carta-1">
                 <paper-icon-item>
                     <!-- <div class="avatar" style$="background-image: url('[[pedido.restaurantLogo.url]]');" slot="item-icon"></div> -->
-                    <paper-item-body two-line>
-                        <div>[[cliente.razonSocial]]</div>
+                    <paper-item-body class="datos" two-line on-click="disparaAccion">
+                        <div>[[cliente.razon]] - [[cliente.alias]]</div>
                         <div secondary>
                             fecha de creación: [[PolymerUtils_getTimeString(cliente._timestamp)]]
                         </div>
                     </paper-item-body>
-                    <div  style="color: var(--paper-blue-grey-600); font-weight: 500; font-size: 20px;">[[cliente.nombreCliente]]</div>
+
+                    <paper-icon-button icon="{{muestraIcono(esCliente)}}" on-click="disparaBoton"></paper-icon-button>
+                    <!-- on-click="disparaAccion" -->
+                    
+                    <!-- <div  style="color: var(--paper-blue-grey-600); font-weight: 500; font-size: 20px;"></div> -->
                 </paper-icon-item>
               
             </div>
@@ -62,9 +72,63 @@ class MyClienteItem extends UtilsMixin(PolymerElement) {
     
     static get properties() {
         return {
-            cliente:{type:Object, notify:true}
+            cliente:{type:Object, notify:true},
+            esCliente:{type:Boolean, notify:true}
         };
     }
+
+    disparaAccion(){
+        var t=this;
+        this.dispatchEvent(new CustomEvent('click-cliente', {
+            detail: {
+                datos:t.cliente
+            }
+        }));
+    }
+
+    disparaBoton(){
+        var t=this;
+        this.dispatchEvent(new CustomEvent('click-opcion', {
+            detail: {
+                datos:t.cliente
+            }
+        }));
+    }
+
+    muestraIcono(bol){
+        if(bol==true){
+            return "work";
+        }else{
+            return "add";
+        }
+    }
+
+    // disparaAccion(){
+    //     if(this.esCliente==false){
+    //         this.muestraCamposCliente();
+    //     }
+    // }
+
+    // muestraCamposCliente(){
+    //     PolymerUtils.Dialog.createAndShow({
+    //         type: "modal",
+    //         title:"Agregar prospecto a clientes",
+	// 		element:"my-crea-cliente",
+    //         style:"width:400px;max-width:95%;",
+	// 		positiveButton: {
+    //             text: "Crear",
+    //             action: function(dialog, element) {
+    //                 element.guardaCliente();
+    //             }
+    //         },
+    //         negativeButton: {
+    //             text: "Cerrar",
+    //             action: function(dialog, element) {
+    //                 dialog.close();
+    //             }
+    //         }
+	// 	});
+    // }
     
     
 }

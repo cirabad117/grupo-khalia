@@ -5,7 +5,7 @@ import '@polymer/paper-fab/paper-fab.js';
 
 
 import './clientes/my-nuevo-cliente.js';
-import './clientes/my-cliente-item.js';
+import './general-controls/my-cliente-item.js';
 
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/iron-icons/iron-icons.js';
@@ -20,16 +20,19 @@ class MyClientesMain extends PolymerElement {
             </style>
             
             <template is="dom-repeat" items="[[listaClientes]]" >
-					<my-cliente-item on-click="abreDetalleCliente" 
+					<my-cliente-item on-click="abreDetalleCliente"
+                    es-cliente="[[item._esCliente]]"
+                    
 					style="margin: 8px 24px;"
 					cliente="[[item]]"></my-cliente-item>
 				</template>
             
-            <div style="position: fixed; bottom: 24px; right: 24px;">
+            <!-- <div style="position: fixed; bottom: 24px; right: 24px;">
+            
 				<div style="position: relative; cursor:pointer;" on-clicK="abreNuevoCliente">
 					<paper-fab icon="add"></paper-fab>
 				</div>
-			</div>
+			</div> -->
 
         `;
     }
@@ -47,16 +50,11 @@ class MyClientesMain extends PolymerElement {
 
     ready() {
         super.ready();
-        if(this.lastClientes){
-            this.lastClientes();
-            this.set("lastClientes",null);
-        }
-
-        this.set("lastClientes",DataHelper.queryCollection(this,{
-            "collection":"_clientes-khalia",
-            "array":this.listaClientes,
-            "arrayName":"listaClientes"
-        }));
+        var binder=new QueryBinder("_clientes-khalia",{
+            "specialRef":firebase.firestore().collection("_clientes-khalia").where("_esCliente","==",true)
+        });
+        
+        binder.bindArray(this,this.listaClientes,"listaClientes");
     }
 
     abreDetalleCliente(e){
@@ -65,7 +63,7 @@ class MyClientesMain extends PolymerElement {
     }
 
     abreNuevoCliente(){
-        NavigationUtils.navigate("nuevo-cliente");
+        NavigationUtils.navigate("nuevo-prospecto");
         // PolymerUtils.Dialog.createAndShow({
 		// 	type: "modal",
 		// 	element:"my-nuevo-cliente",

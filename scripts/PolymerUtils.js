@@ -1,9 +1,4 @@
-window.onload = function() {
-    //console.warn("santa clara",window.location.href);
-    
-
-};
-Array.prototype.multiIndexOf = function (el) { 
+Array.prototype.multiIndexOf = function (el) {
     var idxs = [];
     for (var i = this.length - 1; i >= 0; i--) {
         if (this[i] === el) {
@@ -12,70 +7,19 @@ Array.prototype.multiIndexOf = function (el) {
     }
     return idxs;
 };
+
 window._getCurrentPolymerUrl=function(){
-    return window.location.href.replace(window.location.hostname+"/","").replace("https://","").replace("http://","").replace("localhost:8081/","").replace("localhost:8081","").replace("127.0.0.1:8081/","").replace("127.0.0.1:8081","");
+    return window.location.href.replace(window.location.hostname+"/","")
+    .replace("https://","").replace("http://","").replace("localhost:8081/","")
+    .replace("localhost:8081","").replace("127.0.0.1:8081/","").replace("127.0.0.1:8081","");
 };
-/*console.error=function(error,url,line){
 
-    console.log("warn",error,url,line);
-
-};*/
-window.logFirebaseError = function(...error) {
-//setTimeout(function() { notThere(); }, 0);
-//setTimeout(function() { showToast("dddddddddddddddddd",error,url,line); }, 0);
-    
-//    return;
-    try{
-
-    
-    var ref=firebase.database().ref("errores/"+HELPER_OMNIPOTENT_KEY);
-    var key=ref.push().key;
-
-    var errorFixed=[];
-    for(var i=0;i<error.length;i++){
-        var err=error[i];
-            if(err.toString){
-
-                errorFixed.push(err.toString());
-                if(err.stack){
-                    errorFixed.push(err.stack);
-                }
-            }
-            else errorFixed.push(err);
-    }
-    //console.warn("SEAVING ERROR FIXED",errorFixed);
-    var obj=PolymerUtils.fixDataForFirebase({acc:'error', data:errorFixed});
-
-    
-    if(HELPER_OMNIPOTENT_KEY)
-    obj.negocioKey=HELPER_OMNIPOTENT_KEY;
-    obj._timestamp=firebase.database.ServerValue.TIMESTAMP;
-    
-    if(DataHelper && DataHelper.getActualUser())
-    obj._userId=DataHelper.getActualUser().uid;
-
-    ref.child(key).set(obj);
-
-    var fullRef=firebase.database().ref("errores-full");
-    var fullKey=fullRef.push().key;
-
-    fullRef.child(fullKey).set(obj);
-    }
-    catch(err){
-        console.warn("tttttttttttttttt",err);
-    }
-//    controller.sendLog({acc:'error', data:'ERR:'+error+' URL:'+url+' L:'+line});
-};
 Number.prototype.getTimeWithLetters= function(maxTime){
-    //hours, minutes, seconds, milliseconds
-    //var date=new Date(this);
     var valor=this;
     var hours=Math.floor(valor/(60*60*1000));
     var minutes=Math.floor(valor/(60*1000))-(hours*60);
-    //var minutes=date.getMinutes();
     var seconds=Math.floor(valor/(1000))-(hours*60*60)-(minutes*60);
     var millis=valor%1000;
-
     if(!hours || isNaN(hours)){
         hours=0;
     }
@@ -85,28 +29,19 @@ Number.prototype.getTimeWithLetters= function(maxTime){
     if(!seconds || isNaN(seconds)){
         seconds=0;
     }
-   
-    //console.warn("date",hours,minutes,seconds);
-    
     if(maxTime=="hours"){
         if(hours>24){
             return Math.floor(hours/24)+"d "+(hours%24)+"h "+minutes+"m "+seconds+"s ";
 
         }
         return hours+"h "+minutes+"m "+seconds+"s ";
-
-    }
-    else if(maxTime=="minutes"){
+    }else if(maxTime=="minutes"){
         return (minutes+(hours*60))+"m "+seconds+"s ";
-
-    }
-    else{
+    }else{
         return (((minutes+hours*60)*60)+seconds)+"s ";
-
     }
-
-
 };
+
 Number.prototype.formatCurrency = function (c, d, t) {
     var n = this,
         c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -117,55 +52,20 @@ Number.prototype.formatCurrency = function (c, d, t) {
         j = (j = i.length) > 3 ? j % 3 : 0;
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
+
 var _qrCodeCallbacks=[];
-var _readyForSpeechCallbacks=[];
 var _lastQRCode=null;
 window._goBackCallback=null;
 
-function _readyForSpeech(valor){
-  //  console.log("READY FOR SPEECH WEB",valor,valor==true,valor==false);
-    for(var i=0;i<_readyForSpeechCallbacks.length;i++){
-        var callback=_readyForSpeechCallbacks[i];
-        if(callback){
-            callback(valor);
-        }
-    }
-}
-function _addReadyForSpeechCallback(callback){
-    _readyForSpeechCallbacks.push(callback);
-}
-var _androidSpeechCallbacks=[];
-function _addAndroidSpeechCallback(callback){
-    _androidSpeechCallbacks.push(callback);
-}
-function _androidSpeechResult(result){
-    for(var i=0;i<_androidSpeechCallbacks.length;i++){
-        var callback=_androidSpeechCallbacks[i];
-        if(callback){
-            callback(result);
-        }
-    }
-}
-function _callAndroidSpeechTalk(valor){
-    setTimeout(function(){
-        window.AndroidApp.androidSpeechTalk(valor);
-        
-    },600);
-}
-function _goManualBack(){if(window._goBackCallback){window._goBackCallback()}}
-
-
 function _addQRCodeCallback(callback){
     _qrCodeCallbacks.push(callback);
-  //  if(callback){
-  //      callback(_lastQRCode);
-  //  }
 }
 
 function _removeQRCodeCallback(callback){
     _qrCodeCallbacks.splice(_qrCodeCallbacks.indexOf(callback),1);
     
 }
+
 function _readQRCode(qrCode){
     _lastQRCode=qrCode;
     for(var i=0;i<_qrCodeCallbacks.length;i++){
@@ -175,6 +75,7 @@ function _readQRCode(qrCode){
         }
     }
 }
+
 var defaultDiacriticsRemovalMap = [
     { 'base': 'A', 'letters': '\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F' },
     { 'base': 'AA', 'letters': '\uA732' },
@@ -263,21 +164,22 @@ var defaultDiacriticsRemovalMap = [
     { 'base': 'y', 'letters': '\u0079\u24E8\uFF59\u1EF3\u00FD\u0177\u1EF9\u0233\u1E8F\u00FF\u1EF7\u1E99\u1EF5\u01B4\u024F\u1EFF' },
     { 'base': 'z', 'letters': '\u007A\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763' }
 ];
+
 var _weekDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 var semanaDias = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 var semana = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
 Date.prototype.getMesString= function(){
-    var mm=this.getMonth()
-    ;
+    var mm=this.getMonth();
     return meses[mm].substring(0,1).toUpperCase()+meses[mm].substring(1).toLowerCase();
 };
+
 Date.prototype.getDiaSemanaString= function(){
     var mm=this.getDay();
-    
     return semanaDias[mm].substring(0,1).toUpperCase()+semanaDias[mm].substring(1).toLowerCase();
 };
+
 Date.prototype.yyyymmdd = function () {
     var mm = this.getMonth() + 1; // getMonth() is zero-based
     var dd = this.getDate();
@@ -287,12 +189,11 @@ Date.prototype.yyyymmdd = function () {
     (dd > 9 ? '' : '0') + dd
     ].join('-');
 };
+
 Date.prototype.getTomorrow = function(){
     var time=this.getTime();
-    
-        time=time+(24*60*60*1000);
-  
-        var offBefore=this.getTimezoneOffset();
+    time=time+(24*60*60*1000);
+    var offBefore=this.getTimezoneOffset();
         
     var nuevo=new Date(time);
     var offAfter=nuevo.getTimezoneOffset();
@@ -303,6 +204,7 @@ Date.prototype.getTomorrow = function(){
 
     return new Date(time);
 };
+
 Date.prototype.getPastWeek = function(){
     var inicio=this;
     for(var i=0;i<7;i++){
@@ -310,6 +212,7 @@ Date.prototype.getPastWeek = function(){
     }
     return inicio;
 };
+
 Date.prototype.getNextWeek = function(){
     var inicio=this;
     for(var i=0;i<7;i++){
@@ -317,12 +220,11 @@ Date.prototype.getNextWeek = function(){
     }
     return inicio;
 };
+
 Date.prototype.getYesterday = function(){
     var time=this.getTime();
-    
-        time=time-(24*60*60*1000);
-  
-        var offBefore=this.getTimezoneOffset();
+    time=time-(24*60*60*1000);
+    var offBefore=this.getTimezoneOffset();
         
     var nuevo=new Date(time);
     var offAfter=nuevo.getTimezoneOffset();
@@ -333,9 +235,9 @@ Date.prototype.getYesterday = function(){
 
     return new Date(time);
 };
+
 Date.prototype.toZeroHours = function(){
     var time=this.getTime();
-//    time=time+(this.getTimezoneOffset()*60*1000);
     var fecha=new Date(time);
     fecha.setHours(0);
     fecha.setMinutes(0);
@@ -345,6 +247,7 @@ Date.prototype.toZeroHours = function(){
     
     return new Date(time);
 };
+
 Date.prototype.getZeroHoursLocalDate = function(){
     var time=this.getTime();
     time=time+(this.getTimezoneOffset()*60*1000);
@@ -377,9 +280,7 @@ Date.prototype.fullSpanishDate = function () {
     var timeString;
     if (pm) {
         timeString = hour + ":" + (minutes > 9 ? '' : '0') + minutes + " PM";
-    }
-    else {
-
+    }else {
         timeString = hour + ":" + (minutes > 9 ? '' : '0') + minutes + " AM";
     }
 
@@ -394,14 +295,10 @@ Date.prototype.formatSpanish = function (letters,separator) {
     }
     var mm = this.getMonth();
     var yyyy = this.getFullYear();
-
     var yearString = dd + separator + meses[mm].substring(0,letters) + separator + yyyy;
-
-   
-
     return yearString;
-
 };
+
 Date.prototype.fullTime = function () {
     var seconds = this.getSeconds();
     var minutes = this.getMinutes();
@@ -418,6 +315,7 @@ Date.prototype.fullTime = function () {
     (seconds > 9 ? '' : '0') + seconds + "." + millis
     ].join(':');
 };
+
 var diacriticsMap = {};
 for (var i = 0; i < defaultDiacriticsRemovalMap.length; i++) {
     var letters = defaultDiacriticsRemovalMap[i].letters;
@@ -435,63 +333,37 @@ function removeDiacritics(str) {
         return diacriticsMap[a] || a;
     });
 }
+
 function PolymerUtils_serverTime(){
     return new Date().getTime();
-/*    try {
-        //FF, Opera, Safari, Chrome
-        xmlHttp = new XMLHttpRequest();
-    }
-    catch (err1) {
-        //IE
-        try {
-            xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
-        }
-        catch (err2) {
-            try {
-                xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
-            }
-            catch (eerr3) {
-                //AJAX not supported, use CPU time.
-                alert("AJAX not supported");
-            }
-        }
-    }
-    xmlHttp.open('HEAD',window.location.href.toString(),false);
-    xmlHttp.setRequestHeader("Content-Type", "text/html");
-    xmlHttp.send('');
-    return xmlHttp.getResponseHeader("Date");*/
 }
+
 function isUTCZero(date){
-    
     return date.getUTCHours()==0 && date.getUTCMinutes()==0 && date.getUTCSeconds()==0 && date.getUTCMilliseconds()==0;
+}
 
-  }
-  function getLocalDateFromString(string){
-      //YYYY-MM-DD
-      var date=new Date();
-      var split=string.split("-");
-      date.setFullYear(Number(split[0]));
-      date.setMonth(Number(split[1])-1);
-      date.setDate(Number(split[2]));
-      date.setHours(0);
-      date.setMinutes(0);
-      date.setSeconds(0);
-      date.setMilliseconds(0);  
-    //    console.warn("FECHA",date);
+function getLocalDateFromString(string){
+    var date=new Date();
+    var split=string.split("-");
+    date.setFullYear(Number(split[0]));
+    date.setMonth(Number(split[1])-1);
+    date.setDate(Number(split[2]));
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+}
 
-        return date;
-  }
 var PolymerUtils = {
-    
     getExcelNumber : function(val) {
-  var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
-
-  for (i = 0, j = val.length - 1; i < val.length; i += 1, j -= 1) {
-    result += Math.pow(base.length, j) * (base.indexOf(val[i]) + 1);
-  }
-
-  return result;
-},
+        var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
+        for (i = 0, j = val.length - 1; i < val.length; i += 1, j -= 1) {
+            result += Math.pow(base.length, j) * (base.indexOf(val[i]) + 1);
+        }
+        return result;
+    },
+    
     Notifications:{
         show:function(notification){
             var notificationScreen=document.createElement("notification-screen");
@@ -501,684 +373,9 @@ var PolymerUtils = {
             });
             document.getElementById("unique-main-app-notifications-div").appendChild(notificationScreen);
             return;
-            var color="var(--paper-red-500)";
-            var message="Nueva notificación";
-            var icon="info";
-            if(notification){
-                color=notification.color || "var(--paper-red-500)";
-                message=notification.message || "Nueva notificación";
-                icon=notification.icon || "info";
-            }
-            var mainDiv=document.createElement("div");
-            mainDiv.style.position="fixed";
-            mainDiv.style.top="0";
-            mainDiv.style.left="0";
-            mainDiv.style.right="0";
-            mainDiv.style.bottom="0";
-            mainDiv.style.backgroundColor=color;
-            mainDiv.style.display="flex";
-            mainDiv.style.alignItems="center";
-            mainDiv.style.justifyContent="center";
-
-            var messageDiv=document.createElement("div");
-            messageDiv.innerHTML=message;
-
-            messageDiv.style.color="white";
-            messageDiv.style.fontSize="40px";
-            messageDiv.style.fontWeight="500";
-            messageDiv.style.marginTop="100px";
-          //  mainDiv.appendChild(messageDiv);
-            var circle=document.createElement("div");
-            
-            var ironIcon=document.createElement("iron-icon");
-            ironIcon.icon=icon;
-            ironIcon.style.width="100px";
-            ironIcon.style.height="100px";
-            ironIcon.style.color=color;
-            circle.classList.add("pulsating-circle");
-            var circleContainer=document.createElement("div");
-            circleContainer.style.position="relative";
-            circleContainer.style.display="flex";
-            circleContainer.style.alignItems="center";
-            circleContainer.style.justifyContent="center";
-            
-            circleContainer.appendChild(circle);
-            circleContainer.appendChild(ironIcon);
-
-
-            var containerDiv=document.createElement("div");
-            containerDiv.appendChild(circleContainer);
-            containerDiv.appendChild(messageDiv);
-
-            var paperButton=document.createElement("paper-button");
-            paperButton.innerText="Ver Pedido";
-            
-            paperButton.style.fontWeight="500";
-            paperButton.style.fontSize="18px";
-            paperButton.style.marginTop="16px";
-            paperButton.style.border="2px solid white";
-            paperButton.style.color="white";
-            paperButton.style.backgroundColor="var(--paper-blue-500)";
-            containerDiv.appendChild(paperButton);
-
-            mainDiv.appendChild(containerDiv);
-            containerDiv.style.textAlign="center";
-            
-            var alarm=new Howl({
-                src: ['../sounds/alarma_notifications.wav'],
-                //autoplay: true,
-                loop: true,
-                volume: 0.9,
-                onend: function() {
-                  console.log('Finished!');
-                }
-              });
-              PolymerUtils.Toast.sayToast(message);
-
-              var interval=setInterval(function(){ 
-                  
-              PolymerUtils.Toast.sayToast(message);
-
-               }, 10000);
-            //mainDiv.setAttribute("data-value",));
-//            this.set("cocinaAlarm",);
-
-//<!--            <div class="pulsating-circle"></div>-->
-
-             alarm.play();
-            document.getElementById("unique-main-app-notifications-div").appendChild(mainDiv);
-            
-            
         }
     },
-    querySrPagoClient: function(clientToken,success,fail){
-        console.log("QUERY Cliente srpago");
-        const Http = new XMLHttpRequest();
-  
-const url='http://cobro.corntech.com.mx/clientAdministration.php?clientToken='+clientToken;
-        //Http.open("GET", url);
-
-        Http.open("POST", url);
-       // Http.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        //Http.setRequestHeader("Content-length", params.length);
-        //Http.setRequestHeader("Connection", "close");
-        /*Http.onreadystatechange = function() {
-            if(Http.readyState == 4 && Http.status == 200) {
-            alert(Http.responseText);
-        }
-        }*/
-        var counter=0;
-        Http.onreadystatechange=(e)=>{
-       //     console.warn("SRPAGO RESSSSSS",e);
-            if(Http.responseText && Http.status==200){
-                console.warnPago("Respuesta Consulta Cliente Sr. Pago:",Http.responseText);
-                var obj=JSON.parse(Http.responseText);
-         //       console.log("SRPAGO CHARGE RESULT",obj);
-                counter++;
-                if(counter==1){
-                    if(obj=="null" || obj==null){
-                        if(fail){
-                            fail(obj);
-                        }
-        
-                    }
-                    else{
-                        if(success){
-                            success(obj);
-                        }
     
-                    }
-                }
-            }
-            else if(Http.status==400){
-                var obj=(Http.responseText);
-                console.errorPago("Error Consulta Cliente Sr. Pago:",Http.responseText);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-        //        console.log("I'M VACIO SRPAGO");
-            }
-        };
-        Http.send();
-    },
-    removeCardSrPago:function(request,success,fail){
-        console.log("REGISTER Cliente srpago");
-        const Http = new XMLHttpRequest();
-  
-const url='http://cobro.corntech.com.mx/removeCard.php?clientToken='+request.clientToken+"&tokenInput="+request.token;
-        //Http.open("GET", url);
-        
-        Http.open("POST", url);
-       // Http.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        //Http.setRequestHeader("Content-length", params.length);
-        //Http.setRequestHeader("Connection", "close");
-        /*Http.onreadystatechange = function() {
-            if(Http.readyState == 4 && Http.status == 200) {
-            alert(Http.responseText);
-        }
-        }*/
-        var counter=0;
-        Http.onreadystatechange=(e)=>{
-       //     console.warn("SRPAGO RESSSSSS",e);
-            if(Http.responseText && Http.status==200){
-                console.warn("RESPONSE TEXT",Http.responseText);
-                var obj=JSON.parse(Http.responseText);
-         //       console.log("SRPAGO CHARGE RESULT",obj);
-                counter++;
-                if(counter==1){
-                    if(obj=="null" || obj==null){
-                        if(fail){
-                            fail(obj);
-                        }
-        
-                    }
-                    else{
-                        if(success){
-                            success(obj);
-                        }
-    
-                    }
-                }
-            }
-            else if(Http.status==400){
-                var obj=(Http.responseText);
-                console.error("ERROR TEXT",Http.responseText);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-        //        console.log("I'M VACIO SRPAGO");
-            }
-        };
-        Http.send();
-    },
-    addCardSrPago:function(request,success,fail){
-        console.log("REGISTER CARDDDDDD srpago",request);
-        const Http = new XMLHttpRequest();
-  
-
-        var url='https://us-central1-corntech-restaurant.cloudfunctions.net/addCardrSrPago?clientToken='+request.clientToken+"&tokenInput="+request.token+"&_user="+JSON.stringify(DataHelper.getUserRef())+"&negocioId="+HELPER_OMNIPOTENT_KEY;
-        //Http.open("GET", url);
-        Http.open("GET", url);
-        Http.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        //Http.setRequestHeader("Content-length", params.length);
-        //Http.setRequestHeader("Connection", "close");
-        /*Http.onreadystatechange = function() {
-            if(Http.readyState == 4 && Http.status == 200) {
-            alert(Http.responseText);
-        }
-        }*/
-        var counter=0;
-        Http.onreadystatechange=(e)=>{
-            console.warn("SRPAGO RESSSSSS",e);
-            if(Http.responseText && Http.status==200){
-                var obj=JSON.parse(Http.responseText);
-                console.warnPago("Respuesta Nueva Tarjeta Sr. Pago:",obj);
-                counter++;
-                if(counter==1){
-                    if(success){
-                        success(obj);
-                    }
-                }
-            }
-            else if(Http.status==400){
-                var obj=JSON.parse(Http.responseText);
-                console.errorPago("Error Nueva Tarjeta Sr. Pago:",obj);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-                console.log("I'M VACIO SRPAGO");
-            }
-        };
-        Http.send();
-/*const url='http://cobro.corntech.com.mx/addCard.php?clientToken='+request.clientToken+"&tokenInput="+request.token;
-        //Http.open("GET", url);
-        
-        Http.open("POST", url);
-  
-        var counter=0;
-        Http.onreadystatechange=(e)=>{
-       //     console.warn("SRPAGO RESSSSSS",e);
-            if(Http.responseText && Http.status==200){
-                console.warn("RESPONSE TEXT",Http.responseText);
-                var obj=JSON.parse(Http.responseText);
-         //       console.log("SRPAGO CHARGE RESULT",obj);
-                counter++;
-                if(counter==1){
-                    if(obj=="null" || obj==null){
-                        if(fail){
-                            fail(obj);
-                        }
-        
-                    }
-                    else{
-                        if(success){
-                            success(obj);
-                        }
-    
-                    }
-                }
-            }
-            else if(Http.status==400){
-                var obj=(Http.responseText);
-                console.error("ERROR TEXT",Http.responseText);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-        //        console.log("I'M VACIO SRPAGO");
-            }
-        };
-        Http.send();*/
-    },
-//     registerClienteSrPago:function(request,success,fail){
-
-//         console.log("REGISTER CLIENTE srpago",request);
-//         const Http = new XMLHttpRequest();
-  
-
-//         var url='https://us-central1-corntech-restaurant.cloudfunctions.net/registerClienteSrPago?name='+request.name+"&email="+request.email+"&_user="+JSON.stringify(DataHelper.getUserRef())+"&negocioId="+HELPER_OMNIPOTENT_KEY;
-//         //Http.open("GET", url);
-//         Http.open("GET", url);
-//         Http.setRequestHeader("Content-type", "application/json; charset=utf-8");
-//         //Http.setRequestHeader("Content-length", params.length);
-//         //Http.setRequestHeader("Connection", "close");
-//         /*Http.onreadystatechange = function() {
-//             if(Http.readyState == 4 && Http.status == 200) {
-//             alert(Http.responseText);
-//         }
-//         }*/
-//       //  var counter=0;
-//         Http.onreadystatechange=(e)=>{
-
-
-
-//             if(Http.readyState==4){
-//                 console.warn("SRPAGO NEW CLIENTE RESPONSE",e);
-//                 if(Http.responseText && Http.status==200){
-//                     var obj=JSON.parse(Http.responseText);
-//                     console.warnPago("Respuesta Nuevo Cliente Sr. Pago:",obj);
-                   
-                    
-//                         if(success){
-//                             success(obj);
-//                         }
-                    
-                        
-//                 }
-//                 else if(Http.status==400){
-//                     var obj=JSON.parse(Http.responseText);
-//                     console.errorPago("Error Nuevo CLIENTE Sr. Pago:",obj);
-//                     if(fail){
-//                         fail(obj);
-//                     }
-//                 }else{
-//                     console.error("STATUS NUEVO CLIENTE",Http.readyState,Http.status,Http.responseText);
-//                  //   console.log("I'M VACIO SRPAGO");
-//                 }
-//             }
-
-
-//         };
-//         Http.send();
-
-
-//         return;
-
-// /*
-//         console.log("REGISTER Cliente srpago",request);
-//         const Http = new XMLHttpRequest();
-   
-// var url='http://cobro.corntech.com.mx/clientAdministration.php?email='+request.email+"&name="+request.name;
-//         //Http.open("GET", url);
-//         if(request.clientToken){
-//             url=url+"&clientToken="+request.clientToken;
-//         }
-//         Http.open("POST", url);
-       
-//         var counter=0;
-//         Http.onreadystatechange=(e)=>{
-//        //     console.warn("SRPAGO RESSSSSS",e);
-//             if(Http.responseText && Http.status==200){
-//                 console.warn("RESPONSE TEXT",Http.responseText);
-//                 firebase.firestore().collection("sr-pago").doc("new-cliente-logs").collection("principal").add({
-//                     timestamp: DataHelper.getFirestoreTimestamp(),
-//                     negocioId: HELPER_OMNIPOTENT_KEY,
-//                     request:PolymerUtils.fixDataForFirebase(request),
-//                     response:Http.responseText || "",
-//                     type:"complete"
-//                 });
-//                 var obj=JSON.parse(Http.responseText);
-//          //       console.log("SRPAGO CHARGE RESULT",obj);
-//                 counter++;
-//                 if(counter==1){
-//                     if(obj=="null" || obj==null){
-//                         if(fail){
-//                             fail(obj);
-//                         }
-//                         firebase.firestore().collection("sr-pago").doc("new-cliente-logs").collection("principal").add({
-//                             timestamp: DataHelper.getFirestoreTimestamp(),
-//                             negocioId: HELPER_OMNIPOTENT_KEY,
-//                             request:PolymerUtils.fixDataForFirebase(request),
-//                             response:Http.responseText || "",
-//                             type:"fail"
-//                         });
-//                     }
-//                     else{
-//                         if(success){
-//                             success(obj);
-//                         }
-//                     }
-//                 }
-//             }
-//             else if(Http.status==400){
-//                 var obj=(Http.responseText);
-//                 console.error("ERROR TEXT",Http.responseText);
-//                 firebase.firestore().collection("sr-pago").doc("new-cliente-logs").collection("principal").add({
-//                     timestamp: DataHelper.getFirestoreTimestamp(),
-//                     negocioId: HELPER_OMNIPOTENT_KEY,
-//                     request:PolymerUtils.fixDataForFirebase(request),
-//                     response:Http.responseText || "",
-//                     type:"error"
-//                 });
-//                 if(fail){
-//                     fail(obj);
-//                 }
-//             }else{
-//         //        console.log("I'M VACIO SRPAGO");
-//             }
-//         };
-//         Http.send();*/
-//     },
-    paySrPago:function(request,clienteData,producto,success,fail){
-        console.log("PAYING AAAAAAAAAAAAA srpago");
-        const Http = new XMLHttpRequest();
-        var metadata={
-   
-            "member": {
-                "memberLoggedIn": "Si",
-                "memberId": clienteData.member.uid,
-                "membershipDate": clienteData.member.fechInvertida,
-                "memberFullName": removeDiacritics(clienteData.member.nombreCompleto),
-                "memberFirstName": removeDiacritics(clienteData.member.nombre),
-                "memberMiddleName": removeDiacritics(clienteData.member.nombre2),
-                "memberLastName": removeDiacritics(clienteData.member.apellido),
-                "memberEmailAddress": removeDiacritics(clienteData.member.email),
-                "memberAddressLine1": removeDiacritics(clienteData.member.direccion1),
-                "memberAddressLine2": removeDiacritics(clienteData.member.direccion2),
-                "memberCity": removeDiacritics(clienteData.member.ciudad),
-                "memberState": removeDiacritics(clienteData.member.estado),
-                "memberCountry": "MX",
-                "memberPostalCode": clienteData.member.cp,
-                "membershipLevel": "1",
-                "membershipStatus": "activo",
-                "latitude": clienteData.member.latitud+"",
-                "longitude": clienteData.member.longitud+"",
-                "memberPhone": clienteData.member.telefono
-                },
-    
-                "items": {"item": [
-                    {
-                    "itemNumber": producto._key,
-                    "itemDescription": "Paquete "+removeDiacritics(producto.name),
-                    "itemPrice": producto.precio+"",
-                    "itemQuantity": "1",
-                    "itemMeasurementUnit": "Pza",
-                    "itemBrandName": "Corntech",
-                    "itemCategory": "Software",
-                    "itemTax": "16"
-                    }
-                    ]
-                },
-                
-    };
-    if(clienteData.billing){
-        metadata["billing"]= {
-            "billingEmailAddress": clienteData.billing.email,
-            "billingFirstName-D": clienteData.billing.nombre,
-            "billingMiddleName-D": clienteData.billing.nombre2,
-            "billingLastName-D": clienteData.billing.apellido,
-            "billingAddress-D": clienteData.billing.direccion,
-            "billingAddress2-D": clienteData.billing.direccion2,
-            "billingCity-D": clienteData.billing.ciudad,
-            "billingState-D": clienteData.billing.estado,
-            "billingPostalCode-D": clienteData.billing.cp,
-            "billingCountry-D": "MX",
-            "billingPhoneNumber-D": clienteData.billing.telefono
-            };
-    }
-    console.warn("RETROCOMPATIBLE",metadata);
-    const url='https://us-central1-corntech-restaurant.cloudfunctions.net/makePaymentSrPago?token='+request.token+"&amount="+request.amount+"&description="+request.description+"&reference="+request.reference+"&metadata="+JSON.stringify(metadata);
-    console.warn("URL",url);
-    Http.open("GET", url);
-    Http.setRequestHeader("Content-type", "application/json; charset=utf-8");
-    //Http.setRequestHeader("Content-length", params.length);
-    //Http.setRequestHeader("Connection", "close");
-    /*Http.onreadystatechange = function() {
-        if(Http.readyState == 4 && Http.status == 200) {
-        alert(Http.responseText);
-    }
-    }*/
-  //  var counter=0;
-    Http.onreadystatechange=(e)=>{
-
-
-
-        if(Http.readyState==4){
-            console.warn("SRPAGO NEW PAGO RESPONSE",e);
-            if(Http.responseText && Http.status==200){
-                var obj=JSON.parse(Http.responseText);
-                console.warnPago("Respuesta Nuevo PAGO Sr. Pago:",obj);
-               
-                if(obj=="null" || obj==null){
-                    if(fail){
-                        fail(obj);
-                    }
-    
-                }
-                else{
-                    if(success){
-                        success(obj);
-                    }
-
-                }
-                
-                    
-            }
-            else if(Http.status==400){
-                var obj=JSON.parse(Http.responseText);
-                console.errorPago("Error Nuevo PAGO Sr. Pago:",obj);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-                console.error("STATUS NUEVO PAGO",Http.readyState,Http.status,Http.responseText);
-             //   console.log("I'M VACIO SRPAGO");
-            }
-        }
-
-
-    };
-    Http.send();
-
-
-    
- 
-    },
-    BACKUP_paySrPago:function(request,clienteData,producto,success,fail){
-        console.log("PAY srpago");
-        const Http = new XMLHttpRequest();
-        
-      //  var currentUser=DataHelper.getUserRef();
-       
-    
-
-/*$chargeParams = array(
-    "amount"=>10,
-    "description" => 'Test',
-    "reference"=> 'test',
-    "ip"=> /*Agregar IP del cliente,
-   "source"=>$_POST['tokenInput'] //En el proceso de tokenización se definió este nombre y el método post
-);*/
-
-//console.warn("CLIENTEDATA",clienteData);
-var metadata={
-   
-        "member": {
-            "memberLoggedIn": "Si",
-            "memberId": clienteData.member.uid,
-            "membershipDate": clienteData.member.fechInvertida,
-            "memberFullName": removeDiacritics(clienteData.member.nombreCompleto),
-            "memberFirstName": removeDiacritics(clienteData.member.nombre),
-            "memberMiddleName": removeDiacritics(clienteData.member.nombre2),
-            "memberLastName": removeDiacritics(clienteData.member.apellido),
-            "memberEmailAddress": removeDiacritics(clienteData.member.email),
-            "memberAddressLine1": removeDiacritics(clienteData.member.direccion1),
-            "memberAddressLine2": removeDiacritics(clienteData.member.direccion2),
-            "memberCity": removeDiacritics(clienteData.member.ciudad),
-            "memberState": removeDiacritics(clienteData.member.estado),
-            "memberCountry": "MX",
-            "memberPostalCode": clienteData.member.cp,
-            "membershipLevel": "1",
-            "membershipStatus": "activo",
-            "latitude": clienteData.member.latitud+"",
-            "longitude": clienteData.member.longitud+"",
-            "memberPhone": clienteData.member.telefono
-            },
-
-            "items": {"item": [
-                {
-                "itemNumber": producto._key,
-                "itemDescription": "Paquete "+removeDiacritics(producto.name),
-                "itemPrice": producto.precio+"",
-                "itemQuantity": "1",
-                "itemMeasurementUnit": "Pza",
-                "itemBrandName": "Corntech",
-                "itemCategory": "Software",
-                "itemTax": "16"
-                }
-                ]
-            },
-            
-};
-if(clienteData.billing){
-    metadata["billing"]= {
-        "billingEmailAddress": clienteData.billing.email,
-        "billingFirstName-D": clienteData.billing.nombre,
-        "billingMiddleName-D": clienteData.billing.nombre2,
-        "billingLastName-D": clienteData.billing.apellido,
-        "billingAddress-D": clienteData.billing.direccion,
-        "billingAddress2-D": clienteData.billing.direccion2,
-        "billingCity-D": clienteData.billing.ciudad,
-        "billingState-D": clienteData.billing.estado,
-        "billingPostalCode-D": clienteData.billing.cp,
-        "billingCountry-D": "MX",
-        "billingPhoneNumber-D": clienteData.billing.telefono
-        };
-}
-console.warn("RETROCOMPATIBLE",metadata);
-const url='http://cobro.corntech.com.mx/payment.php?token='+request.token+"&amount="+request.amount+"&description="+request.description+"&reference="+request.reference+"&metadata="+JSON.stringify(metadata);
-        console.warn("URL",url);
-        Http.open("POST", url);
- 
-        var counter=0;
-        Http.onreadystatechange=(e)=>{
-       //     console.warn("SRPAGO RESSSSSS",e);
-            if(Http.responseText && Http.status==200){
-                console.warn("RESPONSE TEXT",Http.responseText);
-                var obj=JSON.parse(Http.responseText);
-         //       console.log("SRPAGO CHARGE RESULT",obj);
-                counter++;
-                if(counter==1){
-                    if(obj=="null" || obj==null){
-                        if(fail){
-                            fail(obj);
-                        }
-        
-                    }
-                    else{
-                        if(success){
-                            success(obj);
-                        }
-    
-                    }
-                }
-            }
-            else if(Http.status==400){
-                var obj=(Http.responseText);
-                console.error("ERROR TEXT",Http.responseText);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-        //        console.log("I'M VACIO SRPAGO");
-            }
-        };
-        Http.send();
-    },
-    paySrPagoBackup:function(token,success,fail){
-        console.log("PAY srpago");
-        const Http = new XMLHttpRequest();
-        
-      //  var currentUser=DataHelper.getUserRef();
-       
-    
-var bankChargeRequest = {
-   'description' : 'Test corntech',
-   "reference": "corntech",
-   'amount' : 10,
-   "ip":"192.168.1.1",
-   
-   'source' : token
-};
-  
-/*$chargeParams = array(
-    "amount"=>10,
-    "description" => 'Test',
-    "reference"=> 'test',
-    "ip"=> /*Agregar IP del cliente,
-   "source"=>$_POST['tokenInput'] //En el proceso de tokenización se definió este nombre y el método post
-);*/
-
-        var params = 
-        JSON.stringify(bankChargeRequest);
-        const url='https://us-central1-corntech-restaurant.cloudfunctions.net/chargeSrPago?data='+params;
-        //Http.open("GET", url);
-        Http.open("GET", url);
-        Http.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        //Http.setRequestHeader("Content-length", params.length);
-        //Http.setRequestHeader("Connection", "close");
-        /*Http.onreadystatechange = function() {
-            if(Http.readyState == 4 && Http.status == 200) {
-            alert(Http.responseText);
-        }
-        }*/
-        var counter=0;
-        Http.onreadystatechange=(e)=>{
-            console.warn("SRPAGO RESSSSSS",e);
-            if(Http.responseText && Http.status==200){
-                var obj=JSON.parse(Http.responseText);
-                console.log("SRPAGO CHARGE RESULT",obj);
-                counter++;
-                if(counter==1){
-                    if(success){
-                        success(obj);
-                    }
-                }
-            }
-            else if(Http.status==400){
-                var obj=JSON.parse(Http.responseText);
-                if(fail){
-                    fail(obj);
-                }
-            }else{
-                console.log("I'M VACIO SRPAGO");
-            }
-        };
-        Http.send();
-    },
     redondearNumeroDecimal: function(numero,decimales){
         if(decimales==null || typeof(decimales)=="undefined"){
             decimales=2;
@@ -1189,13 +386,14 @@ var bankChargeRequest = {
         var y=+(Math.round(num + texto1)  + texto2);
         return Number(y);
     },
-
+    
     convierteArregloEnObjecto:function(arr){
         var rv = {};
         for (var i = 0; i < arr.length; ++i)
           rv[i] = arr[i];
         return rv;
     },
+
     objectEquals: function(a,b){
         if(a==null && b==null){
             return true;
@@ -1203,8 +401,6 @@ var bankChargeRequest = {
         if(a==null || b==null){
             return false;
         }
-
-     //   console.log("A",a,"B",b);
         var aKeys=Object.keys(a);
         var bKeys=Object.keys(b);
         if(aKeys.length==bKeys.length){
@@ -1215,113 +411,99 @@ var bankChargeRequest = {
                     break;
                 }
             }
-       //     console.log("Cierto",cierto);
             return cierto;
         }
-
         return false;
     },
+
     getLocalDateFromString: function(string){
         return getLocalDateFromString(string);
     },
+
     getBrowserName: function(){
-// Opera 8.0+
-var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-
-// Firefox 1.0+
-var isFirefox = typeof InstallTrigger !== 'undefined';
-
-// Safari 3.0+ "[object HTMLElementConstructor]" 
-var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
-
-// Internet Explorer 6-11
-var isIE = /*@cc_on!@*/false || !!document.documentMode;
-
-// Edge 20+
-var isEdge = !isIE && !!window.StyleMedia;
-
-// Chrome 1 - 71
-var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-
-// Blink engine detection
-var isBlink = (isChrome || isOpera) && !!window.CSS;
-if(isOpera){
-    return "Opera";
-}
-else if(isChrome){
-    return "Chrome";
-}
-else if(isFirefox){
-    return "Firefox";
-}
-else if(isEdge){
-    return "Edge";
-}
-else if(isSafari){
-    return "Safari";
-}
-else if(isIE){
-    return "InternetExplorer";
-}
-else return "Generic";
+        // Opera 8.0+
+        var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+        // Firefox 1.0+
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        // Safari 3.0+ "[object HTMLElementConstructor]" 
+        var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+        // Internet Explorer 6-11
+        var isIE = /*@cc_on!@*/false || !!document.documentMode;
+        // Edge 20+
+        var isEdge = !isIE && !!window.StyleMedia;
+        // Chrome 1 - 71
+        var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+        // Blink engine detection
+        var isBlink = (isChrome || isOpera) && !!window.CSS;
+        if(isOpera){
+            return "Opera";
+        }else if(isChrome){
+            return "Chrome";
+        }
+        else if(isFirefox){
+            return "Firefox";
+        }else if(isEdge){
+            return "Edge";
+        }else if(isSafari){
+            return "Safari";
+        }else if(isIE){
+            return "InternetExplorer";
+        }
+        else return "Generic";
     },
     _appShellPath:"verification-app",
     _appShellPathObserver:null,
     setAppShellPath: function(path){
-       // console.error("SaT PATH NE",path);
         PolymerUtils._appShellPath=path;
         if(PolymerUtils._appShellPathObserver){
             PolymerUtils._appShellPathObserver(path);
         }
-        //console.error("SOT PATH NE",path);
-
     },
+    
     _bigUtilsMap:{},
     getServerDate(){
         var xmlHttp;
-
-
-var st = PolymerUtils_serverTime();
-var date = new Date(st);
-return date;
+        var st = PolymerUtils_serverTime();
+        var date = new Date(st);
+        return date;
     },
+
     setVariable: function(field,value){
         this._bigUtilsMap[field]=value;
-
     },
+
     getVariable: function(field){
         return this._bigUtilsMap[field];
     },
+
     getActualCurrentLocation: function(callback){
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(callback,function(err){
-              console.error("Geolocation error",err);
-              if(err && err.code==1){
-                  
-                //PolymerUtils.Dialog.showErrorMessage({message:"Negaste el permiso para revisar tu ubicación actual.",positiveButton:{text: "Entendido"}});
-                console.warn("Negaste el permiso para revisar tu ubicación actual");
-
-              }
-          },{enableHighAccuracy: false});
-        } else { 
+            navigator.geolocation.getCurrentPosition(callback,function(err){
+                console.error("Geolocation error",err);
+                if(err && err.code==1){
+                    console.warn("Negaste el permiso para revisar tu ubicación actual");
+                }
+            },
+            {enableHighAccuracy: false});
+        } else {
             if(callback){
                 callback(null);
             }
-          PolymerUtils.Dialog.showErrorMessage({message:"Tu navegador no es compatible con la geolocalización automática",positiveButton:{text: "Entendido"}});
+            PolymerUtils.Dialog.showErrorMessage({message:"Tu navegador no es compatible con la geolocalización automática",positiveButton:{text: "Entendido"}});
         }
     },
-      newElement: function(element,params){
+    
+    newElement: function(element,params){
         var helper=document.createElement(element);
         if(params){
             var element=new helper.constructor(...params);
             return element;
-        }
-        else{
+        }else{
             var element=new helper.constructor();
             return element;
-        
         }
     },
+    
     getLastDayOfMonth: function(index,origen){
         var date=new Date();
         if(origen){
@@ -1335,9 +517,9 @@ return date;
         while(date.getDate()!=index){
             date=date.getYesterday();
         }
-      //  console.log("Last day of week",date);
         return date;
     },
+
     getNextMonth: function(date){
         var fecha=new Date();
         if(date){
@@ -1350,8 +532,8 @@ return date;
         fecha.setDate(1);
         fecha.setMonth(fecha.getMonth()+1);
         return fecha;
-
     },
+
     getLastMonth: function(date){
         var fecha=new Date();
         if(date){
@@ -1366,8 +548,8 @@ return date;
         return fecha;
         
     },
-    getLastDayOfWeek: function(index,origen){
 
+    getLastDayOfWeek: function(index,origen){
         var date=new Date();
         if(origen){
             date=new Date(origen.getTime());
@@ -1380,92 +562,75 @@ return date;
         while(date.getDay()!=index){
             date=date.getYesterday();
         }
-      //  console.log("Last day of week",date);
         return date;
     },
+
     showFileInput:function(type,callback){
         var inputFile = document.createElement("input");
         inputFile.type="file";
         if(type){
-         //   console.log("Type",type);
-        
             inputFile.accept=type.join(",");
         }
         inputFile.style = "display:none;";
         inputFile.addEventListener("change",function(e){
-          //  console.log("Saitama changed!",e.files,e);
-          if(e.target.files && e.target.files[0]){
-            if(callback)
-            callback(e.target.files[0]);
-            
-          
-          }
-          else{
-              PolymerUtils.Toast.show("No seleccionaste ningún archivo");
-          }
-          
+            if(e.target.files && e.target.files[0]){
+                if(callback)
+                callback(e.target.files[0]);
+            }else{
+                PolymerUtils.Toast.show("No seleccionaste ningún archivo");
+            }
             document.getElementById("unique-main-app-body-file-input").removeChild(inputFile);
-        
         });
-        
         document.getElementById("unique-main-app-body-file-input").appendChild(inputFile);
-       
-       // if(inputFile.tap)
-       //inputFile.dispatchEvent("ontouchstart");
-       // console.log();
-       inputFile.click();
-
+        inputFile.click();
     },
+
     sendTouchEvent: function(x, y, element, eventType) {
         const touchObj = new Touch({
-          identifier: Date.now(),
-          target: element,
-          clientX: x,
-          clientY: y,
-          radiusX: 2.5,
-          radiusY: 2.5,
-          rotationAngle: 10,
-          force: 0.5,
+            identifier: Date.now(),
+            target: element,
+            clientX: x,
+            clientY: y,
+            radiusX: 2.5,
+            radiusY: 2.5,
+            rotationAngle: 10,
+            force: 0.5,
         });
-      
+        
         const touchEvent = new TouchEvent(eventType, {
-          cancelable: true,
-          bubbles: true,
-          touches: [touchObj],
-          targetTouches: [],
-          changedTouches: [touchObj],
-          shiftKey: true,
+            cancelable: true,
+            bubbles: true,
+            touches: [touchObj],
+            targetTouches: [],
+            changedTouches: [touchObj],
+            shiftKey: true,
         });
-      
         element.dispatchEvent(touchEvent);
-      },
-      objectToArray: function(object,saveKey,firstLevel){
-            if(!object){
-                return null;
-            }
-           // console.log("COnverting to array!!!",object);
-            var arreglo=[];
-            var keys=Object.keys(object);
-            //console.warn("JEYS",keys);
-            for(var i=0;i<keys.length;i++){
-                if(saveKey){
-                    if(typeof(object[keys[i]])=="string"){
-                        var obj={"value":object[keys[i]]};
-                        obj[saveKey]=keys[i];
-                        arreglo.push(obj);
-                    }
-                    if(typeof(object[keys[i]])=="boolean"){
-                        var obj={"value":object[keys[i]]};
-                        obj[saveKey]=keys[i];
-                        arreglo.push(obj);
-                    }
-                    else if(typeof(object[keys[i]])=="object"){
-                        var obj=object[keys[i]];
-                        obj[saveKey]=keys[i];
-                        arreglo.push(obj);
-                    }
-                    
+    },
+    
+    objectToArray: function(object,saveKey,firstLevel){
+        if(!object){
+            return null;
+        }
+        var arreglo=[];
+        var keys=Object.keys(object);
+        for(var i=0;i<keys.length;i++){
+            if(saveKey){
+                if(typeof(object[keys[i]])=="string"){
+                    var obj={"value":object[keys[i]]};
+                    obj[saveKey]=keys[i];
+                    arreglo.push(obj);
                 }
+                if(typeof(object[keys[i]])=="boolean"){
+                    var obj={"value":object[keys[i]]};
+                    obj[saveKey]=keys[i];
+                    arreglo.push(obj);
+                }else if(typeof(object[keys[i]])=="object"){
+                    var obj=object[keys[i]];
+                    obj[saveKey]=keys[i];
+                    arreglo.push(obj);
+                }
+            }
                 else{
                     arreglo.push(object[keys[i]]);
                 }
@@ -1912,7 +1077,7 @@ return day;
         }
 
 
-        return date.getHours() + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) + ", " + fecha;
+        return fecha+"; "+ date.getHours() + ":" + (date.getMinutes() <= 9 ? "0" + date.getMinutes() : date.getMinutes()) ;
 
     },
     getDateStringCalendar: function (timestamp) {
@@ -2717,9 +1882,9 @@ while (titleContainer.firstChild) {
 
             var titleDiv=document.createElement("div");
                 
-                    titleDiv.setAttribute("style","flex-grow: 100;")
+                    titleDiv.setAttribute("style","flex-grow: 100;margin-bottom: 0;line-height: 1.5;font-weight: 500; font-size: 20px;")
                     var h2=document.createElement("div");
-                    h2.setAttribute("style","display: flex; flex-wrap: wrap; line-height: 32px;  background-color: #E0E0E0; font-weight: 400; font-size: 26px; padding: 20px 24px;");
+                    h2.setAttribute("style","display: -ms-flexbox; display: flex;-ms-flex-align: start;align-items: flex-start;-ms-flex-pack: justify;justify-content: space-between;padding: 1rem 1rem;border-bottom: 1px solid #dee2e6;border-top-left-radius: calc(0.3rem - 1px);border-top-right-radius: calc(0.3rem - 1px);");
                     if(!emptyDialog){
                         h2.setAttribute("style",h2.getAttribute("style")+"border-radius: 6px 6px 0 0;");
                     }
@@ -3079,6 +2244,7 @@ while (titleContainer.firstChild) {
       
             var buttons=document.createElement("div");
             buttons.className="buttons";
+            buttons.setAttribute("style","display: -ms-flexbox;display: flex;ms-flex-wrap: wrap;flex-wrap: wrap;ms-flex-align: center;align-items: center;ms-flex-pack: end;justify-content: flex-end;padding: 0.75rem;border-top: 1px solid #dee2e6;border-bottom-right-radius: calc(0.3rem - 1px);border-bottom-left-radius: calc(0.3rem - 1px);");
 
             if(options.negativeButton){
 
