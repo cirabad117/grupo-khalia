@@ -74,6 +74,10 @@ var StaticDomAccess={
                 }
 
             }
+        },
+        "app-clientes":{
+            "name":"aplicacion para clientes",
+            "description":"aplicacion ofrecida a clientes de grupo khalia"
         }
        
     

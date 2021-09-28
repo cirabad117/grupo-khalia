@@ -34,6 +34,7 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
 
 import './auth/my-icono-usuario.js';
+import './controles-extra/dom-access.js';
 
 import './my-icons.js';
 
@@ -108,9 +109,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						Menu
 					</app-toolbar>
 					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-						<template is="dom-if" if="[[_loggedUser]]">
+						
 
 							
+					<dom-access path="instalaciones"></dom-access>
 
 							<paper-icon-item on-click="toggleAdmin">
 								<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
@@ -119,10 +121,18 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							</paper-icon-item>
 							
 							<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
+								<dom-access path="admin/prospectos">
 								<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+								</dom-access>
+								<dom-access path="admin/clientes">
 								<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+								</dom-access>
+								<dom-access path="admin/productos">
 								<a name="productos" href="[[rootPath]]productos">Control de productos</a>
+								</dom-access>
+								<dom-access path="admin/cotizaciones">
 								<a name="cotizaciones" href="[[rootPath]]cotizaciones">Cotizaciones</a>
+								</dom-access>
 							</iron-collapse>
 
 							
@@ -138,14 +148,21 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 								<a name="clientes" href="[[rootPath]]clientes">seguridad</a>
 							</iron-collapse>
 							
+							<dom-access path="usuarios">
 							<a name="usuarios" href="[[rootPath]]usuarios">usuarios</a>
+							</dom-access>
+
+							<dom-access path="app-clientes">
 							<a name="app-clientes" href="[[rootPath]]app-clientes">App Clientes</a>
+							</dom-access>
 						<!-- <a name="lista-clientes" href="[[rootPath]]lista-clientes">Mis Clientes</a> -->
 						<hr>
 
 						
+						<template is="dom-if" if="[[_loggedUser]]">
 						<paper-item on-click="cierraSesion">cerrar sesión</paper-item>
 						</template>
+						
 					
 						
 					</iron-selector>
