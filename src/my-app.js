@@ -11,6 +11,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import { NavigationMixin } from "./mixins/navigation-mixin.js";
+import { AuthMixin } from "./mixins/auth-mixin.js";
+
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -26,6 +28,12 @@ import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
+import '@polymer/paper-item/paper-icon-item.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/iron-collapse/iron-collapse.js';
+import '@polymer/iron-icon/iron-icon.js';
+
+import './auth/my-icono-usuario.js';
 
 import './my-icons.js';
 
@@ -37,7 +45,7 @@ setPassiveTouchGestures(true);
 // in `index.html`.
 setRootPath(MyAppGlobals.rootPath);
 
-class MyApp extends NavigationMixin(PolymerElement) {
+class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 	static get template() {
 		return html`
 			<style>
@@ -77,6 +85,14 @@ class MyApp extends NavigationMixin(PolymerElement) {
 					color: black;
 					font-weight: bold;
 				}
+
+				paper-item:hover{
+					cursor:pointer;
+				}
+				paper-icon-item:hover{
+					cursor:pointer;
+				}
+				
 			</style>
 			
 			<app-location route="{{route}}" url-space-regex="^[[rootPath]]" query-params={{routeParams}}>
@@ -85,22 +101,53 @@ class MyApp extends NavigationMixin(PolymerElement) {
 			<app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
 			</app-route>
 
-			<app-drawer-layout fullbleed="" narrow="{{narrow}}">
+			 <app-drawer-layout fullbleed="" narrow="{{narrow}}"><!--force-narrow="" -->
 				<!-- Drawer content -->
 				<app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-					<app-toolbar>Menu</app-toolbar>
+					<app-toolbar>
+						Menu
+					</app-toolbar>
 					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-						<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
-						<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
-						<hr>
-						<a name="clientes" href="[[rootPath]]clientes">Administración y ventas</a>
-						<a name="clientes" href="[[rootPath]]clientes">SASISOPA</a>
-						<a name="clientes" href="[[rootPath]]clientes">Sistemas de gestion de medicion</a>
-						<a name="clientes" href="[[rootPath]]clientes">emisiones a la atmosfera</a>
-						<a name="clientes" href="[[rootPath]]clientes">seguridad</a>
-						<hr>
-						<a name="clientes" href="[[rootPath]]clientes">Configuracion</a>
+						<template is="dom-if" if="[[_loggedUser]]">
+
+							
+
+							<paper-icon-item on-click="toggleAdmin">
+								<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
+								
+								Administración y ventas
+							</paper-icon-item>
+							
+							<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
+								<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+								<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+								<a name="productos" href="[[rootPath]]productos">Control de productos</a>
+								<a name="cotizaciones" href="[[rootPath]]cotizaciones">Cotizaciones</a>
+							</iron-collapse>
+
+							
+							
+							<paper-icon-item on-click="toggleArea">
+								<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
+								estatus por departamento
+							</paper-icon-item>
+							<iron-collapse opened="[[esArea]]" style="padding:15px;">
+								<a name="clientes" href="[[rootPath]]clientes">SASISOPA</a>
+								<a name="clientes" href="[[rootPath]]clientes">Sistemas de gestion de medicion</a>
+								<a name="clientes" href="[[rootPath]]clientes">emisiones a la atmosfera</a>
+								<a name="clientes" href="[[rootPath]]clientes">seguridad</a>
+							</iron-collapse>
+							
+							<a name="usuarios" href="[[rootPath]]usuarios">usuarios</a>
+							<a name="app-clientes" href="[[rootPath]]app-clientes">App Clientes</a>
 						<!-- <a name="lista-clientes" href="[[rootPath]]lista-clientes">Mis Clientes</a> -->
+						<hr>
+
+						
+						<paper-item on-click="cierraSesion">cerrar sesión</paper-item>
+						</template>
+					
+						
 					</iron-selector>
 				</app-drawer>
 
@@ -111,18 +158,35 @@ class MyApp extends NavigationMixin(PolymerElement) {
 						<app-toolbar>
 							<paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
 							<div main-title="">My App</div>
+							
+									<my-icono-usuario tam="48px"></my-icono-usuario>
+									<div style="padding: 4px 12px;">
+										<div style="font-size: 16px; font-weight: 500;">[[_loggedUser.displayName]]</div>
+									</div>
+								
+							
 						</app-toolbar>
 					</app-header>
 
 					<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
 						<my-prospectos-main name="prospectos"></my-prospectos-main>
-						<my-prospecto name="prospecto"></my-prospecto>
+
+						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
+
+
+						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
 						<my-clientes-main name="clientes"></my-clientes-main>
 						<my-cliente name="cliente"></my-cliente>
-						<!-- <my-inicio name="inicio"></my-inicio>
-						<my-clientes-main name="lista-clientes"></my-clientes-main>
-						
-						<my-nuevo-cliente name="nuevo-cliente"></my-nuevo-cliente> -->
+						<my-productos-main name="productos"></my-productos-main>
+
+						<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
+						<my-nueva-cotizacion name="nueva-cotizacion"></my-nueva-cotizacion>
+
+						<my-usuarios name="usuarios"></my-usuarios>
+
+						<my-app-clientes name="app-clientes"></my-app-clientes>
+						<!-- <my-nuevo-app name="nuevo-app"></my-nuevo-app> -->
+					
 						
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
@@ -133,12 +197,23 @@ class MyApp extends NavigationMixin(PolymerElement) {
 
 	static get properties() {
 		return {
+
+			esAdmin:{type:Boolean, notify:true, value:false},
+			esArea:{type:Boolean, notify:true, value:false},
+			
 			page: {
 				type: String,
 				reflectToAttribute: true,
 				observer: '_pageChanged'
 			},
-			paginas:{type:Array, notify:true, value:['prospecto','prospectos','clientes','cliente']},
+			paginas:{type:Array, notify:true, value:[
+				'prospecto','prospectos','clientes','cliente',
+				'productos','cotizaciones','nueva-cotizacion','usuarios',
+				'app-clientes']
+				// 'nuevo-app'
+			},
+
+			
 			routeData: Object,
 			subroute: Object
 		};
@@ -152,14 +227,37 @@ class MyApp extends NavigationMixin(PolymerElement) {
 		super.ready();
 		_initNavigationUtils(this,this.route,"route",this.routeParams,"routeParams");
 
-	
 	}
 
+	getIcono(bol){
+		if(bol==true){
+			return "arrow-drop-up";
+		}else{
+			return "arrow-drop-down";
+		}
+	}
+
+	toggleAdmin(){
+		this.set("esAdmin",!this.esAdmin);
+	}
+	toggleArea(){
+		this.set("esArea",!this.esArea);
+	}
 	static get observers() {
 		return [
 			'_routePageChanged(routeData.page)'
 		];
 	}
+
+	iniciaSesion(){
+		NavigationUtils.navigate("login");
+	}
+
+	cierraSesion(){
+		this.signOut();
+	}
+
+	
 
 	_routePageChanged(page) {
 		 // Show the corresponding page according to the route.
@@ -169,6 +267,7 @@ class MyApp extends NavigationMixin(PolymerElement) {
 		if (!page) {
 			this.page = 'prospectos';
 		} else if (this.paginas.indexOf(page) !== -1) {
+			
 			this.page = page;
 		} else {
 			this.page = 'view404';
@@ -190,7 +289,7 @@ class MyApp extends NavigationMixin(PolymerElement) {
 				import('./my-prospectos-main.js');
 			break;
 			case 'prospecto':
-				import('./prospectos/my-prospecto.js');
+				import('./prospectos/my-datos-prospecto.js');
 			break;
 			case 'clientes':
 				import('./my-clientes-main.js');
@@ -206,13 +305,30 @@ class MyApp extends NavigationMixin(PolymerElement) {
 			case 'cliente':
 				import('./clientes/my-cliente.js');
 			break;
-			// case 'nuevo-cliente':
-			// 	import ('./clientes/my-nuevo-cliente.js');
-			// 	break;
+
+			case 'productos':
+				import('./my-productos-main.js');
+			break;
+			case 'cotizaciones':
+				import('./my-cotizaciones-main.js');
+			break;
+			case 'nueva-cotizacion':
+				import ('./cotizaciones/my-nueva-cotizacion.js');
+			break;
+			case 'usuarios':
+				import ('./auth/my-usuarios.js');
+			break;
+			case 'app-clientes':
+				import ('./my-app-clientes.js');
+			break;
+			// case 'nuevo-app':
+			// 	import ('./app-clientes/my-nuevo-app.js');
+			// break;
+			
 			
 			case 'view404':
 				import('./my-view404.js');
-				break;
+			break;
 		}
 	}
 }

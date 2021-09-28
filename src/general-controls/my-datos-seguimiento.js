@@ -1,84 +1,77 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { DiccionarioMixin } from '../mixins/diccionario-mixin.js';
+import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
 
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import '@vaadin/vaadin-select/vaadin-select.js';
-import '@polymer/paper-input/paper-textarea.js'
+import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/iron-icons/iron-icons.js';
+
+import '@polymer/paper-item/paper-icon-item.js';
+import '@polymer/paper-item/paper-item-body.js';
+
+import './dialogo-nuevo-seg.js';
 
 import '../bootstrap.js';
 
-class MyDatosSeguimiento extends DiccionarioMixin(PolymerElement) {
+class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerElement)) {
     static get template() {
         return html`
             <style include="bootstrap">
                 :host{
                     display:block;
                 }
-            </style>
 
+                .sec:hover{
+                    cursor:pointer;
+                }
+                ::-webkit-scrollbar {
+                    width: 10px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: #f1f1f1; 
+                }
+                ::-webkit-scrollbar-thumb {
+                    background: #888; 
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                    background: #555; 
+                }
+            </style>
+            
             <div style="display:flex; align-items:center;">
-                <div style="flex-grow:1;">historial de seguimiento</div>
+                <div style="flex-grow:1; display:flex;" class="sec">
+                    <iron-icon icon="assignment" style="margin:5px;"></iron-icon>
+                    <h5>historial de seguimiento</h5>
+                </div>
                 <div style="flex-grow:0;">
-                    <paper-icon-button icon="add" on-click="cambiaBol"></paper-icon-button>
-                
+                    <!-- <paper-icon-button style="margin:5px;background-color:#B3E5FC;border-radius:50%;" icon="add" on-click="abreDialogo"></paper-icon-button> -->
+                    <button type="button" style="margin:5px;" class="btn btn-info btn-sm" on-click="abreDialogo">
+                        <span aria-hidden="true">
+                            
+                            <iron-icon icon="add"></iron-icon>
+                            
+                        </span>
+                    </button>
                 </div>
             </div>
             
-            <iron-collapse opened="{{esAgregar}}">
-                <div style="display: flex; padding: 8px; align-items:center; flex-wrap:wrap;">
-                    <div style="flex-grow: 0;margin:5px;">
-                        <vaadin-combo-box id="txtEstatus" selected-item="{{estatusElegido}}" label="estatus" error-message="valor inválido"
-                        items="[[listaEstatus]]" item-label-path="texto" item-id-path="color">
-                            <template>
-                                <b style$="background-color:[[item.color]];color:[[item.base]]">[[item.texto]]</b>
-                            </template>
-                        </vaadin-combo-box>
-                    </div>
-                    
-                    <div style="flex-grow: 0; margin:5px;">
-                        <vaadin-select id="txtActividad" label="actividad a realizar" value="{{actividad}}" error-message="selecciona una opcion">
-                            <template>
-                                <vaadin-list-box>
-                                    <template is="dom-repeat" items="[[listaActividades]]">
-                                        <vaadin-item value="[[item]]">[[item]]</vaadin-item>
-                                    </template>
-                                </vaadin-list-box>
-                            </template>
-                        </vaadin-select> 
-                    </div>
-                    <div style="flex-grow:1; margin:5px;">
-                        <paper-textarea style="max-width:400px;"id="txtComentario" label="comentario" value="{{comentario}}"></paper-textarea>
-                    </div>
-                    
-                </div>
-                <div style="flex-grow:1; margin:5px;">
-                    <button class="btn btn-sm" style="border:solid 1px var(--paper-green-500);color:var(--paper-green-500);background-color:white;" on-click="agregaEstatus">
-                        <span>
-                            <iron-icon icon="add"></iron-icon>
-                        </span>
-                        agregar estatus
-                    </button>
-                </div>
-            </iron-collapse>
-
-            
-            <iron-collapse opened="{{!esAgregar}}">
-                <paper-listbox>
-
-                    <template is="dom-repeat" items="[[arregloSeguimiento]]" as="seg" sort="sort">
-                        <paper-item>
-                            <paper-item-body two-line>
-                                <div style$="background-color:[[seg.estatus.color]];color:[[seg.estatus.base]]">[[seg.estatus.texto]]</div>
-                                <div secondary>[[muestraFecha(seg.fechaGuardado)]] - [[seg.actividad]]</div>
-                            </paper-item-body>
-                           
-                        </paper-item>
-                    </template>
-                
-                </paper-listbox>
-            </iron-collapse>
-            
-
+            <paper-listbox style="max-height:200px;overflow-y:scroll;">
+                <template is="dom-repeat" items="[[arregloSeguimiento]]" as="seg" sort="sort">
+                    <paper-item style="border-bottom: solid 1px #CFD8DC;">
+                        <paper-item-body two-line>
+                            <div>
+                                <span class="badge" style$="padding:5px;background-color:[[seg.estatus.color]];color:[[seg.estatus.base]]">
+                                    [[seg.estatus.texto]]
+                                </span>
+                                [[seg.actividad]]
+                            </div>
+                            <div secondary>[[seg.comentario]]</div>
+                        </paper-item-body>
+                        [[muestraFecha(seg.fechaGuardado)]]
+                    </paper-item>
+                </template>
+            </paper-listbox>
         `;
     }
 
@@ -99,8 +92,52 @@ class MyDatosSeguimiento extends DiccionarioMixin(PolymerElement) {
         super.ready();
     }
 
+    despachaDialogo(){
+        this.dispatchEvent(new CustomEvent('despacha-dialogo', {
+            detail: {
+                closed:true
+            }
+        }));
+    }
+
+    getIcon(bol){
+        if(bol==true){
+            return "arrow-drop-down";
+        }else{
+            return "arrow-drop-up";
+        }
+    }
     cambiaBol(){
         this.set("esAgregar",!this.esAgregar);
+        this.despachaDialogo();
+    }
+
+    abreDialogo(){
+        var id=this.idProspecto;
+        var arr=this.arregloSeguimiento;
+
+        
+         PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"Agregar estatus",
+			element:"dialogo-nuevo-seg",
+            params:[id,arr],
+
+			
+			style:"width:400px;max-width:95%;",
+			positiveButton: {
+                text: "Crear",
+                action: function(dialog, element) {
+                    element.agregaEstatus();
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
 
     muestraFecha(value){
@@ -108,69 +145,8 @@ class MyDatosSeguimiento extends DiccionarioMixin(PolymerElement) {
 
     }
 
-    agregaEstatus(){
-
-
-        var arreglo=this.arregloSeguimiento;
-        if(!arreglo){
-            arreglo=[];
-        }
-
-        var timeSt=new Date().getTime();
-        // var fecha=this.PolymerUtils_getTimeString(timeSt);
-
-        
-        var nuevo={
-            fechaGuardado:timeSt
-            
-        };
-        
-        if(!this.estatusElegido || this.estatusElegido==null){
-            return this.shadowRoot.querySelector("#txtEstatus").invalid=true;
-        }else{
-            this.shadowRoot.querySelector("#txtEstatus").invalid=false;
-            nuevo["estatus"]=this.estatusElegido;
-        }
-        
-        if(!this.actividad || this.actividad==null || this.actividad.trim()==""){
-            return this.shadowRoot.querySelector("#txtActividad").invalid=true;
-        }else{
-            this.shadowRoot.querySelector("#txtActividad").invalid=false;
-            nuevo["actividad"]=this.actividad;
-        }
-
-        if(!this.comentario || this.comentario==null || this.comentario.trim()==""){
-            return this.shadowRoot.querySelector("#txtComentario").invalid=true;
-        }else{
-            this.shadowRoot.querySelector("#txtComentario").invalid=false;
-            nuevo["comentario"]=this.comentario;
-        }
-
-       
-        
-        //this.push("listaSeguimiento",nuevo);
-        //this.limpiaCamposSeguimiento();
-
-        console.log("nuevo seguimiento",nuevo);
-
-        arreglo.push(nuevo);
-
-        var id=this.idProspecto
-
-        var washingtonRef = firebase.firestore().collection("_clientes-khalia").doc(id);
-
-// Set the "capital" field of the city 'DC'
-return washingtonRef.update({
-    listaSeguimiento: arreglo
-})
-.then(() => {
-    console.log("Document successfully updated!");
-})
-.catch((error) => {
-    // The document probably doesn't exist.
-    console.error("Error updating document: ", error);
-});
-    }
+    
+    
 
     sort(a, b) {
         var nameA = a.fechaGuardado; 

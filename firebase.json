@@ -1,0 +1,20 @@
+{
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "build/es6-bundled",
+    "site": "khalia-beta",
+    "ignore": [
+      "firebase.json",
+      "**/.*"
+      
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -763,15 +763,35 @@ class DataHelperClass {
                 }
             },
             showErrorToast: function(error) {
+
+                var errorObj={
+                    "auth/user-not-found":{
+                        input:"El usuario no existe",
+                        toast:"No existe ningún usuario con el email ingresado"
+                    },
+                    "auth/wrong-password":{
+                        
+                        input:"Contraseña incorrecta",
+                        toast:"La contraseña es incorrecta"
+                    },
+                    "auth/email-already-in-use":{
+                        input:"Email ya usado",
+                        toast:"El email definido ya está en uso por otra cuenta"
+            
+                    }
+                }
+
+
+
                 if (error.errorInfo)
                     error = error.errorInfo;
                 if (error) {
                     if (this._errorData[error.code]) {
                         var errorDetail = this._errorData[error.code]
-                          , tostada = CorntechLanguage.login[errorDetail.code] ? CorntechLanguage.login[errorDetail.code].toast : errorDetail.code;
+                          , tostada = errorObj[errorDetail.code] ? errorObj[errorDetail.code].toast : errorDetail.code;
                         PolymerUtils.Toast.show(tostada, errorDetail.toastDuration);
                         if (errorDetail.source) {
-                            var inputMessage = CorntechLanguage.login[errorDetail.code] ? CorntechLanguage.login[errorDetail.code].input : errorDetail.code;
+                            var inputMessage = errorObj[errorDetail.code] ? errorObj[errorDetail.code].input : errorDetail.code;
                             return {
                                 source: errorDetail.source,
                                 shortMessage: inputMessage

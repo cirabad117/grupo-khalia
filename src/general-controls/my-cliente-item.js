@@ -4,7 +4,7 @@ import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-item/paper-item-body';
 
-import '../clientes/my-crea-cliente.js';
+
 class MyClienteItem extends UtilsMixin(PolymerElement) {
     
     static get template() {
@@ -113,7 +113,7 @@ class MyClienteItem extends UtilsMixin(PolymerElement) {
     //     PolymerUtils.Dialog.createAndShow({
     //         type: "modal",
     //         title:"Agregar prospecto a clientes",
-	// 		element:"my-crea-cliente",
+
     //         style:"width:400px;max-width:95%;",
 	// 		positiveButton: {
     //             text: "Crear",

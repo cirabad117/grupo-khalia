@@ -356,6 +356,40 @@ function getLocalDateFromString(string){
 }
 
 var PolymerUtils = {
+
+    getLastItemEstatusFecha:function(arreglo){
+        
+            console.log("recibimos lsita de seguimiento",arreglo);
+            var comparar=function(a,b){
+                
+                var nameA = a.fechaGuardado; 
+                var nameB = b.fechaGuardado; 
+                if (nameA > nameB) {
+                  return -1;
+                }
+                if (nameA > nameB) {
+                  return 1;
+                }
+        
+                // names must be equal
+                return 0;
+            };
+    
+            var ordenado=arreglo.sort(comparar);
+            var ultimo=ordenado[0];
+    
+            if(ultimo && ultimo!=null){
+                return ultimo.estatus;
+            }else{
+                return null;
+            }
+        
+    },
+
+
+
+
+
     getExcelNumber : function(val) {
         var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
         for (i = 0, j = val.length - 1; i < val.length; i += 1, j -= 1) {

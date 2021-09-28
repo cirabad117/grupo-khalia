@@ -8,6 +8,7 @@
   "scripts": {
     "start": "polymer serve",
     "build": "polymer build",
+    "build-big": "node --max-old-space-size=8192 C:\\Users\\cir_a\\AppData\\Roaming\\npm\\node_modules\\polymer-cli\\bin\\polymer.js build",
     "lint": "polymer lint",
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI"
@@ -31,8 +32,11 @@
     "@polymer/paper-input": "^3.2.1",
     "@polymer/paper-item": "^3.0.1",
     "@polymer/paper-listbox": "^3.0.1",
+    "@polymer/paper-radio-button": "^3.0.1",
+    "@polymer/paper-radio-group": "^3.0.1",
     "@polymer/paper-tabs": "^3.1.0",
     "@polymer/paper-toast": "^3.0.1",
+    "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-combo-box": "^6.0.0",
     "@vaadin/vaadin-date-picker": "^5.0.0",

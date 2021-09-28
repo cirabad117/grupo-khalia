@@ -1,97 +1,54 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
+
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/communication-icons.js';
+
+import './dialogo-nuevo-conta.js';
+import '../general-controls/item-contacto.js';
+
 
 import '../bootstrap.js';
 
-class MyDatosContacto extends PolymerElement {
+class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
     static get template() {
         return html`
             <style include="bootstrap">
                 :host{
                     display:block;
+                 
                 }
+                .sec:hover{
+                    cursor:pointer;
+                }
+                /*  */
             </style>
             
             <div style="display:flex; align-items:center;">
-                <div style="flex-grow:1;">contactos de prospecto</div>
+                <div style="flex-grow:1; display:flex;" class="sec">
+                    <iron-icon icon="communication:contact-phone" style="margin:5px;"></iron-icon>
+                    <h5>contactos del prospecto</h5>
+                </div>
                 <div style="flex-grow:0;">
-
-                    <paper-icon-button icon="add" on-click="cambiaBol"></paper-icon-button>
-                
+                    <!-- <paper-icon-button style="margin:5px;background-color:#B3E5FC;border-radius:50%;" icon="add" on-click="abreDialogo"></paper-icon-button> -->
+                    <button type="button" style="margin:5px;" class="btn btn-info btn-sm" on-click="abreDialogo">
+                        <span aria-hidden="true">
+                            
+                            <iron-icon icon="add"></iron-icon>
+                            
+                        </span>
+                    </button>
                 </div>
             </div>
-            
-            <iron-collapse opened="{{esAgregar}}">
-                <div class="row">
-                    <div class="col-md-12">
-                        <p>agregar contacto de prospecto</p>
-                        
-                        <div class="d-flex flex-wrap align-items-center">
-                            <paper-input style="padding:8px;" id="txtNombre" label="Nombre" error-message="valor inválido" value="{{nombre}}"></paper-input>
-                            <paper-input style="padding:8px;" label="puesto" value="{{puesto}}"></paper-input>
-                           
-                        </div>
-                        
-                        <div class="d-flex flex-wrap align-items-center" >
-                            <vaadin-select label="tipo de telefono" value="{{tipoTel}}">
-                                <template>
-                                    <vaadin-list-box>
-                                        <vaadin-item value="celular">celular</vaadin-item>
-                                        <vaadin-item value="oficina">oficina</vaadin-item>
-                                        <vaadin-item value="otro">otro</vaadin-item>
-                                    </vaadin-list-box>
-                                </template>
-                            </vaadin-select>
-                            <paper-input style="padding:8px;" id="txtTel" label="Telefono" value="{{tel}}" error-message="ingresa un valor válido"></paper-input>
-                
-                            <paper-icon-button style="background-color:#E0E0E0; border-radius:50%;" icon="add" on-click="agregaTelefono"></paper-icon-button>
-                            
-                            
-                            
-                        </div>
 
-                        <div id="lista-tels" style="overflow-y:scroll;max-height:70px;">
-                            <vaadin-list-box>
-                                <template is="dom-repeat" items="[[listaTels]]" as="tels" restamp>
-                                    <vaadin-item>[[tels.tipo]]: [[tels.telefono]]</vaadin-item>
-                                </template>
-                            </vaadin-list-box>
-                        </div>
 
-                        <div class="d-flex flex-wrap align-items-center">
-                            <paper-input style="padding:8px;" label="Correo electrónico" value="{{email}}"></paper-input>
-                            
-                            <paper-icon-button style="background-color:#E0E0E0; border-radius:50%;" icon="add" on-click="agregaEmail"></paper-icon-button>
-                        </div>
-
-                        <div id="lista-email" style="overflow-y:scroll;max-height:70px;">
-                            <vaadin-list-box>
-                                <template is="dom-repeat" items="[[listaEmails]]" as="email" restamp>
-                                    <vaadin-item>[[email]]</vaadin-item>
-                                </template>
-                            </vaadin-list-box>
-                        </div>
-
-                        <div style="padding:8px;">
-                            <button style="padding:8px;" class="btn btn-sm btn-primary" on-click="agregaContacto">agregar contacto</button>
-                        </div>
-                        
-                        
-                    </div>
-
+            <div class="card-deck">
+            <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]">
                     
-                    
-                </div>
-            </iron-collapse>
-            
-            
-            <iron-collapse opened="{{!esAgregar}}">
-                <template is="dom-repeat" items="[[listaContactos]]">
-                    <item-contacto style="border:solid 1px var(--paper-blue-300);border-radius:10px;margin:5px;" datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
+                        <item-contacto  datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
+                   
                 </template>
-            </iron-collapse>
-            
-            
-
+            </div>
 
         `;
     }
@@ -99,9 +56,12 @@ class MyDatosContacto extends PolymerElement {
     static get properties() {
         return {
             infoCliente:{type:Object, notify:true},
+            idProspecto:{type:String, notify:true},
             esAgregar:{type:Boolean, notify:true,value:false},
 
-            listaContactos:{type:Array, notify:true, value:[]}
+            listaTels:{type:Array, notify:true, value:[]},
+            listaEmails:{type:Array, notify:true, value:[]},
+            arregloContactos:{type:Array, notify:true, value:[],},
 
         }
     }
@@ -114,36 +74,57 @@ class MyDatosContacto extends PolymerElement {
         super.ready();
     }
 
+    
+    abreDialogo(){
+        var id=this.idProspecto;
+        var arr=this.arregloContactos;
+        console.log("veamos que nos llega de contactos",arr);
+         PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"Agregar nuevo contacto",
+			element:"dialogo-nuevo-conta",
+            params:[id,arr],
+
+			
+			style:"width:600px;max-width:95%;",
+			positiveButton: {
+                text: "Crear",
+                action: function(dialog, element) {
+                    element.agregaContacto();
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
+    }
+
+    getIcon(bol){
+        if(bol==true){
+            return "arrow-drop-down";
+        }else{
+            return "arrow-drop-up";
+        }
+    }
     cambiaBol(){
         this.set("esAgregar",!this.esAgregar);
+        this.despachaDialogo();
+
+
     }
 
-    agregaContacto(){
-
-        if(!this.nombre || this.nombre==null || this.nombre.trim()==""){
-            return this.shadowRoot.querySelector("#txtNombre").invalid=true;
-        }else{
-            this.shadowRoot.querySelector("#txtNombre").invalid=false;
-        }
-        var nuevo={
-            nombreCliente:this.nombre,
-            
-        };
-
-        if(this.tel && this.tel!=null && this.tel.trim()!=""){
-            nuevo["telefono"]=this.tel;
-        }
-
-        if(this.email && this.email!=null && this.email.trim()!=""){
-            nuevo["email"]=this.email;
-        }
-
-        
-
-
-        this.push("listaContactos",nuevo);
-        this.limpiaCamposContacto();
+    despachaDialogo(){
+        this.dispatchEvent(new CustomEvent('despacha-dialogo', {
+            detail: {
+                closed:true
+            }
+        }));
     }
+   
+
 }
 
 customElements.define('my-datos-contacto', MyDatosContacto);

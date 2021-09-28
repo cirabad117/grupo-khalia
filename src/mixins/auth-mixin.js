@@ -10,6 +10,9 @@ let internalMixinAuth = function(superClass) {
 					context.set("_loggedUser",loggedUser);
 				}else{
 					context.set("_loggedUser",null);
+
+					
+					
 				}
 				context.set("_loadedUser",true);
 			});
@@ -107,6 +110,82 @@ let internalMixinAuth = function(superClass) {
 					errorCallback(returnError);
 				}
 			});
+		}
+
+
+
+		creaNuevoUsuario(objUser,callbacks) {
+			var t=this;
+			console.log("Inserting user", objUser.name);
+			var agregaUsuarioKhalia = firebase.functions().httpsCallable('agregaUsuarioKhalia');
+			agregaUsuarioKhalia(objUser).then(function (result) {
+				if (callbacks && callbacks.finished) {
+					callbacks.finished();
+				}
+				if (result.data.user) {
+					if (callbacks && callbacks.success) {
+						callbacks.success();
+					}
+					PolymerUtils.Toast.show("¡Usuario registrado con éxito!");
+				} else {
+					if (callbacks && callbacks.fail) {
+						callbacks.fail();
+					}
+					DataHelper.auth.showErrorToast(result.data.error);
+				}
+				console.log(result.data.result);
+			});
+			
+		}
+
+		editaUsuario(user, callbacks) {
+		
+			var actualizaUsuarioKhalia = firebase.functions().httpsCallable('actualizaUsuarioKhalia');
+            if(!user.password){
+                delete user["password"];
+            }
+
+            actualizaUsuarioKhalia(user).then(function(result) {
+                if(callbacks && callbacks.finished){
+                    callbacks.finished();
+                }
+                if(result.data.user){
+                    if(callbacks && callbacks.success){
+                        callbacks.success();
+                    }   
+                    PolymerUtils.Toast.show("¡Usuario actualizado con éxito!");
+                }
+                else{
+                    if(callbacks && callbacks.fail){
+                        callbacks.fail();
+                    }
+                    //firebaseHelper.auth.showErrorToast(result.data.error);
+					DataHelper.auth.showErrorToast(result.data.error);
+                }
+                console.log(result.data.result);
+            });
+		}
+
+		borraUsuario(user, callbacks) {
+			var borraUsuarioKhalia = firebase.functions().httpsCallable('borraUsuarioKhalia');
+            borraUsuarioKhalia({uid: user.uid,negocioKey:user.negocioKey}).then(function(result) {
+                if(callbacks && callbacks.finished){
+                    callbacks.finished();
+                }
+                if(result.data.user){
+                    if(callbacks && callbacks.success){
+                        callbacks.success();
+                    }   
+                    PolymerUtils.Toast.show("Usuario elminado de la plataforma");
+                }
+                else{
+                    if(callbacks && callbacks.fail){
+                        callbacks.fail();
+                    }
+                    DataHelper.auth.showErrorToast(result.data.error);
+                }
+                console.log(result.data.result);
+            });
 		}
 	}
 }

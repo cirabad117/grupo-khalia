@@ -1,123 +1,4 @@
-// import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-// import { NavigationMixin } from "../mixins/navigation-mixin.js";
 
-// import '@polymer/iron-pages/iron-pages.js';
-// import '@polymer/paper-tabs/paper-tabs.js';
-// import '@polymer/paper-tabs/paper-tab.js';
-
-// import '../procesos/my-licencias.js';
-// import '../procesos/my-pre-arsh.js';
-// import '../procesos/my-sasisopa.js';
-// import '../procesos/my-sgm.js';
-
-// import '../bootstrap.js';
-
-// class MyCliente extends NavigationMixin(PolymerElement) {
-//     static get template() {
-//         return html`
-//             <style include="bootstrap">
-//                 :host{
-//                     display:block;
-                    
-                    
-//                 }
-
-//                 paper-tabs{
-//                     background-color:var(--paper-blue-500);
-//                     --paper-tab-ink: var(--paper-blue-100);
-// 		            --paper-tabs-selection-bar-color: #FFFF00;
-//                 }
-
-//                 paper-tabs paper-tab.iron-selected {
-//                     color: #FFFF00;
-//                 }
-
-
-//             </style>
-
-//             <div class="container">
-//                 <div class="card">
-//                     <div class="card-body">
-//                         <h5 class="card-title">Estatus general por departamento</h5>
-//                     </div>
-
-//                     <div class="card-body">
-//                         <paper-tabs selected="{{selected}}" attr-for-selected="name" scrollable>
-//                             <paper-tab name="sasi">SASISOPA</paper-tab>
-//                             <paper-tab name="licencia">LICENCIAS DE FUNCIONAMIENTO</paper-tab>
-//                             <paper-tab name="pre">PRE & ARSH</paper-tab>
-//                             <paper-tab name="sgm">SGM</paper-tab>
-//                         </paper-tabs>
-                        
-//                         <iron-pages selected="{{selected}}" attr-for-selected="name">
-//                             <my-sasisopa name="sasi" cliente="[[idCliente]]"></my-sasisopa>
-//                             <my-licencias name="licencia" cliente="[[idCliente]]"></my-licencias>
-//                             <my-pre-arsh name="pre" cliente="[[idCliente]]"></my-pre-arsh>
-//                             <my-sgm name="sgm" cliente="[[idCliente]]"></my-sgm>
-//                         </iron-pages>
-//                     </div>
-//                 </div>
-//             </div>
-
-
-
-            
-            
-            
-//         `;
-//     }
-
-//     static get properties() {
-//         return {
-//             selected:{type:String, notify:true, value:"sasi"},
-//             idCliente:{type:String, notify:true},
-//             datosCliente:{type:Object, notify:true},
-
-//             routeParams:{observer:"_cambiaId"},
-
-//             documentos:{type:Array, notify:true, value:[]}
-
-//         }
-//     }
-
-//     _cambiaId(params){
-
-//         if(params && params.id){
-//             this.set("idCliente",params.id);
-//         }
-//     }
-
-    
- 
-//     // _consultaInstalacion(str){
-//     //     var t=this;
-//     //     if(str && str!=null && str.trim()!=""){
-//     //         if(this.lastEquipo){
-//     //             this.lastEquipo();
-//     //             this.set("lastEquipo",null);
-//     //         }
-            
-//     //         this.set("lastEquipo",DataHelper.queryCollection(this,{
-//     //             "collection":"documentos",
-//     //             "specialRef": sharedFirebase.collection("_clientes-khalia").doc(id).collection("documentos"),
-//     //             "array":this.equipos,
-//     //             "arrayName":"equipos"
-//     //         }));
-                
-            
-//     //     }
-//     // }
-
-//     constructor() {
-//         super();
-//     }
-
-//     ready() {
-//         super.ready();
-//     }
-// }
-
-// customElements.define('my-cliente', MyCliente);
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { UtilsMixin } from '../mixins/utils-mixin.js';
 import { NavigationMixin } from "../mixins/navigation-mixin.js";
@@ -132,6 +13,9 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 
 import '../general-controls/item-contacto.js';
+import '../general-controls/my-datos-seguimiento.js';
+import '../general-controls/my-datos-contacto.js';
+import '../controles-extra/selector-usuarios.js';
 
 import '../bootstrap.js';
 
@@ -151,38 +35,13 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             </style>
             
             <div class="container">
-                <!-- <div style="background-color:white;">
-                    <div style="display: flex; padding: 8px; ">
-                        <div style="flex-grow: 1;">
-                            <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">fecha ultima actualizacion</div>
-                            <div style="font-size: 16px; color: black;">[[PolymerUtils_getTimeString(item._timestamp)]]</div>
-                        </div>
-                        
-                        <div style="flex-grow: 1;">
-                            <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">usuario que registró</div>
-                            <div style="font-size: 16px; color: black;">[[item._user.displayName]]</div>
-                        </div>
-                        
-                        <div style="flex-grow: 1;">
-                            <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">archivo disponible</div>
-                            <a href="[[item.ubicacion]]">[[item.nombreArchivo]]</a>
-                        </div>
-                        
-                        <div style="flex-grow: 1;">
-                            <paper-button style="color:var(--paper-red-500);border:solid 1px var(--paper-red-500);" on-click="borraDoc">
-                                <span>
-                                    <iron-icon icon="clear"></iron-icon>
-                                </span>
-                                eliminar
-                            </paper-button>
-                        </div>
-                    </div>
-                    <my-datos-doc style="flex-grow: 10;" documento="[[item]]" instalacion="[[instalacion]]"></my-datos-doc>
-                </div> -->
-                
                 <div class="card">
                     <h5 class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                        <paper-icon-button icon="arrow-back" on-click="navegaLista"></paper-icon-button>
                         Datos del prospecto
+                        </div>
+                    
                         <button class=" btn btn-info btn-md" on-click="actualizaDatos">
                             <span>
                                 <iron-icon icon="save"></iron-icon>
@@ -202,14 +61,18 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                                 value="{{alias}}" error-message="valor inválido"></paper-input>
                             </div>
                             <div style="flex-grow: 1; margin:5px;">
-                                <paper-input id="txtAlias" label="Agente"
-                                value="{{alias}}" error-message="valor inválido"></paper-input>
+                                <!-- <paper-input id="txtAlias" label="Agente"
+                                value="{{alias}}" error-message="valor inválido"></paper-input> -->
+                                <selector-usuarios etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
+
                             </div>
 
+                            <template is="dom-if" if="[[esProspectoGuardado]]">
                             <div style="flex-grow: 1; margin:5px;">
                                 <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">fecha de creación</div>
                                 <div style="font-size: 16px; color: black;">{{PolymerUtils_getTimeString(prospecto._timestamp)}}</div>
                             </div>
+                            </template>
 
                         </div>
                     </div>
@@ -256,31 +119,8 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                     </h5>
                     <div class="card-body">
                         <iron-collapse id="collapse" opened="{{bolConta}}">
-                            <div style="display: flex; padding: 8px; align-items:center;">
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input id="txtNombre" label="Nombre" error-message="valor inválido" value="{{nombre}}"></paper-input>
-                                </div>
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input label="puesto" value="{{puesto}}"></paper-input>
-                                </div>
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input id="txtTel" label="Telefono" value="{{tel}}"></paper-input>
-                                </div>
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input label="Correo electrónico" value="{{email}}"></paper-input>
-                                </div>
-                                <div style="flex-grow: 0;">
-                                    <button class="btn btn-sm" style="background-color:var(--paper-green-500);color:white;" on-click="agregaContacto">
-                                        <span class="btn-label">
-                                        <iron-icon icon="add"></iron-icon>
-                                        </span>
-                                        agregar contacto
-                                    </button>
-                                </div>
-                            </div>
-                            <template is="dom-repeat" items="[[listaContactos]]">
-                                <item-contacto style="border:solid 1px var(--paper-blue-300);border-radius:10px;margin:5px;" datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
-                            </template>
+                        <my-datos-contacto style="padding:10px;" id-prospecto="[[prospecto.id]]" arreglo-contactos="[[listaContactos]]"></my-datos-contacto>
+
                         </iron-collapse>
                     </div>
                 </div><!--card-->
@@ -293,53 +133,9 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                     </h5>
                     <div class="card-body">
                         <iron-collapse id="collapse" opened="{{bolExtra}}">
-                            <div style="display: flex; padding: 8px; align-items:center;">
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input id="txtEstatus" label="estatus" error-message="valor inválido" value="{{estatus}}"></paper-input>
-                                </div>
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input id="txtComentario" label="comentario" value="{{comentario}}"></paper-input>
-                                </div>
-                                <!-- <div style="flex-grow: 1; margin:5px;"> esto esra automatico
-                                    <paper-input id="txtTel" label="fecha" value="{{tel}}"></paper-input>
-                                </div> -->
-                                <div style="flex-grow: 1; margin:5px;">
-                                    <paper-input id="txtActividad" label="actividad a realizar" value="{{actividad}}"></paper-input>
-                                </div>
-                                <div style="flex-grow: 0;">
-                                    <button class="btn btn-sm" style="border:solid 1px var(--paper-green-500);color:var(--paper-green-500);background-color:white;" on-click="agregaEstatus">
-                                        <span>
-                                            <iron-icon icon="add"></iron-icon>
-                                        </span>
-                                        agregar estatus
-                                    </button>
-                                </div>
-                            </div>
-                            <template is="dom-repeat" items="[[listaSeguimiento]]" as ="seg">
-                                <div style="background-color:white;">
-                                    <div style="display: flex; padding: 8px; ">
-                                        <div style="flex-grow: 1;">
-                                            <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">estatus</div>
-                                            <div style="font-size: 16px; color: black;">[[seg.estatus]]</div>
-                                        </div>
-                                        <div style="flex-grow: 1;">
-                                            <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">comentario</div>
-                                            <div style="font-size: 16px; color: black;">[[seg.comentario]]</div>
-                                        </div>
-                                        
-                                        <div style="flex-grow: 1;"> 
-                                        <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">fecha</div>
-                                        <div style="font-size: 16px; color: black;">{{PolymerUtils_getTimeString(seg._timestamp)}}</div>
-                                        </div>
-                                        
-                                        <div style="flex-grow: 1;">
-                                            <div style="font-size: 16px; font-weight: 500; color: var(--paper-indigo-500);">actividad a realizar</div>
-                                            <div style="font-size: 16px; color: black;">[[seg.actividad]]</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                           
+                            <my-datos-seguimiento style="padding:10px;" id-prospecto="[[prospecto.id]]" arreglo-seguimiento="[[prospecto.listaSeguimiento]]"></my-datos-seguimiento>
+
+                            
                         </iron-collapse>
                     </div>
                 </div><!--card-->
@@ -351,10 +147,12 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
 
     static get properties() {
         return {
+            esProspectoGuardado:{type:Boolean, notify:true, value:false},
             prospecto:{type:Object, notify:true,observer:"_llenaCampos"},
             listaContactos:{type:Array, notify:true, value:[]},
             listaSeguimiento:{type:Array, notify:true, value:[]},
             objCliente:{type:Object, notify:true},
+            agente:{type:Object, notify:true},
             _routeParams:{observer: "_routeChanged"},
 
             bolInfo:{type:Boolean, notify:true, value:false},
@@ -372,6 +170,10 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
         super.ready();
     }
 
+    navegaLista(){
+        NavigationUtils.navigate("clientes");
+    }
+
     muestraIcono(bol){
         if(bol==true){
             return "expand-less";
@@ -382,8 +184,13 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
 
     _llenaCampos(obj){
         if(obj && obj!=null){
+            this.set("esProspectoGuardado",true);
+
             if(obj.razon){
                 this.set("razon",obj.razon);
+            }
+            if(obj.agente){
+                this.set("agente",obj.agente);
             }
             if(obj.alias){
                 this.set("alias",obj.alias);
@@ -401,29 +208,44 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                 this.set("es",obj.es);
             }
             if(obj.listaContactos){
-                this.set("listaContactos",obj.listaContactos);
+                var arrCon=PolymerUtils.cloneObject(obj.listaContactos);
+                this.set("listaContactos",arrCon);
             }
             if(obj.listaSeguimiento){
-                this.set("listaSeguimiento",obj.listaSeguimiento);
+                var arrSeg=PolymerUtils.cloneObject(obj.listaSeguimiento);
+                this.set("listaSeguimiento",arrSeg);
             }
+        }else{
+            console.log("no hay datos de prospecto");
+            this.set("bolInfo",!this.bolInfo);
+   
+        this.set("bolConta",!this.bolConta);
+  
+        this.set("bolExtra",!this.bolExtra);
         }
         
     }
 
     actualizaDatos(){
-        var idEditar=this.prospecto.id;
+        
 
         if(!this.razon || this.razon==null || this.razon.trim()==""){
             return PolymerUtils.Toast.show("Ingresa un nombre válido");
         }
 
         var actualizado={
-            razon:this.razon
+            razon:this.razon,
+            _esCliente:true
         };
 
         
         if(this.alias){
             actualizado["alias"]=this.alias;
+        }
+        if(!this.agente || this.agente==null ){
+            return PolymerUtils.Toast.show("no hay un agente asignado a este cliente");
+        }else{
+            actualizado["agente"]=this.agente;
         }
         if(this.domicilio){
             actualizado["domicilio"]=this.domicilio;
@@ -444,15 +266,30 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             actualizado["listaSeguimiento"]=this.listaSeguimiento;
         }
 
+        if(this.prospecto && this.prospecto!=null){
+            var idEditar=this.prospecto.id;
+            firebase.firestore().collection("_clientes-khalia").doc(idEditar).set(actualizado,{merge:true})
+            .then(() => {
+                PolymerUtils.Toast.show("Cliente almacenado con exito");
+            })
+            .catch((error) => {
+                PolymerUtils.Toast.show("Error al guardar; intentalo más tarde.");
+                console.error("Error writing document: ", error);
+            });
+        }else{
 
-        firebase.firestore().collection("_clientes-khalia").doc(idEditar).set(actualizado,{merge:true})
-        .then(() => {
-            PolymerUtils.Toast.show("Información actualizada con exito");
-        })
-        .catch((error) => {
-            PolymerUtils.Toast.show("Error al guardar; intentalo más tarde.");
-            console.error("Error writing document: ", error);
-        });
+            firebase.firestore().collection("_clientes-khalia").add(idEditar)
+            .then(() => {
+                PolymerUtils.Toast.show("Cliente almacenado con exito actualizada con exito");
+            })
+            .catch((error) => {
+                PolymerUtils.Toast.show("Error al guardar; intentalo más tarde.");
+                console.error("Error writing document: ", error);
+            });
+        }
+
+
+        
     }
 
     _routeChanged(params){
@@ -471,12 +308,14 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                         t.set("prospecto",obj);
                         
                     }else{
-                        t.set("prospecto",null);
+                        
                     }
                 }
             }));
 
-		}
+		}else{
+            t.set("prospecto",null);
+        }
 	}
 
 
