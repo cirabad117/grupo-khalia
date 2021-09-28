@@ -1,6 +1,6 @@
 build/
 node_modules/
 .firebase/
-/scripts/firebase-start.js
+scripts/firebase-start.js
 package-lock.json
 .vscode/
