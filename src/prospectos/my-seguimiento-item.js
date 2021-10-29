@@ -2,7 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import '../bootstrap.js';
 
-class MySeguimientoItem extends PolymerElement {
+class MySeguimientoItem extends  PolymerElement {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -13,8 +13,10 @@ class MySeguimientoItem extends PolymerElement {
             
             <div style="font-size: 16px; font-weight: 500;">
                 <span class="badge" style$="padding:5px; background-color:[[objEstatus.color]];color:[[objEstatus.base]];">
-                    {{objEstatus.texto}}
+                    {{objEstatus.texto}} - [[muestraFecha(fechaUltimoSeg)]]
                 </span>
+
+               
             </div>
 
         `;
@@ -24,7 +26,8 @@ class MySeguimientoItem extends PolymerElement {
         return {
 
             objBuscar:{type:Object, notify:true,observer:"_llenaCampos"},
-            objEstatus:{type:Object,notify:true}
+            objEstatus:{type:Object,notify:true},
+            fechaUltimoSeg:{type:Number, notify:true}
 
         }
     }
@@ -37,14 +40,22 @@ class MySeguimientoItem extends PolymerElement {
         super.ready();
     }
 
+    muestraFecha(value){
+        return PolymerUtils.getTimeString(value);
+
+    }
+
     _llenaCampos(obj){
         if(obj && obj!=null){
+            console.log("se dispara observer",obj)
             
             if(obj.listaSeguimiento){
                 this.set("listaSeguimiento",obj.listaSeguimiento);
 
-                var obj=this.muestraEstatus(obj.listaSeguimiento);
-                this.set("objEstatus",obj)
+                var objEs=this.muestraEstatus(obj.listaSeguimiento);
+                console.log("recibimos estatus reciente",objEs);
+                this.set("objEstatus",objEs.estatus);
+                this.set("fechaUltimoSeg",objEs.fechaGuardado);
             }else{
                 this.set("objEstatus",{texto:"no hay datos de seguimiento",base:"white",color:"black"}
                 );
@@ -73,7 +84,7 @@ class MySeguimientoItem extends PolymerElement {
         var ultimo=ordenado[0];
 
         if(ultimo && ultimo!=null){
-            return ultimo.estatus;
+            return ultimo;
         }else{
             return {texto:"no hay datos de seguimiento",base:"white",color:"black"};
         }

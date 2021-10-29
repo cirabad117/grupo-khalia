@@ -56,7 +56,7 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                 </div>
             </div>
             
-            <paper-listbox style="max-height:200px;overflow-y:scroll;">
+            <paper-listbox style="max-height:280px;overflow-y:scroll;">
                 <template is="dom-repeat" items="[[arregloSeguimiento]]" as="seg" sort="sort">
                     <paper-item style="border-bottom: solid 1px #CFD8DC;">
                         <paper-item-body two-line>

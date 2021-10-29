@@ -335,6 +335,13 @@ let internalMixinUtils = function(superClass) {
 			return signo+val.formatCurrency();
 			else return signo+"0.00";
 		}
+
+		validateEmail(mail){
+			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+			   return (true);
+			}
+			return (false);
+		}
 		
 		_toUpperCase(string){
 			if(string){

@@ -20,7 +20,7 @@ class MyCotizacionesMain extends PolymerElement {
 			</style>
 			
 			
-			<my-lista-general vista="prospectos" arreglo-items="[[listaProspectos]]" titulo="razon"
+			<my-lista-general vista="cotizacion" arreglo-items="[[listaCotizaciones]]" titulo="nombreDirigido"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
 			funcion-buscar="[[funcionProspecto]]" funcion-ordenar="[[funcionOrdena]]"
             on-ejecuta-accion="abreNuevaCotizacion" on-ejecuta-item="abreProspecto"></my-lista-general>

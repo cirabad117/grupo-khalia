@@ -2,10 +2,10 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-item-body.js';
-import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/iron-icons/communication-icons.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-dropdown/demo/x-select.js';
 
 
 import '../bootstrap.js';
@@ -16,7 +16,6 @@ class ItemContacto extends PolymerElement {
             <style include="bootstrap">
                 :host{
                     display:block;
-                    padding:10px;
                 }
                 ::-webkit-scrollbar {
                     width: 10px;
@@ -30,9 +29,52 @@ class ItemContacto extends PolymerElement {
                 ::-webkit-scrollbar-thumb:hover {
                     background: #555; 
                 }
+                
             </style>
             
-            <div class="card">
+            <x-select>
+                <div slot="dropdown-trigger" class="dropdownTrigger">
+                    <paper-item style="cursor:pointer;">
+                        <paper-item-body>
+                            <div>
+                                [[muestraNombre(datosContacto)]]
+                            </div>
+                        </paper-item-body>
+                        
+                    </paper-item>
+                    
+                    
+
+                    
+                </div>
+                
+                <div slot="dropdown-content" class="dropdownContent" style="border:solid 1px var(--paper-blue-500);background-color:white;">
+                    <paper-icon-button icon="create"></paper-icon-button>
+                    <paper-icon-button icon="delete"></paper-icon-button>
+                    <paper-listbox>
+                        <template is="dom-repeat" items="[[datosContacto.telefonos]]" as="tels">
+                            <paper-item>
+                                <span style="padding:10px;">
+                                    <iron-icon icon="communication:call"></iron-icon>
+                                </span>[[tels.tipo]]: [[tels.telefono]]
+                            </paper-item>
+                        </template>
+                        
+                        <template is="dom-repeat" items="[[datosContacto.correos]]" as="email">
+                            <paper-item >
+                                <span style="padding:10px;">
+                                    <iron-icon icon="communication:email"></iron-icon>
+                                </span>[[email]]
+                            </paper-item>
+                        </template>
+                    </paper-listbox>
+                </div>
+            </x-select>
+
+
+
+            
+            <!-- <div class="card">
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <h5 class="card-title" style="padding:10px;">[[muestraNombre(datosContacto)]]</h5>
@@ -71,7 +113,7 @@ class ItemContacto extends PolymerElement {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
    
 
             

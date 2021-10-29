@@ -1,5 +1,8 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-item/paper-item-body.js';
+
 import '../prospectos/my-seguimiento-item.js';
 
 import '../bootstrap.js';
@@ -12,10 +15,10 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                 :host{
                     display:block;
                 }
-                .carta{
+                /* .carta{
                     background-color: white;
                     border-radius: 5px;
-                    /* margin: 8px 24px; */
+                    
                     margin:8px;
                 }
                 .carta.iron-selected{
@@ -31,48 +34,37 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                 }
                 .carta-1:hover {
                     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-                }
+                } */
             </style>
+
             
-            <div class="carta carta-1" >
-                <div style="display: flex; padding: 8px 16px; ">
-                    <div>
-                        <div style="font-size: 22px; font-weight: 500; color: var(--paper-indigo-500);">{{getNombre(dato,tituloValue)}}</div>
-
-                        <div style="font-size: 17px; font-weight: 450;">[[dato.dependencia]]</div>
-
-                        <template is="dom-if" if="{{_muestraElemento(estilo,'appClientes')}}">
-                        <div style="font-size: 17px; font-weight: 450;">[[dato.id]]</div>
-
+            <paper-item style="border:solid 1px #607D8B; border-radius:10px;">
+                <paper-item-body>
+                    <div class="row align-items-center">
+                    <template is="dom-if" if="{{_muestraElemento(estilo,'appClientes')}}">
+                            <div  class="col-auto">[[dato.id]]</div>
                         </template>
-
-
-
+                        <div class="col-auto">{{getNombre(dato,tituloValue)}}</div>
+                        <div  class="col-auto">[[dato.dependencia]]</div>
                         <template is="dom-if" if="{{_muestraElemento(estilo,'prospectos')}}">
-                            <my-seguimiento-item obj-buscar="[[dato]]"></my-seguimiento-item>
+                            <my-seguimiento-item  class="col-auto" obj-buscar="[[dato]]"></my-seguimiento-item>
                         </template>
-                        
-                        
-                    </div>
-                    <div style="flex-grow: 1000;"></div>
-                    <div style="text-align: right;">
-                        <template is="dom-if" if="{{_muestraElemento(estilo,'prospectos')}}">
-                            <div style="font-size: 16px; font-weight: 400; color: var(--paper-blue-grey-500);">fecha de creación</div>
-                            <div style="font-weight: 400; font-size: 16px;">[[PolymerUtils_getTimeString(dato._timestamp)]]</div>
-                        </template>
-                        <template is="dom-if" if="{{_muestraElemento(estilo,'clientes')}}">
-                            <div style="font-size: 16px; font-weight: 400; color: var(--paper-blue-grey-500);">fecha de adición</div>
-                            <div style="font-weight: 400; font-size: 16px;">[[PolymerUtils_getTimeString(dato._timestamp)]]</div>
-                        </template>
-
                         <template is="dom-if" if="{{_muestraElemento(estilo,'productos')}}">
-                            <div style="font-size: 16px; font-weight: 400; color: var(--paper-blue-grey-500);">departamento</div>
-                            <div style="font-weight: 400; font-size: 16px;">[[dato.departamento]]</div>
+                            <div class="col-auto">
+                                <div style="font-size: 16px; font-weight: 400; color: var(--paper-blue-grey-500);">departamento</div>
+                                <div style="font-weight: 400; font-size: 16px;">[[dato.departamento]]</div>
+                            </div>
                         </template>
                         
                     </div>
-                </div>
-            </div>
+                </paper-item-body>
+                
+                <paper-icon-button style="color:var(--paper-blue-500);" icon="search" on-click="clickEdita"></paper-icon-button>
+                <paper-icon-button style="color:var(--paper-red-500);" icon="delete"></paper-icon-button>
+
+                
+            </paper-item>
+            
 
         `;
     }
@@ -83,7 +75,8 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
             dato:{type:Object, notify:true},
             tituloValue:{type:String, notify:true},
 
-            bolEstatus:{type:Boolean, notify:true}
+            bolEstatus:{type:Boolean, notify:true},
+
 
         }
     }
@@ -110,6 +103,14 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
         }else{
             return "registro";
         }
+    }
+
+    clickEdita(){
+        this.dispatchEvent(new CustomEvent('activa-item', {
+            detail: {
+                closed:true
+            }
+        }));
     }
 }
 

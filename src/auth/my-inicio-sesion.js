@@ -5,7 +5,7 @@ import '@polymer/paper-input/paper-input.js';
 ;
 import '@polymer/iron-pages/iron-pages.js';
 
-// import './dialog-reset-pass.js';
+import './dialog-reset-pass.js';
 
 import '../bootstrap.js';
 import '../shared-styles.js';

@@ -1,15 +1,17 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin.js';
 import { NavigationMixin } from '../mixins/navigation-mixin.js';
+import { UtilsMixin } from '../mixins/utils-mixin.js';
 
 import '../general-controls/my-datos-contacto.js';
 import '../general-controls/my-datos-seguimiento.js';
 import '../general-controls/data-simple.js';
 import '../controles-extra/selector-usuarios.js';
+import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 
 import '../bootstrap.js';
 
-class MyDatosProspecto extends NavigationMixin(DialogLayoutMixin(PolymerElement)) {
+class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(PolymerElement))) {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -17,79 +19,90 @@ class MyDatosProspecto extends NavigationMixin(DialogLayoutMixin(PolymerElement)
                     display:block;
                 }
             </style>
-            
+
             <div class="container-fluid">
-                <div class="card">
-                    <div class="card-header">
-                        
+                <div class="row">
+                    <div class="col-md-12 p-3 mb-2 bg-info text-white d-flex">
                         <paper-icon-button icon="arrow-back" on-click="navegaLista"></paper-icon-button>
-                        
-                        Informacion del prospecto
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <template is="dom-if" if="[[esEditar]]">
-                                    <paper-input id="txtAlias" label="Razón social"
-                                    value="{{razon}}" error-message="valor inválido"></paper-input>
-                                    
-                                    <paper-input id="txtAlias" label="Alias"
-                                    value="{{alias}}" error-message="valor inválido"></paper-input>
-
-                                    <selector-usuarios etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
-                                    
-                                    <paper-input id="txtAlias" label="Franquicia"
-                                    value="{{franquicia}}" error-message="valor inválido"></paper-input>
-
-                                    <button type="button" class="btn btn-sm btn-success" on-click="actualizaDatos">
-                                        <span>
-                                            <iron-icon icon="save"></iron-icon>
-                                        </span>guardar cambios
-                                    </button>
-                                    
-                                    <button type="button" class="btn btn-sm btn-light" on-click="cambiaEdita">
-                                        <span>
-                                            <iron-icon icon="clear"></iron-icon>
-                                        </span>cancelar
-                                    </button>
-                                </template>
-
-                                <template is="dom-if" if="[[!esEditar]]">
-                                    <div style="display:flex;">
-                                        <data-simple value="{{razon}}" title="Nombre o razón social" font-size="20px"></data-simple>
-                                        <paper-icon-button style="background-color:#FFECB3;border-radius:50%;" icon="create" on-click="cambiaEdita"></paper-icon-button>
-
-                                    </div>
-                                    <data-simple value="{{alias}}" title="alias" font-size="20px"></data-simple>
-                                    <data-simple value="{{nombreAgente}}" title="Agente" font-size="20px"></data-simple>
-                                    <data-simple value="{{franquicia}}" title="Franquicia" font-size="20px"></data-simple>
-
-                                    <paper-button on-click="cambiaCliente" raised style="background-color:var(--paper-blue-500);color:white;">
-                                        <span>
-                                        <iron-icon icon="supervisor-account"></iron-icon>
-                                        </span>
-                                        agregar a clientes
-                                    </paper-button>
-                                </template>
-                            </div>
-
-                            <div class="col-md-9">
-                                <my-datos-seguimiento  on-despacha-dialogo="updateDialogo"
-                                style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;"
-                                id-prospecto="[[prospecto.id]]" arreglo-seguimiento="[[listaSeguimiento]]">
-                                </my-datos-seguimiento>
-                                
-                                <my-datos-contacto on-despacha-dialogo="updateDialogo"
-                                style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;"
-                                id-prospecto="[[prospecto.id]]" arreglo-contactos="[[listaContactos]]">
-                                </my-datos-contacto>
-                            </div>
-
-                            
-                        </div>
+                        <h4>{{razon}}</h4>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;">
+                        <div style="display:flex; align-items:center;">
+                            <div style="flex-grow:1; display:flex;" class="sec">
+                                <iron-icon icon="book" style="margin:5px;"></iron-icon>
+                                <h5>Información del prospecto</h5>
+                            </div>
+                            <div style="flex-grow:0;">
+                                <template is="dom-if" if="[[!esEditar]]">
+                                <button type="button" style="margin:5px;" class="btn btn-warning btn-sm" on-click="cambiaEdita">
+                                    <span aria-hidden="true">
+                                        <iron-icon icon="create"></iron-icon>
+                                    </span>
+                                </button>
+                                </template>
+                                <button type="button" style="margin:5px;" class="btn btn-info btn-sm" on-click="cambiaCliente">
+                                    <span aria-hidden="true">
+                                        <iron-icon icon="supervisor-account"></iron-icon>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <template is="dom-if" if="[[esEditar]]">
+                                <paper-input id="txtAlias" label="Razón social"
+                                value="{{razon}}" error-message="valor inválido"></paper-input>
+                                <paper-input id="txtAlias" label="Alias"
+                                value="{{alias}}" error-message="valor inválido"></paper-input>
+                                <selector-usuarios etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
+                                <vaadin-combo-box style="margin:5px;" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
+                                item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+                                <paper-input id="txtAlias" label="Franquicia"
+                                value="{{franquicia}}" error-message="valor inválido"></paper-input>
+                                <button type="button" class="btn btn-sm btn-success" on-click="actualizaDatos">
+                                    <span>
+                                        <iron-icon icon="save"></iron-icon>
+                                    </span>guardar cambios
+                                </button>
+                                <button type="button" class="btn btn-sm btn-light" on-click="cambiaEdita">
+                                    <span>
+                                        <iron-icon icon="clear"></iron-icon>
+                                    </span>cancelar
+                                </button>
+                            </template>
+                            <template is="dom-if" if="[[!esEditar]]">
+                                <data-simple value="{{razon}}" title="Nombre o razón social" font-size="20px"></data-simple>
+                                  
+                                <data-simple value="{{alias}}" title="alias" font-size="20px"></data-simple>
+                                <data-simple value="{{nombreAgente}}" title="Agente" font-size="20px"></data-simple>
+                                <data-simple value="{{franquicia}}" title="Franquicia" font-size="20px"></data-simple>
+                                <data-simple value="{{estado.nombre}}" title="Estado" font-size="20px"></data-simple>
+                                
+                            </template>
+                        </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <my-datos-contacto on-despacha-dialogo="updateDialogo"
+                        style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;"
+                        id-prospecto="[[prospecto.id]]" arreglo-contactos="[[listaContactos]]">
+                        </my-datos-contacto>
+                    </div>
+                    <div class="col-md-12">
+                        <my-datos-seguimiento  on-despacha-dialogo="updateDialogo"
+                        style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;"
+                        id-prospecto="[[prospecto.id]]" arreglo-seguimiento="[[listaSeguimiento]]">
+                        </my-datos-seguimiento>
+                    </div>
+
+                </div>
             </div>
+            
+        
         `;
     }
 
@@ -192,6 +205,12 @@ class MyDatosProspecto extends NavigationMixin(DialogLayoutMixin(PolymerElement)
             }else{
                 this.set("franquicia",null);
             }
+
+            if(obj.estado){
+                this.set("estado",obj.estado);
+            }else{
+                this.set("estado",null);
+            }
             if(obj.listaContactos){
                 
                 var arrCon=PolymerUtils.cloneObject(obj.listaContactos);
@@ -252,20 +271,6 @@ class MyDatosProspecto extends NavigationMixin(DialogLayoutMixin(PolymerElement)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-
 }
 
 
@@ -292,6 +297,11 @@ actualizaDatos(){
     if(this.agente){
         actualizado["agente"]=this.agente;
     }
+
+    if(this.estado){
+        actualizado["estado"]=this.estado;
+    }
+
 
     var t=this;
     firebase.firestore().collection("_clientes-khalia").doc(idEditar).set(actualizado,{merge:true})

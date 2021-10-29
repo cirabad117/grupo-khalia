@@ -247,7 +247,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
             title:"Agregar prospecto",
 			element:"dialogo-nuevo-prospecto",
 			
-			style:"width:95%;",
+			style:"width:500px;max-width:95%;",
 			positiveButton: {
                 text: "Guardar prospecto",
                 action: function(dialog, element) {
@@ -257,7 +257,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
             negativeButton: {
                 text: "Cerrar",
                 action: function(dialog, element) {
-                    element.limpiaDatos();
+                    // element.limpiaDatos();
                     dialog.close();
                 }
             }

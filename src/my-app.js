@@ -117,7 +117,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							<paper-icon-item on-click="toggleAdmin">
 								<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
 								
-								Administración y ventas
+								Ventas
 							</paper-icon-item>
 							
 							<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
@@ -186,17 +186,30 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					</app-header>
 
 					<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+						
+						<dom-access name="prospectos" path="admin/prospectos">
 						<my-prospectos-main name="prospectos"></my-prospectos-main>
+						</dom-access>
 
 						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
 
 
 						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
+
+						<dom-access name="clientes" path="admin/clientes">
 						<my-clientes-main name="clientes"></my-clientes-main>
-						<my-cliente name="cliente"></my-cliente>
-						<my-productos-main name="productos"></my-productos-main>
+						</dom-access>
 
+						<my-cliente name="cliente"></my-cliente>
+
+						<dom-access name="productos" path="admin/productos">
+						<my-productos-main name="productos"></my-productos-main>
+						</dom-access>
+
+						<dom-access name="cotizaciones" path="admin/cotizaciones">
 						<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
+						</dom-access>
+
 						<my-nueva-cotizacion name="nueva-cotizacion"></my-nueva-cotizacion>
 
 						<my-usuarios name="usuarios"></my-usuarios>

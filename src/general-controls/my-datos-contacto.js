@@ -3,6 +3,7 @@ import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
 
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/communication-icons.js';
+import '@polymer/paper-listbox/paper-listbox.js';
 
 import './dialogo-nuevo-conta.js';
 import '../general-controls/item-contacto.js';
@@ -22,6 +23,9 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                     cursor:pointer;
                 }
                 /*  */
+               item-contacto:hover{
+                    background-color:#CFD8DC;
+                }
             </style>
             
             <div style="display:flex; align-items:center;">
@@ -41,14 +45,16 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                 </div>
             </div>
 
-
-            <div class="card-deck">
-            <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]">
-                    
-                        <item-contacto  datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
+            <paper-listbox style="overflow-y:scroll;height:230px;">
+                <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]">
+                    <item-contacto  style="width:100%;" datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
                    
                 </template>
-            </div>
+            </paper-listbox>
+            
+           
+                
+            
 
         `;
     }

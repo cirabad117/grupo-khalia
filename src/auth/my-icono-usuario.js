@@ -108,7 +108,7 @@ class MyIconoUsuario extends AuthMixin(UtilsMixin(PolymerElement)) {
             title:"iniciar sesión",
 			element:"my-inicio-sesion",
 			
-			style:"width:95%;",
+			style:"width:400px;max-width:95%;",
 			// positiveButton: {
             //     text: "Crear",
             //     action: function(dialog, element) {
