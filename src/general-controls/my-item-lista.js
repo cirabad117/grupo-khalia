@@ -44,7 +44,16 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                     <template is="dom-if" if="{{_muestraElemento(estilo,'appClientes')}}">
                             <div  class="col-auto">[[dato.id]]</div>
                         </template>
-                        <div class="col-auto">{{getNombre(dato,tituloValue)}}</div>
+                        <div class="col-auto">
+                            <template is="dom-if" if="[[esCotiza(estilo)]]">
+                                [[dato.cliente.razon]]
+                            </template>
+                            <template is="dom-if" if="[[!esCotiza(estilo)]]">
+                            {{getNombre(dato,tituloValue)}}
+                            </template>
+                            
+
+                        </div>
                         <div  class="col-auto">[[dato.dependencia]]</div>
                         <template is="dom-if" if="{{_muestraElemento(estilo,'prospectos')}}">
                             <my-seguimiento-item  class="col-auto" obj-buscar="[[dato]]"></my-seguimiento-item>
@@ -87,6 +96,10 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
 
     ready() {
         super.ready();
+    }
+
+    esCotiza(str){
+        return str == "cotizacion" ? true : false;
     }
 
     _muestraElemento(str,base){

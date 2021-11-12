@@ -20,10 +20,10 @@ class MyCotizacionesMain extends PolymerElement {
 			</style>
 			
 			
-			<my-lista-general vista="cotizacion" arreglo-items="[[listaCotizaciones]]" titulo="nombreDirigido"
+			<my-lista-general vista="cotizacion" arreglo-items="[[listaCotizaciones]]" titulo="cliente.razon"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
 			funcion-buscar="[[funcionProspecto]]" funcion-ordenar="[[funcionOrdena]]"
-            on-ejecuta-accion="abreNuevaCotizacion" on-ejecuta-item="abreProspecto"></my-lista-general>
+            on-ejecuta-accion="abreNuevaCotizacion" on-ejecuta-item="abreCotizacion"></my-lista-general>
 			
 			<!-- <div class="container-fluid">
 				<div class="row m-3">
@@ -100,6 +100,11 @@ class MyCotizacionesMain extends PolymerElement {
 
 	abreNuevaCotizacion(){
 		NavigationUtils.navigate("nueva-cotizacion");
+	}
+
+	abreCotizacion(e){
+		var elegido=e.detail.valor;
+        NavigationUtils.navigate("cotizacion",{"id":elegido.id});
 	}
 }
 

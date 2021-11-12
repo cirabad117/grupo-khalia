@@ -47,7 +47,8 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
 
             <paper-listbox style="overflow-y:scroll;height:230px;">
                 <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]">
-                    <item-contacto  style="width:100%;" datos-contacto="[[item]]" index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
+                    <item-contacto  style="width:100%;" id-prospecto="[[idProspecto]]" datos-contacto="[[item]]" arreglo-contactos="[[arregloContactos]]"
+                    index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
                    
                 </template>
             </paper-listbox>
@@ -92,7 +93,7 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
             params:[id,arr],
 
 			
-			style:"width:600px;max-width:95%;",
+			style:"width:70%;",
 			positiveButton: {
                 text: "Crear",
                 action: function(dialog, element) {

@@ -32,6 +32,7 @@ import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
 
 import './auth/my-icono-usuario.js';
 import './controles-extra/dom-access.js';
@@ -117,21 +118,21 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							<paper-icon-item on-click="toggleAdmin">
 								<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
 								
-								Ventas
+								VENTAS
 							</paper-icon-item>
 							
 							<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
 								<dom-access path="admin/prospectos">
-								<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+								<a name="prospectos" href="[[rootPath]]prospectos">PROSPECTOS</a>
 								</dom-access>
 								<dom-access path="admin/clientes">
-								<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+								<a name="clientes" href="[[rootPath]]clientes">CLIENTES</a>
 								</dom-access>
 								<dom-access path="admin/productos">
-								<a name="productos" href="[[rootPath]]productos">Control de productos</a>
+								<a name="productos" href="[[rootPath]]productos">CONTROL DE PRODUCTOS</a>
 								</dom-access>
 								<dom-access path="admin/cotizaciones">
-								<a name="cotizaciones" href="[[rootPath]]cotizaciones">Cotizaciones</a>
+								<a name="cotizaciones" href="[[rootPath]]cotizaciones">COTIZACIONES</a>
 								</dom-access>
 							</iron-collapse>
 
@@ -139,13 +140,14 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							
 							<paper-icon-item on-click="toggleArea">
 								<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
-								estatus por departamento
+								DEPARTAMENTOS
 							</paper-icon-item>
 							<iron-collapse opened="[[esArea]]" style="padding:15px;">
 								<a name="clientes" href="[[rootPath]]clientes">SASISOPA</a>
-								<a name="clientes" href="[[rootPath]]clientes">Sistemas de gestion de medicion</a>
-								<a name="clientes" href="[[rootPath]]clientes">emisiones a la atmosfera</a>
-								<a name="clientes" href="[[rootPath]]clientes">seguridad</a>
+								<a name="clientes" href="[[rootPath]]clientes">SGM</a>
+								<a name="clientes" href="[[rootPath]]clientes">EMISIONES</a>
+								<a name="clientes" href="[[rootPath]]clientes">SEGURIDAD</a>
+								<a name="clientes" href="[[rootPath]]clientes">ADMINSITRACIÓN</a>
 							</iron-collapse>
 							
 							<dom-access path="usuarios">
@@ -210,6 +212,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
 						</dom-access>
 
+						<my-vista-cotiza name="cotizacion"></my-vista-cotiza>
+
 						<my-nueva-cotizacion name="nueva-cotizacion"></my-nueva-cotizacion>
 
 						<my-usuarios name="usuarios"></my-usuarios>
@@ -239,7 +243,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			paginas:{type:Array, notify:true, value:[
 				'prospecto','prospectos','clientes','cliente',
 				'productos','cotizaciones','nueva-cotizacion','usuarios',
-				'app-clientes']
+				'app-clientes','cotizacion']
 				// 'nuevo-app'
 			},
 
@@ -341,6 +345,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			break;
 			case 'cotizaciones':
 				import('./my-cotizaciones-main.js');
+			break;
+			case 'cotizacion':
+				import ('./cotizaciones/my-vista-cotiza.js');
 			break;
 			case 'nueva-cotizacion':
 				import ('./cotizaciones/my-nueva-cotizacion.js');

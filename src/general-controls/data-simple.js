@@ -44,7 +44,6 @@ class DataSimple extends PolymerElement {
         if(va && va!=null && va.trim()!=""){
             this.set("valor",va);
         }else{
-            console.log("no hay dato");
             this.set("valor"," - ");
         }
     }

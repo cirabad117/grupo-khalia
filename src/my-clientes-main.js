@@ -157,7 +157,7 @@ class MyClientesMain extends PolymerElement {
 
     abreDetalleCliente(e){
         var elegido=e.detail.valor;
-        NavigationUtils.navigate("cliente",{"id":elegido.id})
+        NavigationUtils.navigate("cliente",{"id":elegido.id});
     }
 
     abreNuevoCliente(){

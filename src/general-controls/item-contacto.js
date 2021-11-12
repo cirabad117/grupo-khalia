@@ -7,6 +7,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-dropdown/demo/x-select.js';
 
+import '../general-controls/dialogo-nuevo-conta.js';
 
 import '../bootstrap.js';
 
@@ -29,6 +30,11 @@ class ItemContacto extends PolymerElement {
                 ::-webkit-scrollbar-thumb:hover {
                     background: #555; 
                 }
+
+                .dato:hover{
+                    cursor:pointer;
+                    text-decoration:underline;
+                }
                 
             </style>
             
@@ -36,7 +42,7 @@ class ItemContacto extends PolymerElement {
                 <div slot="dropdown-trigger" class="dropdownTrigger">
                     <paper-item style="cursor:pointer;">
                         <paper-item-body>
-                            <div>
+                            <div class="dato">
                                 [[muestraNombre(datosContacto)]]
                             </div>
                         </paper-item-body>
@@ -49,8 +55,8 @@ class ItemContacto extends PolymerElement {
                 </div>
                 
                 <div slot="dropdown-content" class="dropdownContent" style="border:solid 1px var(--paper-blue-500);background-color:white;">
-                    <paper-icon-button icon="create"></paper-icon-button>
-                    <paper-icon-button icon="delete"></paper-icon-button>
+                    <paper-icon-button icon="create" on-click="abreDialogo"></paper-icon-button>
+                    <paper-icon-button icon="delete" on-click="despachaBorra"></paper-icon-button>
                     <paper-listbox>
                         <template is="dom-repeat" items="[[datosContacto.telefonos]]" as="tels">
                             <paper-item>
@@ -123,8 +129,10 @@ class ItemContacto extends PolymerElement {
 
     static get properties() {
         return {
+            idProspecto:{type:String, notify:true},
             datosContacto:{type:Object, notify:true},
-            indexContacto:{type:Number, notify:true}
+            indexContacto:{type:Number, notify:true},
+            arregloContactos:{type:Array, notify:true, value:[]}
 
         }
     }
@@ -152,6 +160,35 @@ class ItemContacto extends PolymerElement {
 
     ready() {
         super.ready();
+    }
+
+    abreDialogo(){
+        var id=this.idProspecto;
+        var arr=PolymerUtils.cloneObject(this.arregloContactos);
+        var pos=this.indexContacto;
+        var data=this.datosContacto;
+        console.log("veamos que nos llega de contactos",arr);
+         PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"editar contacto",
+			element:"dialogo-nuevo-conta",
+            params:[id,arr,pos,data],
+
+			
+			style:"width:70%;",
+			positiveButton: {
+                text: "Guardar cambios",
+                action: function(dialog, element) {
+                    element.editaContacto();
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
 }
 
