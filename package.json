@@ -44,7 +44,8 @@
     "@vaadin/vaadin-dialog": "^2.5.2",
     "@vaadin/vaadin-notification": "^1.6.1",
     "@vaadin/vaadin-select": "^3.0.0",
-    "@webcomponents/webcomponentsjs": "^2.0.0"
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "kothing-editor": "^0.1.4"
   },
   "devDependencies": {
     "polymer-cli": "^1.7.1",

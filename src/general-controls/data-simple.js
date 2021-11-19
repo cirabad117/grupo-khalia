@@ -40,7 +40,6 @@ class DataSimple extends PolymerElement {
     }
 
     muestraValor(va){
-        console.log("va",va);
         if(va && va!=null && va.trim()!=""){
             this.set("valor",va);
         }else{

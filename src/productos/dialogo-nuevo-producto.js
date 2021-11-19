@@ -5,11 +5,12 @@ import "@polymer/paper-input/paper-input.js";
 import '@vaadin/vaadin-select/vaadin-select.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 
-
-class DialogoNuevoProducto extends DialogLayoutMixin(PolymerElement) {
+import '../kothing.js';
+import { UtilsMixin } from '../mixins/utils-mixin';
+class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement)) {
     static get template() {
         return html`
-            <style>
+            <style include="kothing">
                 :host{
                     display:block;
                 }
@@ -65,6 +66,41 @@ class DialogoNuevoProducto extends DialogLayoutMixin(PolymerElement) {
                     </template>
                 </vaadin-select>
             </template>
+
+            <div>
+            <label for="entrega">Entregables</label>
+            <textarea id="entrega" class="my-editor"></textarea>
+            </div>
+
+            <div>
+            <label for="marco">fundamento legal</label>
+            <textarea id="marco" class="my-editor"></textarea>
+            </div>
+            <!-- <paper-input label="fundamento legal" value="{{nuevoEntregable}}"></paper-input> -->
+
+            <!-- <paper-input label="alcance" value="{{nuevoEntregable}}"></paper-input> -->
+
+            <div>
+                <p>Entregables</p>
+                <!-- <paper-input label="agregar entregable" value="{{busqueda}}">
+                    <paper-icon-button slot="suffix" on-click="sumaEntregable" icon="add" alt="agrega" title="agrega">
+                    </paper-icon-button>
+                </paper-input> -->
+                
+                <!-- <paper-listbox style="max-height:250px;overflow-y:scroll;">
+                    <template is="dom-repeat" items="{{entregables}}">
+                        <paper-item>
+                            <paper-item-body>
+                                <div>[[item.razon]]</div>
+                            </paper-item-body>
+                        </paper-item>
+                    </template>
+                </paper-listbox> -->
+            </div>
+
+            
+
+
             
 
         `;
@@ -88,6 +124,36 @@ class DialogoNuevoProducto extends DialogLayoutMixin(PolymerElement) {
 
     ready() {
         super.ready();
+        var t=this;
+
+        var edit=this.shadowRoot.querySelectorAll(".my-editor");
+		const editor=KothingEditor.create(edit, {
+			// All of the plugins are loaded in the "window.KothingEditor" object in kothing-editor.min.js file
+			// Insert options
+		
+			// formats: [
+			// 	'p', 'div', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+			//   ],
+           
+			lang:t.configLenguaje,
+
+			  imageResizing: true,
+			
+			toolbarItem: [
+				['undo', 'redo'],
+				// ['font', 'fontSize', 'formatBlock'],
+				['bold', 'underline', 'italic', 'strike', 'fontColor', 'hiliteColor'],
+				['outdent', 'indent', 'align', 'list'],
+				['table'],
+				
+				
+		
+			  ],
+			width: '100%',
+			height:'100px',
+		  });
+
+		  //this.$.btnGuardar.addEventListener('click', e => {this._handleClick(e,editor)});
     }
 
     guardaProducto(){

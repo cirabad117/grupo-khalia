@@ -4,7 +4,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 
 import '../general-controls/data-simple.js';
-import '../general-controls/dialogo-nuevo-producto.js';
+// import '../general-controls/dialogo-nuevo-producto.js';
 import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin.js';
 
 class DialogoProdInfo extends DialogLayoutMixin(PolymerElement) {

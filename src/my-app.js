@@ -208,6 +208,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<my-productos-main name="productos"></my-productos-main>
 						</dom-access>
 
+						<my-vista-producto name="producto"></my-vista-producto>
+
 						<dom-access name="cotizaciones" path="admin/cotizaciones">
 						<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
 						</dom-access>
@@ -242,7 +244,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			},
 			paginas:{type:Array, notify:true, value:[
 				'prospecto','prospectos','clientes','cliente',
-				'productos','cotizaciones','nueva-cotizacion','usuarios',
+				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
 				'app-clientes','cotizacion']
 				// 'nuevo-app'
 			},
@@ -342,6 +344,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 			case 'productos':
 				import('./my-productos-main.js');
+			break;
+			case 'producto':
+				import('./productos/my-vista-producto.js');
 			break;
 			case 'cotizaciones':
 				import('./my-cotizaciones-main.js');

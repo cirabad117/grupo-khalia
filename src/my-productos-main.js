@@ -1,8 +1,8 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
-import './general-controls/dialogo-nuevo-producto.js';
+import './productos/dialogo-nuevo-producto.js';
 import './general-controls/my-lista-general.js';
-import './productos/dialogo-prod-info.js';
+// import './productos/dialogo-prod-info.js';
 
 class MyProductosMain extends PolymerElement {
     static get template() {
@@ -162,27 +162,22 @@ class MyProductosMain extends PolymerElement {
 
     abreInfo(e){
         var elegido=e.detail.valor;
-        PolymerUtils.Dialog.createAndShow({
-			type: "modal",
-            title:"Información del producto",
-			element:"dialogo-prod-info",
-			params:[elegido],
-			style:"width:400px;max-width:95%;",
-			// positiveButton: {
-            //     text: "Crear",
-            //     action: function(dialog, element) {
-            //         // element.guardaProducto();
+        NavigationUtils.navigate("producto",{id:elegido.id});
+        // PolymerUtils.Dialog.createAndShow({
+		// 	type: "modal",
+        //     title:"Información del producto",
+		// 	element:"dialogo-prod-info",
+		// 	params:[elegido],
+		// 	style:"width:400px;max-width:95%;",
+		
+        //     negativeButton: {
+        //         text: "Cerrar",
+        //         action: function(dialog, element) {
                     
-            //     }
-            // },
-            negativeButton: {
-                text: "Cerrar",
-                action: function(dialog, element) {
-                    
-                    dialog.close();
-                }
-            }
-		});
+        //             dialog.close();
+        //         }
+        //     }
+		// });
     }
 }
 
