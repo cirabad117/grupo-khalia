@@ -30,29 +30,17 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                     
                     <div class="row">
                         <div class="col-md-12">
-                            <template is="dom-if" if="[[esEditar]]">
+                           
+
+                            <!-- id-prod="[[producto.id]]" codigo="[[producto.codigo]]"
+                                nombre="[[producto.nombre]]" departamento="[[producto.departamento]]" dependencia="[[producto.dependencia]]" -->
                                
-                                <dialogo-nuevo-producto style="margin:10px;" id="ventana-editar" es-editar="[[esEditar]]" id-prod="[[producto.id]]" codigo="[[producto.codigo]]"
-                                nombre="[[producto.nombre]]" departamento="[[producto.departamento]]" dependencia="[[producto.dependencia]]"
-                                es-cotizacion="[[revisaCoti(producto)]]" cotizacion="[[producto.cotizacion]]"
-                                on-cierra-dialogo="forzarDialogo"></dialogo-nuevo-producto>
-                            </template>
+                                <dialogo-nuevo-producto style="margin:10px;" id="ventana-editar"
+                                es-editar="[[esEditar]]" producto-activo="{{producto}}"></dialogo-nuevo-producto>
+                          
                         </div>
 
-                        <div class="col-md-12">
-                            <template is="dom-if" if="[[!esEditar]]">
-                                <div style="margin:10px; display: flex; align-items: center; flex-wrap: wrap;">
-                                    <data-simple value="[[producto.codigo]]" title="código"></data-simple>
-                                    <data-simple value="[[producto.nombre]]" title="nombre del producto"></data-simple>
-                                    <data-simple value="[[producto.departamento]]" title="departamento"></data-simple>
-                                    <data-simple value="[[producto.dependencia]]" title="dependencia"></data-simple>
-                                    <template is="dom-if" if="[[producto.cotizacion]]">
-                                        <data-simple value="[[producto.cotizacion]]" title="cotizacion"></data-simple>
-                                    </template>
-                                    <!-- <paper-icon-button style="background-color:#FFECB3;border-radius:50%;" icon="create" on-click="cambiaEdita"></paper-icon-button> -->
-                                </div>
-                            </template>
-                        </div>
+                        
                     </div>
                     <div class="card-footer">
                         <template is="dom-if" if="[[esEditar]]">
@@ -62,7 +50,9 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                             
                         </template>
                         <template is="dom-if" if="[[!esEditar]]">
-                            <paper-button on-click="cambiaEdita">editar</paper-button>
+                            <paper-button on-click="cambiaEdita">cancelar</paper-button>
+                            <paper-button style="color:var(--paper-green-500);" icon="save" on-click="disparaVentanaProd">Crear producto</paper-button>
+                            
                         </template>
                     </div>
                 </div>
@@ -78,7 +68,7 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
         return {
             producto:{type:Object, notify:true},
             _routeParams:{observer: "_routeChanged"},
-            esEditar:{type:Boolean, notify:true, value:false}
+            esEditar:{type:Boolean, notify:true, value:true}
         }
     }
 

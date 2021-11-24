@@ -137,27 +137,28 @@ class MyProductosMain extends PolymerElement {
     }
 
     abreNuevoProd(){
-        PolymerUtils.Dialog.createAndShow({
-			type: "modal",
-            title:"Agrear nuevo producto",
-			element:"dialogo-nuevo-producto",
+        NavigationUtils.navigate("producto");
+        // PolymerUtils.Dialog.createAndShow({
+		// 	type: "modal",
+        //     title:"Agrear nuevo producto",
+		// 	element:"dialogo-nuevo-producto",
 			
-			style:"width:400px;max-width:95%;",
-			positiveButton: {
-                text: "Crear",
-                action: function(dialog, element) {
-                    element.guardaProducto();
+		// 	style:"width:400px;max-width:95%;",
+		// 	positiveButton: {
+        //         text: "Crear",
+        //         action: function(dialog, element) {
+        //             element.guardaProducto();
                     
-                }
-            },
-            negativeButton: {
-                text: "Cerrar",
-                action: function(dialog, element) {
+        //         }
+        //     },
+        //     negativeButton: {
+        //         text: "Cerrar",
+        //         action: function(dialog, element) {
                     
-                    dialog.close();
-                }
-            }
-		});
+        //             dialog.close();
+        //         }
+        //     }
+		// });
     }
 
     abreInfo(e){

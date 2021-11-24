@@ -35,11 +35,17 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                 .carta-1:hover {
                     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
                 } */
+
+                paper-item-body:hover{
+                    text-decoration:underline;
+                    cursor:pointer;
+                    background-color:var(--paper-grey-200);
+                }
             </style>
 
             
             <paper-item style="border:solid 1px #607D8B; border-radius:10px;">
-                <paper-item-body>
+                <paper-item-body on-click="clickEdita">
                     <div class="row align-items-center">
                     <template is="dom-if" if="{{_muestraElemento(estilo,'appClientes')}}">
                             <div  class="col-auto">[[dato.id]]</div>
@@ -56,7 +62,7 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                         </div>
                         <div  class="col-auto">[[dato.dependencia]]</div>
                         <template is="dom-if" if="{{_muestraElemento(estilo,'prospectos')}}">
-                            <my-seguimiento-item  class="col-auto" obj-buscar="[[dato]]"></my-seguimiento-item>
+                            <my-seguimiento-item class="col-auto" obj-buscar="[[dato]]"></my-seguimiento-item>
                         </template>
                         <template is="dom-if" if="{{_muestraElemento(estilo,'productos')}}">
                             <div class="col-auto">
@@ -68,7 +74,7 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                     </div>
                 </paper-item-body>
                 
-                <paper-icon-button style="color:var(--paper-blue-500);" icon="search" on-click="clickEdita"></paper-icon-button>
+                <!-- <paper-icon-button style="color:var(--paper-blue-500);" icon="search" ></paper-icon-button> -->
                 <paper-icon-button style="color:var(--paper-red-500);" icon="delete"></paper-icon-button>
 
                 
