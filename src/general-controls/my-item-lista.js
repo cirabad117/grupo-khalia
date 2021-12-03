@@ -44,8 +44,8 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
             </style>
 
             
-            <paper-item style="border:solid 1px #607D8B; border-radius:10px;">
-                <paper-item-body on-click="clickEdita">
+            <paper-item style="border:solid 1px #607D8B;">
+                <paper-item-body on-click="clickEdita" style="margin:10px;">
                     <div class="row align-items-center">
                     <template is="dom-if" if="{{_muestraElemento(estilo,'appClientes')}}">
                             <div  class="col-auto">[[dato.id]]</div>
