@@ -50,7 +50,7 @@ class MyAppClientes extends PolymerElement {
 			positiveButton: {
                 text: "Crear",
                 action: function(dialog, element) {
-                    element.guardaApp();
+                    element.accionBotonGuardar();
                 }
             },
             negativeButton: {

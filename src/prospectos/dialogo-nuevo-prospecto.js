@@ -83,6 +83,7 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 
 	static get properties() {
 		return {
+			esForzarCliente:{type:Boolean, notify:true, value:false},
 			listaTels:{type:Array, notify:true, value:[]},
 			listaEmails:{type:Array, notify:true, value:[]},
 			listaContactos:{type:Array, notify:true, value:[]},
@@ -163,7 +164,7 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 		listaContactos.push(nuevo);
 		
 		var cliente={
-			_esCliente:false,
+			_esCliente:this.esForzarCliente,
 			_timestamp:firebase.firestore.FieldValue.serverTimestamp(),
 			razon:this.razon,
 			agente:this.agente
@@ -185,7 +186,7 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 
 			
 			PolymerUtils.Toast.show("prospecto agregado con éxito");
-			
+			t.despachaProspecto(docRef.id,cliente);
 			
 			if(t._dialog){
 				t._dialog.close();
@@ -198,6 +199,17 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 			PolymerUtils.Toast.show("Error al guardar. Intentalo más tarde.");
 		});
 
+	}
+
+	despachaProspecto(id,datos){
+
+		var obj=datos;
+		obj["id"]=id;
+		this.dispatchEvent(new CustomEvent('prospecto-guardado', {
+			detail: {
+				datosCliente:obj
+			}
+		}));
 	}
 
 	

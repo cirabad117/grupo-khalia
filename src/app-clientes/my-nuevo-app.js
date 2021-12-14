@@ -5,8 +5,12 @@ import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/paper-tabs/paper-tab.js';
+import '@polymer/paper-tabs/paper-tabs.js';
+import "@polymer/iron-pages/iron-pages.js";
 
 import '../general-controls/data-simple.js';
+import '../prospectos/dialogo-nuevo-prospecto.js';
 
 import '../bootstrap.js';
 
@@ -24,83 +28,44 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                     cursor:pointer;
                 }
             </style>
+
             
-            <div style="display:block;">
-                
-                <vaadin-combo-box id="combo-cliente" label="cliente" selected-item="{{clienteElegido}}" allow-custom-value
-                items="[[listaClientes]]" item-label-path="razon" item-id-path="id">
-                    <template>
-                        <b>[[item.razon]]</b>
-                        [[getTipo(item)]]
-                    </template>
-                </vaadin-combo-box>
+            <paper-tabs selected="{{selected}}" attr-for-selected="name">
+                <paper-tab name="elige">seleccionar cliente</paper-tab>
+                <paper-tab name="nuevo">agregar nuevo cliente</paper-tab>
+               
+            </paper-tabs>
 
-                <div>
-                    <data-simple font-size="20px"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
-                    <data-simple font-size="20px"value="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" title="fecha de creación"></data-simple>
-                </div>
-            </div>
             
-            
-            
-            <!-- <div class="container-fluid">
-                <div class="card">
-                    <div class="card-header">
-                        <paper-icon-button icon="arrow-back" on-click="cambiaPag"></paper-icon-button>
-
-                        Nuevo registro para App Clientes
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <vaadin-combo-box id="combo-cliente" label="cliente" selected-item="{{clienteElegido}}" allow-custom-value
-                                items="[[listaClientes]]" item-label-path="razon" item-id-path="id">
-                                    <template>
-                                        <b>[[item.razon]]</b>
-                                        [[getTipo(item)]]
-                                    </template>
-                                
-                                </vaadin-combo-box>
-
-                               
-
-                            </div>
-                            <div class="col-md-12">
-                                <h4>Información del cliente</h4>
-                                <data-simple font-size="20px"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
-                                
-                                <data-simple font-size="20px"value="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" title="fecha de creación"></data-simple>
-
-
-
-                              
-                               
-
-
-                            </div>
-
-
-                            
+            <iron-pages selected="{{selected}}" attr-for-selected="name">
+                <div name="elige">
+                    <div style="display:block;">
+                        <vaadin-combo-box id="combo-cliente" label="cliente" selected-item="{{clienteElegido}}" allow-custom-value
+                        items="[[listaClientes]]" item-label-path="razon" item-id-path="id">
+                            <template>
+                                <b>[[item.razon]]</b>
+                                [[getTipo(item)]]
+                            </template>
+                        </vaadin-combo-box>
+                        <div>
+                            <data-simple font-size="20px"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
+                            <data-simple font-size="20px"value="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" title="fecha de creación"></data-simple>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        
-                        <paper-button style="color:white;background-color:var(--paper-green-500);" on-click="guardaApp">
-                            <span>
-                                <iron-icon icon="save"></iron-icon>
-                            </span>
-                            agregar cliente a la aplicación
-                        </paper-button>
-                        
-                    </div>
                 </div>
-            </div> -->
+                <div name="nuevo">
+                    <dialogo-nuevo-prospecto id="creador-cliente" es-forzar-cliente="{{esCliente}}" on-prospecto-guardado="ejecutaNuevoApp" ></dialogo-nuevo-prospecto>
+                </div>
+            </iron-pages>
+            
 
         `;
     }
 
     static get properties() {
         return {
+            esCliente:{type:Boolean, notify:true, value:true},
+            selected:{type:String, notify:true, value:"elige", observer:"_actualiza"},
             listaClientes:{type:Array, notify:true, value:[]},
             clienteElegido:{type:Object, notify:true}
 
@@ -109,6 +74,10 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 
     constructor() {
         super();
+    }
+
+    _actualiza(str){
+        this.DialogLayout_notifyResize();
     }
 
     ready() {
@@ -141,7 +110,28 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
     }
 
 
-    guardaApp(){
+    accionBotonGuardar(){
+        if(this.selected=="elige"){
+            this.guardaAppLocal();
+        }else{
+            this.shadowRoot.querySelector("#creador-cliente").guardaCliente();
+        }
+    }
+
+    ejecutaNuevoApp(e){
+        var nuevoCliente=e.detail.datosCliente;
+        nuevoCliente["_fechaApp"]=firebase.firestore.FieldValue.serverTimestamp();
+        this.firebaseGuardaApp(nuevoCliente);
+
+    }
+
+
+
+
+
+    guardaAppLocal(){
+
+        
         if(!this.clienteElegido || this.clienteElegido==null){
             return PolymerUtils.Toast.show("Selecciona un cliente para continuar");
         }
@@ -160,7 +150,15 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         
 
         guardar["_fechaApp"]=firebase.firestore.FieldValue.serverTimestamp();
+        this.firebaseGuardaApp(guardar);
+       
 
+
+    }
+
+
+
+    firebaseGuardaApp(guardar){
         var id=this.makeId();
 
         var t=this;
@@ -174,8 +172,6 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
             console.error("Error writing document: ", error);
             PolymerUtils.Toast.show("Error al guardar. Intentalo más tarde");
         });
-
-
     }
 
     cambiaPag(){
@@ -184,14 +180,13 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
     }
     
     makeId() {
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var result= '';
+        var characters= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var charactersLength = characters.length;
         for ( var i = 0; i < 16; i++ ) {
-          result += characters.charAt(Math.floor(Math.random() * 
-     charactersLength));
-       }
-       return result;
+            result += characters.charAt(Math.floor(Math.random()*charactersLength));
+        }
+        return result;
     }
 }
 

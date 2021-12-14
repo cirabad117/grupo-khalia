@@ -80,7 +80,7 @@ class MyItemLista extends UtilsMixin(PolymerElement) {
                 
             </paper-item>
             
-
+                
         `;
     }
 
