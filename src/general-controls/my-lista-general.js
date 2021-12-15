@@ -61,7 +61,7 @@ class MyListaGeneral extends PolymerElement {
                     <div class="col-md-12">
                         <paper-listbox>
                             <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}" filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}">
-                                <my-item-lista class$="[[getEstiloLista(modoVista)]]" estilo="[[vista]]" dato="[[item]]" titulo-value="[[titulo]]" on-activa-item="disparaAccionItem"></my-item-lista>
+                                <my-item-lista estilo="[[vista]]" dato="[[item]]" titulo-value="[[titulo]]" on-activa-item="disparaAccionItem"></my-item-lista>
                             </template>
                         </paper-listbox>
                     </div>
