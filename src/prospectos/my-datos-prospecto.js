@@ -3,11 +3,12 @@ import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin.js';
 import { NavigationMixin } from '../mixins/navigation-mixin.js';
 import { UtilsMixin } from '../mixins/utils-mixin.js';
 
+import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
+
 import '../general-controls/my-datos-contacto.js';
 import '../general-controls/my-datos-seguimiento.js';
 import '../general-controls/data-simple.js';
 import '../controles-extra/selector-usuarios.js';
-import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 
 import '../bootstrap.js';
 
@@ -22,9 +23,107 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
 
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4>{{razon}}</h4>
+                                <div>
+                                    <template is="dom-if" if="[[!esEditar]]">
+                                        <button type="button" style="margin:5px;" class="btn btn-warning btn-sm" on-click="cambiaEdita">
+                                            <span aria-hidden="true">
+                                                <iron-icon icon="create"></iron-icon>
+                                            </span>
+                                            EDITAR PROSPECTO
+                                        </button>
+                                    </template>
+                                    <button type="button" style="margin:5px;" class="btn btn-info btn-sm" on-click="cambiaCliente">
+                                        <span aria-hidden="true">
+                                            <iron-icon icon="supervisor-account"></iron-icon>
+                                        </span>
+                                        AGREGAR A CLIENTES
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                               
+                                    <template is="dom-if" if="[[esEditar]]">
+                                        <div>
+                                            <paper-input id="txtAlias" label="Razón social"
+                                            value="{{razon}}" error-message="valor inválido"></paper-input>
+                                        
+                                            <paper-input id="txtAlias" label="Alias"
+                                            value="{{alias}}" error-message="valor inválido"></paper-input>
+                                        
+                                            <selector-usuarios etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
+                                        
+                                            <vaadin-combo-box style="margin:5px;" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
+                                            item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+                                        
+                                            <paper-input id="txtAlias" label="Franquicia"
+                                            value="{{franquicia}}" error-message="valor inválido"></paper-input>
+                                        
+                                            <button type="button" class="btn btn-sm btn-success" on-click="actualizaDatos">
+                                                <span>
+                                                    <iron-icon icon="save"></iron-icon>
+                                                </span>
+                                                Guardar cambios
+                                            </button>
+                                        
+                                            <button type="button" class="btn btn-sm btn-light" on-click="cambiaEdita">
+                                                <span>
+                                                    <iron-icon icon="clear"></iron-icon>
+                                                </span>
+                                                Cancelar
+                                            </button>
+
+                                        </div>
+                                    </template>
+
+                                    <template is="dom-if" if="[[!esEditar]]">
+
+                                       
+                                            <data-simple value="{{razon}}" title="Nombre o razón social" font-size="20px"></data-simple>
+                                            <data-simple value="{{alias}}" title="alias" font-size="20px"></data-simple>
+                                            <data-simple value="{{nombreAgente}}" title="Agente" font-size="20px"></data-simple>
+                                            <data-simple value="{{franquicia}}" title="Franquicia" font-size="20px"></data-simple>
+                                            <data-simple value="{{estado.nombre}}" title="Estado" font-size="20px"></data-simple>
+                                    
+
+
+                                        
+                                    </template>
+                                
+
+
+                            </div><!--card-body-->
+
+                            
+
+                          
+
+                        </div><!--card-->
+                        
+                        <div class="d-flex">
+                        <!-- style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;" -->
+                            <my-datos-contacto class="flex-fill m-2" on-despacha-dialogo="updateDialogo"
+                            id-prospecto="[[prospecto.id]]" arreglo-contactos="[[listaContactos]]">
+                            </my-datos-contacto>
+
+                            <my-datos-seguimiento class="flex-fill m-2" on-despacha-dialogo="updateDialogo"
+                            id-prospecto="[[prospecto.id]]" arreglo-seguimiento="[[listaSeguimiento]]">
+                            </my-datos-seguimiento>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="container-fluid">
+                <div class="row">
                     <div class="col-md-12 p-3 mb-2 bg-info text-white d-flex">
-                        <paper-icon-button icon="arrow-back" on-click="navegaLista"></paper-icon-button>
-                        <h4>{{razon}}</h4>
+                       
+                        <h4></h4>
                     </div>
                 </div>
 
@@ -87,20 +186,14 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                         
                     </div>
                     <div class="col-md-6">
-                        <my-datos-contacto on-despacha-dialogo="updateDialogo"
-                        style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;"
-                        id-prospecto="[[prospecto.id]]" arreglo-contactos="[[listaContactos]]">
-                        </my-datos-contacto>
+                        
                     </div>
                     <div class="col-md-12">
-                        <my-datos-seguimiento  on-despacha-dialogo="updateDialogo"
-                        style="margin:10px; padding:10px; background-color:#F5F5F5; border-radius:10px;"
-                        id-prospecto="[[prospecto.id]]" arreglo-seguimiento="[[listaSeguimiento]]">
-                        </my-datos-seguimiento>
+                        
                     </div>
 
                 </div>
-            </div>
+            </div> -->
             
         
         `;
@@ -177,7 +270,9 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
         super.ready();
     }
 
-    _llenaCampos(obj){
+    _llenaCampos(datos){
+
+        var obj=PolymerUtils.cloneObject(datos);
         if(obj && obj!=null){
             if(obj.razon){
                 this.set("razon",obj.razon);
@@ -213,13 +308,17 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
             }
             if(obj.listaContactos){
                 
-                var arrCon=PolymerUtils.cloneObject(obj.listaContactos);
-                console.log("hay contactos",arrCon);
-                this.set("listaContactos",arrCon);
+                //var arrCon=PolymerUtils.cloneObject(obj.listaContactos);
+                //console.log("hay contactos",arrCon);
+                this.set("listaContactos",obj.listaContactos);
+            }else{
+                this.set("listaContactos",[]);
             }
             if(obj.listaSeguimiento){
-                var arrSeg=PolymerUtils.cloneObject(obj.listaSeguimiento);
-                this.set("listaSeguimiento",arrSeg);
+                //var arrSeg=PolymerUtils.cloneObject(obj.listaSeguimiento);
+                this.set("listaSeguimiento",obj.listaSeguimiento);
+            }else{
+                this.set("listaSeguimiento",[]);
             }
          
         }

@@ -27,8 +27,10 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                     background-color:#CFD8DC;
                 }
             </style>
-            
-            <div style="display:flex; align-items:center;">
+
+            <div class="card">
+                <div class="card-body">
+                <div style="display:flex; align-items:center;">
                 <div style="flex-grow:1; display:flex;" class="sec">
                     <iron-icon icon="communication:contact-phone" style="margin:5px;"></iron-icon>
                     <h5>contactos del prospecto</h5>
@@ -45,13 +47,24 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                 </div>
             </div>
 
-            <paper-listbox style="overflow-y:scroll;height:230px;">
-                <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]">
-                    <item-contacto  style="width:100%;" id-prospecto="[[idProspecto]]" datos-contacto="[[item]]" arreglo-contactos="[[arregloContactos]]"
-                    index-contacto="[[index]]" on-quita-contacto="spliceContactos"></item-contacto>
+            <paper-listbox style="overflow-y:scroll;height:280px;">
+                <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]" index-as="numero">
+                    <item-contacto style="width:100%; border-bottom: solid 1px #CFD8DC;" id-prospecto="[[idProspecto]]" datos-contacto="[[item]]" arreglo-contactos="[[arregloContactos]]"
+                    index-contacto="{{numero}}" on-quita-contacto="spliceContactos"></item-contacto>
                    
                 </template>
             </paper-listbox>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            
+            
             
            
                 

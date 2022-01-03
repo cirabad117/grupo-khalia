@@ -25,11 +25,17 @@ class MySeguimientoItem extends  PolymerElement {
     static get properties() {
         return {
 
-            objBuscar:{type:Object, notify:true,observer:"_llenaCampos"},
+            objBuscar:{type:Array, notify:true,value:[]},
             objEstatus:{type:Object,notify:true},
             fechaUltimoSeg:{type:Number, notify:true}
 
         }
+    }
+
+    static get observers() {
+        return [
+            '_llenaCampos(objBuscar,objBuscar.*)'
+        ];
     }
 
     constructor() {
@@ -46,21 +52,23 @@ class MySeguimientoItem extends  PolymerElement {
     }
 
     _llenaCampos(obj){
-        if(obj && obj!=null){
-            console.log("se dispara observer",obj)
-            
-            if(obj.listaSeguimiento){
-                this.set("listaSeguimiento",obj.listaSeguimiento);
+        console.log("se dispara observer",obj)
 
-                var objEs=this.muestraEstatus(obj.listaSeguimiento);
-                console.log("recibimos estatus reciente",objEs);
-                this.set("objEstatus",objEs.estatus);
-                this.set("fechaUltimoSeg",objEs.fechaGuardado);
-            }else{
-                this.set("objEstatus",{texto:"no hay datos de seguimiento",base:"white",color:"black"}
-                );
-            }
+
+
+
+
+        if(obj && obj.length && obj .length>0){
+            this.set("listaSeguimiento",obj);
+
+            var objEs=this.muestraEstatus(obj);
+            console.log("recibimos estatus reciente",objEs);
+            this.set("objEstatus",objEs.estatus);
+            this.set("fechaUltimoSeg",objEs.fechaGuardado);
+        }else{
+            this.set("objEstatus",{texto:"no hay datos de seguimiento",base:"white",color:"black"});
         }
+
         
     }
 

@@ -15,6 +15,7 @@ class MyProductosMain extends PolymerElement {
             
             <my-lista-general vista="productos" arreglo-items="[[listaProductos]]" titulo="codigo"
             lista-filtro="[[listaSeccion]]" lista-ordena="[[opcionesOrdena]]"
+            lista-cols="[[datosProd]]"
             funcion-ordenar="[[funcionOrdena]]" funcion-buscar="[[funcionFiltra]]"
             on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="abreInfo"></my-lista-general>
 
@@ -39,6 +40,13 @@ class MyProductosMain extends PolymerElement {
                 {color:"#1A237E",base:"white",texto:"IMSS"},
                 {color:"#1A237E",base:"white",texto:"STPS"},
                 {color:"#1A237E",base:"white",texto:"Otro"},
+            ]},
+
+            datosProd:{type:Array, notify:true, value:[
+                {"titulo":"Código","dato":"codigo"},
+                {"titulo":"Nombre","dato":"nombre"},
+                {"titulo":"departamento","dato":"departamento"},
+                {"titulo":"dependencia","dato":"dependencia"},
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[

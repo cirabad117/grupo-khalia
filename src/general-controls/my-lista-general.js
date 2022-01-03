@@ -7,9 +7,13 @@ import '@polymer/paper-listbox/paper-listbox.js';
 
 import './my-item-lista.js';
 
-import '../bootstrap.js';
+import '../prospectos/my-seguimiento-item.js';
 
-class MyListaGeneral extends PolymerElement {
+
+import '../bootstrap.js';
+import { UtilsMixin } from '../mixins/utils-mixin.js';
+
+class MyListaGeneral extends UtilsMixin(PolymerElement) {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -24,6 +28,10 @@ class MyListaGeneral extends PolymerElement {
 				background-color: #fff;
 				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 			}
+
+            tr:hover{
+                cursor:pointer;
+            }
             </style>
             
             <div class="container-fluid carta">
@@ -59,11 +67,52 @@ class MyListaGeneral extends PolymerElement {
 
                 <div class="row">
                     <div class="col-md-12">
-                        <paper-listbox>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <template is="dom-repeat" items="[[listaCols]]" as="col">
+                                            <th>[[col.titulo]]</th>
+                                        </template>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}"
+                                filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}" as="info">
+                                
+                                    <tr on-click="disparaAccionItem">
+                                        <template is="dom-repeat" items="[[listaCols]]" as="tit">
+
+                                            <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
+                                                <my-seguimiento-item obj-buscar="[[info.listaSeguimiento]]"></my-seguimiento-item>
+                                            </template>
+                                            <template is="dom-if" if="[[!esSeguimiento(tit.dato)]]">
+                                                <td>
+                                                    [[muestraInfo(info,tit.dato,tit.valorInterno)]]
+                                                </td>
+                                            </template>
+                                            
+                                        </template>
+                                    </tr>
+                                </template>
+
+
+                                    
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+
+
+                        <!-- <paper-listbox>
                             <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}" filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}">
                                 <my-item-lista estilo="[[vista]]" dato="[[item]]" titulo-value="[[titulo]]" on-activa-item="disparaAccionItem"></my-item-lista>
                             </template>
-                        </paper-listbox>
+                        </paper-listbox> -->
                     </div>
                 </div>
 
@@ -90,6 +139,8 @@ class MyListaGeneral extends PolymerElement {
             listaFiltro:{type:Array, notify:true, value:[]},
             listaOrdena:{type:Array, notify:true, value:[]},
 
+            listaCols:{type:Array, notify:true, value:[]},
+
             funcionBuscar:{type:Object, notify:true},
             funcionOrdenar:{type:Object, notify:true},
             // funcionFiltro:{type:Object, notify:true},
@@ -99,7 +150,42 @@ class MyListaGeneral extends PolymerElement {
 
         }
     }
+
+    esSeguimiento(str){
+        return str=="listaSeguimiento";
+    }
     
+
+    muestraInfo(obj,dato,valorInterno){
+        console.log("vamos a mostrar datos",obj,dato);
+
+        if(valorInterno){
+            var extra=valorInterno;
+            var interno=obj[dato];
+            console.log("interno",interno);
+            return interno[extra];
+        }else if(dato=="_timestamp"){
+            return this.PolymerUtils_getDateString(obj._timestamp);
+        }else if(dato=="id"){
+            var str=obj.id;
+            let length = str.length;
+            var restante=4-length;
+            if(restante>0){
+                for(var i=0;i<restante;i++){
+                    str=0+str;
+                }
+            }
+            
+            return "GK-"+str;
+            
+
+        }else{
+            return obj[dato];
+        }
+        
+        
+        
+    }
     // static get observers() {
     //     return [
     //         '_activaFiltro(funcionFiltro,filtroEstatus,arregloItems,arregloItems.*)'
@@ -175,7 +261,7 @@ class MyListaGeneral extends PolymerElement {
     }
 
     disparaAccionItem(e){
-        var elegido=e.model.item;
+        var elegido=e.model.info;
         this.dispatchEvent(new CustomEvent('ejecuta-item', {
             detail: {
                 valor:elegido

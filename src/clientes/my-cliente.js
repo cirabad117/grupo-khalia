@@ -38,8 +38,8 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                 <div class="card">
                     <h5 class="card-header d-flex justify-content-between align-items-center">
                         <div>
-                        <paper-icon-button icon="arrow-back" on-click="navegaLista"></paper-icon-button>
-                        información del cliente
+                        
+                        {{prospecto.razon}} - {{prospecto.alias}}
                         </div>
                     
                         <button class=" btn btn-info btn-md" on-click="actualizaDatos">
@@ -49,13 +49,17 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                             guardar informacion
                         </button>
                     </h5>
-                    <div class="card-body d-flex flex-wrap align-items-center">
+                    <div class="card-body">
 
-                        <paper-input style="margin:5px;" id="txtRazon" label="Nombre o Razón social" value="{{razon}}"
+                        <div class="d-flex">
+                            <paper-input class="flex-fill" style="margin:5px;" id="txtRazon" label="Nombre o Razón social" value="{{razon}}"
                         error-message="valor inválido"></paper-input>
 
-                        <paper-input style="margin:5px;" id="txtAlias" label="Alias"
+                        <paper-input class="flex-fill" style="margin:5px;" id="txtAlias" label="Alias"
                         value="{{alias}}" error-message="valor inválido"></paper-input>
+                        </div>
+
+                        
 
                         <selector-usuarios style="margin:5px;" etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
 
@@ -64,9 +68,13 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                         <vaadin-combo-box style="margin:5px;" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
                         item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
 
-                        <paper-input style="margin:5px;" id="txtPl" label="PL" value="{{pl}}" placeholder="PL/XXXX/EXP/ES/XXXX" error-message="valor inválido"></paper-input>
+                        <div class="d-flex">
+                            <paper-input style="margin:5px; width:50%;" id="txtPl" label="PL" value="{{pl}}" placeholder="PL/XXXX/EXP/ES/XXXX" error-message="valor inválido"></paper-input>
 
-                        <paper-input style="margin:5px;" id="txtEs" label="ES" value="{{es}}" error-message="valor inválido"></paper-input>
+                            <paper-input style="margin:5px; width:50%;" id="txtEs" label="ES" value="{{es}}" error-message="valor inválido"></paper-input>
+                        </div>
+
+                        
 
                         <template is="dom-if" if="[[esProspectoGuardado]]">
                             <div style="margin:5px;" >

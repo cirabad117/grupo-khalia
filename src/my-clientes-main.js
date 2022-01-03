@@ -20,6 +20,9 @@ class MyClientesMain extends PolymerElement {
             <my-lista-general vista="clientes" arreglo-items="[[listaClientes]]" titulo="razon"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
             funcion-buscar="[[funcionProspecto]]"
+
+            lista-cols="[[datosCliente]]"
+
             on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="abreDetalleCliente"
             color-boton="var(--paper-blue-800)">
             </my-lista-general>
@@ -76,12 +79,18 @@ class MyClientesMain extends PolymerElement {
                 
             ]},
 
+            datosCliente:{type:Array, notify:true, value:[
+                {"titulo":"razon social","dato":"razon"},
+                {"titulo":"alias","dato":"alias"},
+                {"titulo":"agente","dato":"agente","valorInterno":"displayName"},
+            ]},
+
 
 
             funcionProspecto:{type:Object,notify:true, value:{
                 nombre:"funcionProspecto",
                 funcion:function(prospecto,texto) {
-                    console.log("entramos al dom repeat",prospecto)
+                    //console.log("entramos al dom repeat",prospecto)
                     if((prospecto.razon && prospecto.razon.toLowerCase().indexOf(texto)!=-1) || (prospecto.alias && prospecto.alias.toLowerCase().indexOf(texto)!=-1)){
                         return prospecto;
                     }

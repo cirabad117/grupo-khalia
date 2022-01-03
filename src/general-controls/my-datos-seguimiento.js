@@ -38,8 +38,10 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                     background: #555; 
                 }
             </style>
-            
-            <div style="display:flex; align-items:center;">
+
+            <div class="card">
+                <div class="card-body">
+                <div style="display:flex; align-items:center;">
                 <div style="flex-grow:1; display:flex;" class="sec">
                     <iron-icon icon="assignment" style="margin:5px;"></iron-icon>
                     <h5>historial de seguimiento</h5>
@@ -72,6 +74,10 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                     </paper-item>
                 </template>
             </paper-listbox>
+                </div>
+            </div>
+            
+            
         `;
     }
 

@@ -24,7 +24,7 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                 <div class="card">
                     <div class="card-header d-flex align-items-center" >
                         
-                        <paper-icon-button icon="arrow-back" on-click="regresa"></paper-icon-button>
+                       
                         <h5>[[producto.nombre]]</h5>
                     </div>
                     

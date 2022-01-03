@@ -22,59 +22,11 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
 
             <my-lista-general vista="prospectos" arreglo-items="[[listaProspectos]]" titulo="razon"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
+            lista-cols="[[datosProspecto]]"
             funcion-buscar="[[funcionProspecto]]" funcion-ordenar="[[funcionOrdena]]"
             on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="abreProspecto"
             color-boton="var(--paper-green-600)"></my-lista-general>
 
-            <!-- <div class="container-fluid">
-                
-                <div class="row">
-                    <div class="col-md-12 card">
-                        <div class="d-flex flex-row bd-highlight mb-3 align-items-center m-3">
-                         
-                            <vaadin-select id="selectCotiza" class="m-3" label="filtrar por estatus" value="{{filtroEstatus}}" error-message="selecciona una opcion">
-                                <template>
-                                    <vaadin-list-box>
-                                        <vaadin-item value="todos">todos los estatus</vaadin-item>
-                                        <template is="dom-repeat" items="[[listaEstatus]]">
-                                        <vaadin-item value="[[item.texto]]">[[item.texto]]</vaadin-item>
-
-                                        </template>
-                                        
-                                    </vaadin-list-box>
-                                </template>
-                            </vaadin-select>
-
-                            <vaadin-select id="selectCotiza" class="m-3" label="Ordenar registros" value="{{modoOrdena}}" error-message="selecciona una opcion">
-                                <template>
-                                    <vaadin-list-box>
-                                        <vaadin-item value="razonAs">razon social (ascendente)</vaadin-item>
-                                        <vaadin-item value="razonDe">razon social (descendente)</vaadin-item>
-                                        <vaadin-item value="fechaAs">fecha de creacion (ascendente)</vaadin-item>
-                                        <vaadin-item value="fechaDe">fecha de creacion (descendente)</vaadin-item>
-                                    </vaadin-list-box>
-                                </template>
-                            </vaadin-select>
-                            <paper-input label="buscar prospecto" class="m-3" id="inputWithButton" value="{{busqueda}}">
-                                <paper-icon-button slot="suffix" on-click="limpia" icon="clear" alt="clear" title="clear">
-                                </paper-icon-button>
-                            </paper-input>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <template is="dom-repeat" items="[[listaProspectos]]" sort="{{_ordenaRegistros(modoOrdena)}}" filter="{{_buscaProspecto(busqueda)}}">
-                            <my-prospecto prospecto="[[item]]" on-click="abreProspecto"></my-prospecto>
-                        </template>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="position: fixed; bottom: 24px; right: 24px;">
-				<div style="position: relative; cursor:pointer;" on-clicK="abreNuevoCliente">
-					<paper-fab icon="add"></paper-fab>
-				</div>
-			</div> -->
 
         `;
     }
@@ -85,6 +37,11 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
             busqueda:{type:String, notify:true},
             filtroEstatus:{type:String, notify:true, value:"todos"},
             modoOrdena:{type:String, notify:true},
+
+            datosProspecto:{type:Array, notify:true, value:[
+                {"titulo":"razon social","dato":"razon"},
+                {"titulo":"estatus de prospecto","dato":"listaSeguimiento"}
+            ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
                 {"opcion":"razonAs","texto":"razón social (ascendente)"},

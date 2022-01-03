@@ -43,19 +43,15 @@ class ItemContacto extends PolymerElement {
                     <paper-item style="cursor:pointer;">
                         <paper-item-body>
                             <div class="dato">
-                                [[muestraNombre(datosContacto)]]
+                               [[indexContacto]] -  [[muestraNombre(datosContacto)]]
                             </div>
                         </paper-item-body>
                         
                     </paper-item>
-                    
-                    
-
-                    
                 </div>
                 
-                <div slot="dropdown-content" class="dropdownContent" style="border:solid 1px var(--paper-blue-500);background-color:white;">
-                    <paper-icon-button icon="create" on-click="abreDialogo"></paper-icon-button>
+                <div slot="dropdown-content" class="dropdownContent" style="margin-left:230px;border:solid 1px var(--paper-blue-500);background-color:white;">
+                    <paper-icon-button icon="create" on-click="activaVista"></paper-icon-button>
                     <paper-icon-button icon="delete" on-click="despachaBorra"></paper-icon-button>
                     <paper-listbox>
                         <template is="dom-repeat" items="[[datosContacto.telefonos]]" as="tels">
@@ -77,52 +73,6 @@ class ItemContacto extends PolymerElement {
                 </div>
             </x-select>
 
-
-
-            
-            <!-- <div class="card">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <h5 class="card-title" style="padding:10px;">[[muestraNombre(datosContacto)]]</h5>
-                        <div>
-                            <paper-icon-button icon="create" on-click="despachaEdita"></paper-icon-button>
-                            <paper-icon-button icon="delete" on-click="despachaBorra"></paper-icon-button>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <paper-listbox style="max-height:200px;overflow-y:scroll;">
-                            <template is="dom-repeat" items="[[datosContacto.telefonos]]" as="tels">
-                                    <paper-item ><span style="padding:10px;">
-                                    <iron-icon icon="communication:call"></iron-icon>
-                                    </span>[[tels.tipo]]: [[tels.telefono]]</paper-item>
-                                </template>
-                                <template is="dom-repeat" items="[[datosContacto.correos]]" as="email">
-                                    <paper-item ><span style="padding:10px;">
-                                    <iron-icon icon="communication:email"></iron-icon>
-                                    </span>[[email]]</paper-item>
-                                </template>
-                            </paper-listbox>
-
-
-
-
-
-
-
-
-
-
-                            <ul class="list-group" style="max-height:150px;overflow-y:scroll;">
-                               
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-   
-
-            
 
         `;
     }
@@ -162,17 +112,34 @@ class ItemContacto extends PolymerElement {
         super.ready();
     }
 
+    activaVista(){
+        var t=this;
+        setTimeout(() => {
+            t.abreDialogo();
+        }, 1000);
+    }
+
     abreDialogo(){
+        var t=this;
         var id=this.idProspecto;
         var arr=PolymerUtils.cloneObject(this.arregloContactos);
+        console.log("abre indexContacto",this.indexContacto);
         var pos=this.indexContacto;
         var data=this.datosContacto;
-        console.log("veamos que nos llega de contactos",arr);
+
+        var data={
+            id:id,
+            arr:arr,
+            pos:pos.toString(),
+            data:data
+        }
+        
+        console.log("se asigna el indexContacto",pos);
          PolymerUtils.Dialog.createAndShow({
 			type: "modal",
             title:"editar contacto",
 			element:"dialogo-nuevo-conta",
-            params:[id,arr,pos,data],
+            params:[data],
 
 			
 			style:"width:70%;",

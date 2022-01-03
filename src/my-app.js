@@ -54,14 +54,13 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				:host {
 					--app-primary-color: #4285f4;
 					--app-secondary-color: black;
-
 					display: block;
 				}
-
+				
 				app-drawer-layout:not([narrow]) [drawer-toggle] {
 					display: none;
 				}
-
+				
 				app-header {
 					color: #fff;
 					background-color: var(--app-primary-color);
@@ -87,6 +86,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					color: black;
 					font-weight: bold;
 				}
+				
 
 				paper-item:hover{
 					cursor:pointer;
@@ -94,7 +94,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				paper-icon-item:hover{
 					cursor:pointer;
 				}
-				
+			
 			</style>
 			
 			<app-location route="{{route}}" url-space-regex="^[[rootPath]]" query-params={{routeParams}}>
@@ -102,67 +102,51 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 			<app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
 			</app-route>
-
-			 <app-drawer-layout fullbleed="" narrow="{{narrow}}"><!--force-narrow="" -->
+			
+			<app-drawer-layout fullbleed="" narrow="{{narrow}}"><!--force-narrow="" -->
 				<!-- Drawer content -->
 				<app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
 					<app-toolbar>
 						Menu
 					</app-toolbar>
+					
 					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+						<dom-access path="admin/prospectos">
+							<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+						</dom-access>
+						<dom-access path="admin/clientes">
+							<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+						</dom-access>
+						<dom-access path="admin/productos">
+							<a name="productos" href="[[rootPath]]productos" >Control de productos</a>
+						</dom-access>
+						<dom-access path="admin/cotizaciones">
+							<a name="cotizaciones" href="[[rootPath]]cotizaciones" >Cotizaciones</a>
+						</dom-access>
 						
-
-							
-					<dom-access path="instalaciones"></dom-access>
-
-							<paper-icon-item on-click="toggleAdmin">
-								<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
-								
-								VENTAS
-							</paper-icon-item>
-							
-							<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
-								<dom-access path="admin/prospectos">
-								<a name="prospectos" href="[[rootPath]]prospectos">PROSPECTOS</a>
-								</dom-access>
-								<dom-access path="admin/clientes">
-								<a name="clientes" href="[[rootPath]]clientes">CLIENTES</a>
-								</dom-access>
-								<dom-access path="admin/productos">
-								<a name="productos" href="[[rootPath]]productos">CONTROL DE PRODUCTOS</a>
-								</dom-access>
-								<dom-access path="admin/cotizaciones">
-								<a name="cotizaciones" href="[[rootPath]]cotizaciones">COTIZACIONES</a>
-								</dom-access>
-							</iron-collapse>
-
-							
-							
-							<paper-icon-item on-click="toggleArea">
-								<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
-								DEPARTAMENTOS
-							</paper-icon-item>
-							<iron-collapse opened="[[esArea]]" style="padding:15px;">
-								<a name="clientes" href="[[rootPath]]clientes">SASISOPA</a>
-								<a name="clientes" href="[[rootPath]]clientes">SGM</a>
-								<a name="clientes" href="[[rootPath]]clientes">EMISIONES</a>
-								<a name="clientes" href="[[rootPath]]clientes">SEGURIDAD</a>
-								<a name="clientes" href="[[rootPath]]clientes">ADMINSITRACIÓN</a>
-							</iron-collapse>
-							
-							<dom-access path="usuarios">
-							<a name="usuarios" href="[[rootPath]]usuarios">usuarios</a>
-							</dom-access>
-
-							<dom-access path="app-clientes">
-							<a name="app-clientes" href="[[rootPath]]app-clientes">App Clientes</a>
-							</dom-access>
-						<!-- <a name="lista-clientes" href="[[rootPath]]lista-clientes">Mis Clientes</a> -->
 						<hr>
 
+						<dom-access path="app-clientes">
+							<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
+						</dom-access>
+						
+						<hr>
+						<a name="sasisopa" href="[[rootPath]]sasisopa" >SASISOPA</a>
+						<a name="sgm" href="[[rootPath]]sgm" >SGM</a>
+						<a name="emisiones" href="[[rootPath]]emisiones" >Emisiones</a>
+						<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
+						<a name="admin" href="[[rootPath]]admin" >Administración</a>
+						
+						<hr>
+						
+						<dom-access path="usuarios">
+							<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
+						</dom-access>
+				
+						<hr>
 						
 						<template is="dom-if" if="[[_loggedUser]]">
-						<paper-item on-click="cierraSesion">cerrar sesión</paper-item>
+							<a  href="#" on-click="cierraSesion">Cerrar sesión</a>
 						</template>
 						
 					
@@ -176,7 +160,13 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					<app-header slot="header" condenses="" reveals="" effects="waterfall">
 						<app-toolbar>
 							<paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
-							<div main-title="">My App</div>
+							<template is="dom-if" if="[[muestraBack]]">
+									<paper-icon-button icon="arrow-back" on-click="regresa"></paper-icon-button>
+								</template>
+							<div main-title="">
+								
+								[[nombrePagina]]
+							</div>
 							
 									<my-icono-usuario tam="48px"></my-icono-usuario>
 									<div style="padding: 4px 12px;">
@@ -196,7 +186,6 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
 
 
-						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
 
 						<dom-access name="clientes" path="admin/clientes">
 						<my-clientes-main name="clientes"></my-clientes-main>
@@ -248,7 +237,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				'app-clientes','cotizacion']
 				// 'nuevo-app'
 			},
-
+			nombrePagina:{type:String, notify:true, value:"Grupo Khalia"},
+			muestraBack:{type:Boolean, notify:true, value:false},
 			
 			routeData: Object,
 			subroute: Object
@@ -263,6 +253,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 		super.ready();
 		_initNavigationUtils(this,this.route,"route",this.routeParams,"routeParams");
 
+	}
+
+	regresa(){
+		window.history.back();
 	}
 
 	getIcono(bol){
@@ -323,12 +317,18 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 		switch (page) {
 			case 'prospectos':
 				import('./my-prospectos-main.js');
+				this.set("nombrePagina","Prospectos");
+				this.set("muestraBack",false);
 			break;
 			case 'prospecto':
 				import('./prospectos/my-datos-prospecto.js');
+				this.set("nombrePagina","Información de prospecto");
+				this.set("muestraBack",true);
 			break;
 			case 'clientes':
 				import('./my-clientes-main.js');
+				this.set("nombrePagina","Clientes");
+				this.set("muestraBack",false);
 			break;
 			// case 'inicio':
 			// 	import('./my-inicio.js');
@@ -340,28 +340,43 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			
 			case 'cliente':
 				import('./clientes/my-cliente.js');
+				this.set("nombrePagina","Cliente");
+				this.set("muestraBack",true);
 			break;
 
 			case 'productos':
 				import('./my-productos-main.js');
+				this.set("nombrePagina","Productos");
+				this.set("muestraBack",false);
 			break;
 			case 'producto':
 				import('./productos/my-vista-producto.js');
+				this.set("nombrePagina","datos de producto");
+				this.set("muestraBack",true);
 			break;
 			case 'cotizaciones':
 				import('./my-cotizaciones-main.js');
+				this.set("nombrePagina","Cotizaciones");
+				this.set("muestraBack",false);
 			break;
 			case 'cotizacion':
 				import ('./cotizaciones/my-vista-cotiza.js');
+				this.set("nombrePagina","Datos cotización");
+				this.set("muestraBack",true);
 			break;
 			case 'nueva-cotizacion':
 				import ('./cotizaciones/my-nueva-cotizacion.js');
+				this.set("nombrePagina","Nueva cotización");
+				this.set("muestraBack",true);
 			break;
 			case 'usuarios':
 				import ('./auth/my-usuarios.js');
+				this.set("nombrePagina","Usuarios");
+				this.set("muestraBack",false);
 			break;
 			case 'app-clientes':
 				import ('./my-app-clientes.js');
+				this.set("nombrePagina","App Clientes");
 			break;
 			// case 'nuevo-app':
 			// 	import ('./app-clientes/my-nuevo-app.js');
