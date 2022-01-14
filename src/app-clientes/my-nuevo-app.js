@@ -27,15 +27,29 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                 paper-item:hover{
                     cursor:pointer;
                 }
+
+                div.relative {
+					margin-top:15px;
+					padding:5px;
+					position: relative;
+					border: 3px solid var(--paper-blue-300);
+					border-radius:15px;
+				}
+				div.absolute {
+					position: absolute;
+					top: -15px;
+					left: 20px;
+					background-color:white !important;
+					font-weight: 700;
+					font-size: 14px;
+				}
             </style>
 
             
             <paper-tabs selected="{{selected}}" attr-for-selected="name">
                 <paper-tab name="elige">seleccionar cliente</paper-tab>
                 <paper-tab name="nuevo">agregar nuevo cliente</paper-tab>
-               
             </paper-tabs>
-
             
             <iron-pages selected="{{selected}}" attr-for-selected="name">
                 <div name="elige">
@@ -47,9 +61,11 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                                 [[getTipo(item)]]
                             </template>
                         </vaadin-combo-box>
-                        <div>
-                            <data-simple font-size="20px"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
-                            <data-simple font-size="20px"value="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" title="fecha de creación"></data-simple>
+                        <div class="d-flex align-items-center">
+                            <data-simple font-size="15px" style="padding:5px;"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
+                            <data-simple font-size="15px" style="padding:5px;"value="[[clienteElegido.alias]]" title="Alias"></data-simple>
+
+                            <data-simple font-size="15px" style="padding:5px;"value="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" title="fecha de creación"></data-simple>
                         </div>
                     </div>
                 </div>
@@ -58,6 +74,21 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                 </div>
             </iron-pages>
             
+            <div class="relative">
+				<div class="absolute">tipo de membresia</div>
+				<div class="d-flex align-items-center">
+                    <vaadin-combo-box id="combo-vigencia" label="Periodo de uso" selected-item="{{nuevaVigencia}}" allow-custom-value
+                    items="[[listaOpciones]]" item-label-path="tipo" item-id-path="cantidad">
+                        <template>
+                            <b>[[item.tipo]]</b>
+                            [[item.explicacion]]
+                        </template>
+                    </vaadin-combo-box>
+                    
+                    <data-simple font-size="15px" value="{{muestraNuevaFecha(fechaActual,nuevaVigencia)}}" title="fecha de vigencia"></data-simple>
+                </div>
+            </div>
+ 
 
         `;
     }
@@ -67,18 +98,33 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
             esCliente:{type:Boolean, notify:true, value:true},
             selected:{type:String, notify:true, value:"elige", observer:"_actualiza"},
             listaClientes:{type:Array, notify:true, value:[]},
-            clienteElegido:{type:Object, notify:true}
+            clienteElegido:{type:Object, notify:true},
+
+            fechaActual:{type:Object, notify:true},
+            nuevaVigencia:{type:Object, notify:true},
+            listaOpciones:{type:Array, notify:true, value:[
+                {"tipo":"Versión de prueba","explicacion":"15 días","cantidad":15},
+                {"tipo":"Básica","explicacion":"1 mes","cantidad":30},
+                {"tipo":"Completa","explicacion":"1 año","cantidad":365}
+            ]}
 
         }
     }
 
     constructor() {
         super();
+
+        var fecha=firebase.firestore.Timestamp.now().toDate();
+
+        if(fecha && fecha!=null){
+            this.set("fechaActual",fecha);
+        }else{
+            var fechaEquipo=new Date();
+            this.set("fechaActual",fechaEquipo);
+        }
     }
 
-    _actualiza(str){
-        this.DialogLayout_notifyResize();
-    }
+    
 
     ready() {
         super.ready();
@@ -101,6 +147,35 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         });
     }
 
+    muestraNuevaFecha(fecha,dato){
+        if(!fecha || fecha==null || !dato || dato==null){
+            return "-";
+        }else{
+            var fechaBase=new Date(fecha.getTime());
+            var numDias=dato.cantidad;
+            var nuevaFecha=Sugar.Date.advance(fechaBase, { days: numDias });
+
+            return Sugar.Date.medium(nuevaFecha,'es');
+        }
+    }
+
+    muestraFecha(fecha,dato){
+        if(!fecha || fecha==null || !dato || dato==null){
+            return "-";
+        }else{
+            var fechaBase=new Date(fecha.getTime());
+            var numDias=dato.cantidad;
+            var nuevaFecha=Sugar.Date.advance(fechaBase, { days: numDias });
+            var noTime = new Date(nuevaFecha.getFullYear(), nuevaFecha.getMonth(), nuevaFecha.getDate());
+
+            return firebase.firestore.Timestamp.fromDate(noTime);
+        }
+    }
+
+    _actualiza(str){
+        this.DialogLayout_notifyResize();
+    }
+
     getTipo(obj){
         if(obj._esCliente && obj._esCliente==true){
             return "Cliente";
@@ -120,7 +195,12 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 
     ejecutaNuevoApp(e){
         var nuevoCliente=e.detail.datosCliente;
-        nuevoCliente["_fechaApp"]=firebase.firestore.FieldValue.serverTimestamp();
+        nuevoCliente["_timestamp"]=firebase.firestore.FieldValue.serverTimestamp();
+        if(!this.nuevaVigencia || this.nuevaVigencia==null){
+            return PolymerUtils.Toast.show("Selecciona un tipo de membresia");
+        }
+
+        nuevoCliente["tipoMembresia"]=this.nuevaVigencia;
         this.firebaseGuardaApp(nuevoCliente);
 
     }
@@ -148,8 +228,7 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         delete guardar._key;
         delete guardar._timestamp;
         
-
-        guardar["_fechaApp"]=firebase.firestore.FieldValue.serverTimestamp();
+        guardar["_timestamp"]=firebase.firestore.FieldValue.serverTimestamp();
         this.firebaseGuardaApp(guardar);
        
 
@@ -160,6 +239,11 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 
     firebaseGuardaApp(guardar){
         var id=this.makeId();
+
+        var fechaLimite=this.muestraFecha(this.fechaActual,this.nuevaVigencia);
+
+        var timeSt=fechaLimite.getTime();
+        guardar["_fechaLimite"]=timeSt;
 
         var t=this;
         firebase.firestore().collection("_clientes").doc(id).set(guardar)

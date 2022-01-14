@@ -6,6 +6,8 @@ import '@polymer/iron-pages/iron-pages.js';
 
 import './general-controls/my-lista-general.js';
 import './app-clientes/my-nuevo-app.js';
+import './app-clientes/my-datos-app.js';
+import './app-clientes/my-comentarios-app.js';
 
 import './bootstrap.js';
 
@@ -16,21 +18,20 @@ class MyAppClientes extends PolymerElement {
                 :host{
                     display:block;
                 }
+
+                paper-tabs paper-tab.iron-selected {
+                    background-color: #DCEDC8;
+                }
             </style>
 
             <div class="container">
-
-            
-                
-                <paper-tabs selected="{{selected}}">
+                <paper-tabs selected="{{selected}}" style="background-color:white;">
                     <paper-tab>Clientes activos</paper-tab>
                     <paper-tab>Comentarios</paper-tab>
-                    
                 </paper-tabs>
-                
                 <iron-pages selected="{{selected}}">
                     <div>
-                    <my-lista-general vista="appClientes" arreglo-items="[[listaClientesApp]]" titulo="razon"
+                        <my-lista-general vista="appClientes" arreglo-items="{{listaClientesApp}}" titulo="razon"
                         lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
                         lista-cols="[[datosApp]]"
                         funcion-buscar="[[funcionProspecto]]"
@@ -38,11 +39,10 @@ class MyAppClientes extends PolymerElement {
                         color-boton="#BF360C"></my-lista-general>
                     </div>
                     <div>
-                        aqui van los comentarios recibidos
+                        <my-comentarios-app></my-comentarios-app>
                     </div>
                    
                 </iron-pages>
-                
                 
             </div>
             
@@ -56,6 +56,8 @@ class MyAppClientes extends PolymerElement {
             datosApp:{type:Array, notify:true, value:[
                 {"titulo":"clave de producto","dato":"_key"},
                 {"titulo":"razon social","dato":"razon"},
+                {"titulo":"tipo de membresia","dato":"tipoMembresia","valorInterno":"tipo"},
+                {"titulo":"estado","dato":"objCliente",}
                 
             ]},
             listaClientesApp:{type:Array, notify:true, value:[]}
@@ -67,12 +69,6 @@ class MyAppClientes extends PolymerElement {
         super();
     }
 
-    /**
-      * Array of strings describing multi-property observer methods and their
-      * dependant properties
-      */
-    
-
     ready() {
         super.ready();
         var binder=new QueryBinder("_clientes",{
@@ -80,6 +76,29 @@ class MyAppClientes extends PolymerElement {
         });
         
         binder.bindArray(this,this.listaClientesApp,"listaClientesApp");
+    }
+
+    abreClienteApp(e){
+        var elegido=e.detail.valor;
+        console.log("abreClienteApp",elegido);
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			element:"my-datos-app",
+			style:"width:700px;max-width:95%;",
+            params:[elegido],
+			// positiveButton: {
+            //     text: "Crear",
+            //     action: function(dialog, element) {
+            //         // element.accionBotonGuardar();
+            //     }
+            // },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
 
     abreNuevoApp(){

@@ -144,7 +144,9 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             funcionBuscar:{type:Object, notify:true},
             funcionOrdenar:{type:Object, notify:true},
             // funcionFiltro:{type:Object, notify:true},
-            colorBoton:{type:String, notify:true, value:"var(--paper-pink-500)"}
+            colorBoton:{type:String, notify:true, value:"var(--paper-pink-500)"},
+
+            fechaActual:{type:Object, notify:true}
 
 
 
@@ -157,15 +159,17 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
     
 
     muestraInfo(obj,dato,valorInterno){
-        console.log("vamos a mostrar datos",obj,dato);
 
         if(valorInterno){
             var extra=valorInterno;
             var interno=obj[dato];
-            console.log("interno",interno);
+            //console.log("interno",interno);
             return interno[extra];
         }else if(dato=="_timestamp"){
             return this.PolymerUtils_getDateString(obj._timestamp);
+        }else if(dato=="objCliente"){
+            return this.showEstatus(obj);
+            
         }else if(dato=="id"){
             var str=obj.id;
             let length = str.length;
@@ -186,19 +190,44 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         
         
     }
-    // static get observers() {
-    //     return [
-    //         '_activaFiltro(funcionFiltro,filtroEstatus,arregloItems,arregloItems.*)'
-    //     ];
-    // }
+   
 
     constructor() {
         super();
+
+        var fecha=firebase.firestore.Timestamp.now().toDate();
+
+        if(fecha && fecha!=null){
+            this.set("fechaActual",fecha);
+        }else{
+            var fechaEquipo=new Date();
+            this.set("fechaActual",fechaEquipo);
+        }
     }
 
     ready() {
         super.ready();
         // this.set("filtroEstatus","todos");
+    }
+
+    showEstatus(obj){
+        if(obj._cancelada && obj._cancelada==true){
+            return "cancelada";
+        }else{
+            var fechaProducto=this.PolymerUtils_getDateFromTimestamp(obj._fechaLimite);
+            var fechaActual=this.fechaActual;
+
+            var diasRestantes=Sugar.Date.daysUntil(fechaActual, fechaProducto);
+
+            if(diasRestantes<=0){
+                return "finalizada";
+            }else{
+                return "activa";
+            }
+            //return diasRestantes;
+
+
+        }
     }
 
     getEstiloLista(str){

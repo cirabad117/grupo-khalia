@@ -9,6 +9,8 @@
     "node_modules/@webcomponents/webcomponentsjs/*.js",
     "!node_modules/@webcomponents/webcomponentsjs/gulpfile.js",
     "node_modules/@webcomponents/webcomponentsjs/bundles/*.js",
+    "node_modules/kothing-editor/dist/kothing-editor.min.js",
+    "node_modules/kothing-editor/dist/css/kothing-editor.min.css",
     "scripts/*.js",
     "scripts/*.css"
   ],
