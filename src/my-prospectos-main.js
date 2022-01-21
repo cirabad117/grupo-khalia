@@ -20,7 +20,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
                 }
             </style>
 
-            <my-lista-general vista="prospectos" arreglo-items="[[listaProspectos]]" titulo="razon"
+            <my-lista-general vista="prospectos" arreglo-items="[[listaProspectos]]"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
             lista-cols="[[datosProspecto]]"
             funcion-buscar="[[funcionProspecto]]" funcion-ordenar="[[funcionOrdena]]"

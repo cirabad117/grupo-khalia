@@ -13,10 +13,10 @@ class MyProductosMain extends PolymerElement {
                 }
             </style>
             
-            <my-lista-general vista="productos" arreglo-items="[[listaProductos]]" titulo="codigo"
+            <my-lista-general vista="productos" arreglo-items="[[listaProductos]]"
             lista-filtro="[[listaSeccion]]" lista-ordena="[[opcionesOrdena]]"
             lista-cols="[[datosProd]]"
-            funcion-ordenar="[[funcionOrdena]]" funcion-buscar="[[funcionFiltra]]"
+            funcion-ordenar="[[funcionOrdenaProd]]" funcion-buscar="[[funcionFiltraProd]]"
             on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="abreInfo"></my-lista-general>
 
          
@@ -54,11 +54,11 @@ class MyProductosMain extends PolymerElement {
                 {"opcion":"razonDe","texto":"nombre del producto (descendente)"},
                 
             ]},
-            funcionFiltra:{
+            funcionFiltraProd:{
                 type:Object,
                 notify:true,
                 value:{
-                    nombre:"funcionProspecto",
+                    nombre:"funcionFiltraProd",
                     funcion:function(item,texto,filtro) {
                         var busca=texto.toLowerCase();
                         if(filtro=="todos"){
@@ -78,11 +78,11 @@ class MyProductosMain extends PolymerElement {
                     }
                 }
             },
-            funcionOrdena:{
+            funcionOrdenaProd:{
                 type:Object,
                 notify:true,
                 value:{
-                    nombre:"funcionOrdena",
+                    nombre:"funcionOrdenaProd",
                     funcion:function(a,b,str) {
                         // var at=PolymerUtils.convertFirebaseTimestamp(a._timestamp);
                         // var bt=PolymerUtils.convertFirebaseTimestamp(b._timestamp);

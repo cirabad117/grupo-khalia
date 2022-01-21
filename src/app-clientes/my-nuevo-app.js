@@ -160,16 +160,14 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
     }
 
     muestraFecha(fecha,dato){
-        if(!fecha || fecha==null || !dato || dato==null){
-            return "-";
-        }else{
+       
             var fechaBase=new Date(fecha.getTime());
             var numDias=dato.cantidad;
             var nuevaFecha=Sugar.Date.advance(fechaBase, { days: numDias });
             var noTime = new Date(nuevaFecha.getFullYear(), nuevaFecha.getMonth(), nuevaFecha.getDate());
 
             return firebase.firestore.Timestamp.fromDate(noTime);
-        }
+        
     }
 
     _actualiza(str){
@@ -242,8 +240,7 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 
         var fechaLimite=this.muestraFecha(this.fechaActual,this.nuevaVigencia);
 
-        var timeSt=fechaLimite.getTime();
-        guardar["_fechaLimite"]=timeSt;
+        guardar["_fechaLimite"]=fechaLimite;
 
         var t=this;
         firebase.firestore().collection("_clientes").doc(id).set(guardar)

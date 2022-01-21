@@ -105,14 +105,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
                         </div>
 
-
-
-
-                        <!-- <paper-listbox>
-                            <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}" filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}">
-                                <my-item-lista estilo="[[vista]]" dato="[[item]]" titulo-value="[[titulo]]" on-activa-item="disparaAccionItem"></my-item-lista>
-                            </template>
-                        </paper-listbox> -->
                     </div>
                 </div>
 
@@ -130,12 +122,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
     static get properties() {
         return {
-            modoVista:{type:String, notify:true, value:"lista"},
             vista:{type:String, notify:true},
             filtroEstatus:{type:String, notify:true,value:"todos"},
             arregloItems:{type:Array, notify:true, value:[]},
             arregloMostrar:{type:Array, notify:true, value:[]},
-            titulo:{type:String, notify:true,},
             listaFiltro:{type:Array, notify:true, value:[]},
             listaOrdena:{type:Array, notify:true, value:[]},
 
@@ -230,38 +220,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         }
     }
 
-    getEstiloLista(str){
-        if(str=="lista"){
-            return "col-md-12";
-        }else{
-            return "col-md-4";
-        }
-    }
-
-    esVistaLista(){
-        this.set("modoVista","lista");
-
-    }
-    esVistaCuadro(){
-        this.set("modoVista","cuadro");
-
-    }
-
-    activoLista(str){
-        if(str=="lista"){
-            return "btn-primary";
-        }else{
-            return "btn-secondary";
-        }
-    }
-    activoCuadro(str){
-        if(str=="cuadro"){
-            return "btn-primary";
-        }else{
-            return "btn-secondary";
-        }
-    }
-
     muestraSeparador(item){
         if(item.esSeparador && item.esSeparador==true){
             return "border-bottom:solid 1px var(--paper-blue-400);";
@@ -271,21 +229,15 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
     }
 
     _activaFiltro(objFunct,texto,arreglo){
-        // console.log("se dispara _activaFiltro",objFunct,texto,arreglo);
+        
         if(!objFunct || objFunct==null || !texto && texto==null || texto.trim()==""){
             console.log("no hay funcion para filtro");
             return arreglo;
-
-
-
-            
-            //this.set("arregloMostrar",nuevoArreglo);
         }else{
             var funcion=objFunct.funcion;
 
             var nuevoArreglo=funcion(arreglo,texto);
             return nuevoArreglo;
-            //this.set("arregloMostrar",arreglo);
         }
     }
 
@@ -307,16 +259,12 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
     }
 
     _funcionGeneralBusqueda(texto,filtro){
-
         if(this.funcionBuscar && this.funcionBuscar!=null){
             var funcion=this.funcionBuscar.funcion;
             return function(item) {
                 return funcion(item,texto,filtro);
             }
-
-            
         }
-
     }
 
     _funcionGeneralOrdena(valor){
@@ -324,7 +272,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             var funcion=this.funcionOrdenar.funcion;
             return function(a,b){
                 return funcion(a,b,valor);
-
             }
         }
     }

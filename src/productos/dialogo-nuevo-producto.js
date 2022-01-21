@@ -86,8 +86,8 @@ class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement))
                     </div>
 
                     <div class="col-md-12">
-                        <paper-checkbox checked="{{esEntrega}}">maneja entregables</paper-checkbox>
-                        <template is="dom-if" if="{{esEntrega}}">
+                        <paper-checkbox checked="{{esEntregable}}">maneja entregables</paper-checkbox>
+                        <template is="dom-if" if="{{esEntregable}}">
                             <my-text-editor id="text-entregable" texto-incrustar="{{textoEntregable}}"></my-text-editor>
                         </template>
                     </div>
@@ -159,10 +159,10 @@ class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement))
                 t.set("esAlcance",false);
             }
     
-            if(obj.esEntrega && obj.esEntrega==true){
-                t.set("esEntrega",true);
+            if(obj.esEntregable && obj.esEntregable==true){
+                t.set("esEntregable",true);
             }else{
-                t.set("esEntrega",false);
+                t.set("esEntregable",false);
             }
     
             if(obj.esObserva && obj.esObserva==true){

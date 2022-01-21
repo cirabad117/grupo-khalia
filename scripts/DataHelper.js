@@ -592,6 +592,9 @@ class DataHelperClass {
         if (dataUser.displayName) {
             user.displayName = dataUser.displayName
         }
+        if (dataUser.nombre) {
+            user.nombre = dataUser.nombre
+        }
         user.emailVerified = !0 == dataUser.emailVerified;
         if (dataUser.email) {
             user.email = dataUser.email

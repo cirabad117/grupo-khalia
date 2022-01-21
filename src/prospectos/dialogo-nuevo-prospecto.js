@@ -138,15 +138,21 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 
 		if(tel && tel.trim()!="" && tipo && tipo.trim()!=""){
 			var agregar={"telefono":tel,"tipo":tipo};
+			console.log("se agrega al arreglo",agregar);
 			listaTels.push(agregar);
 		}
+
+		console.log("listaTels",listaTels);
 		
 		var listaEmails=[]
 		var email=this.email;
 
 		if(email && email.trim()!=""){
+			console.log("se agrega al arreglo",email);
 			listaEmails.push(email);
 		}
+
+		console.log("listaEmails",listaEmails);
 		
 		var listaContactos=[];
 
@@ -154,10 +160,10 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 			return PolymerUtils.Toast.show("no se encuentran datos de contacto validos");
 		}else{
 			if(listaTels.length>0){
-				nuevo["telefonos"]=this.listaTels;
+				nuevo["telefonos"]=listaTels;
 			}
 			if(listaEmails.length>0){
-				nuevo["correos"]=this.listaEmails;
+				nuevo["correos"]=listaEmails;
 			}
 		}
 

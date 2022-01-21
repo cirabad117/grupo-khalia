@@ -54,7 +54,7 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
     ready() {
         super.ready();
         var binder=new QueryBinder("_clientes",{
-            "specialRef":firebase.firestore().collection("_comentarios-app")
+            "specialRef":firebase.firestore().collection("_comentarios-app").orderBy("_timestamp","desc")
         });
         
         binder.bindArray(this,this.listaComentarios,"listaComentarios");
