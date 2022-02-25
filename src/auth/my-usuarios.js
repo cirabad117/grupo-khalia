@@ -23,20 +23,12 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                     margin:15px;
                 }
             </style>
-            
-            <div class="container-fluid">
-            
-                <div class="card m-4">
-                    <h5 class="card-header d-flex  align-items-center">
-                        <template is="dom-if" if="{{esAccion(selected)}}">
-                            <paper-icon-button icon="arrow-back" on-click="abreListaUsuario">volver a mis usuarios</paper-icon-button>
-                        </template>
-                        {{muestraTitulo(selected)}}
-                        
-                    </h5>
-                    
-                    <div class="card-body">
-                        <iron-pages selected="{{selected}}" attr-for-selected="name">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+
+                    <iron-pages selected="{{selected}}" attr-for-selected="name">
                             <div name="lista">
                                 <div class="row">
                                     <template is="dom-repeat" items="[[listaUsuarios]]" sort="_sortInstalaciones">
@@ -68,29 +60,47 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                             </div><!--div name="lista"-->
                             
                             <div name="editar">
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-lg-6">
+                               
                                         <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" campo-activo="[[!esEditarUsuario]]"
                                         main-tree="[[listaPermisos]]" uid="[[usuarioActivo.id]]" nombre="[[usuarioActivo.displayName]]"
-                                        email="[[usuarioActivo.email]]" perfil="[[usuarioActivo.accessList]]"></my-nuevo-usuario>
-                                    </div>
-                                </div>
+                                        email="[[usuarioActivo.email]]" perfil="[[usuarioActivo.accessList]]"
+                                        pass="[[usuarioActivo.password]]" pass2="[[usuarioActivo.password]]"></my-nuevo-usuario>
+                                    
                             </div><!--div name="editar"-->
                             
                             <div name="crear">
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-lg-6">
+                                
                                         <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" 
                                         campo-activo="[[!esEditarUsuario]]" main-tree="[[listaPermisos]]"></my-nuevo-usuario>
-                                    </div>
-                                </div>
+                                   
                             </div>
                         </iron-pages>
+
+                    </div>
+                </div>
+            </div>
+            
+            <!-- <div class="container-fluid">
+            
+                <div class="card m-4">
+                    <h5 class="card-header d-flex  align-items-center">
+                        <template is="dom-if" if="{{esAccion(selected)}}">
+                            <paper-icon-button icon="arrow-back" on-click="abreListaUsuario">volver a mis usuarios</paper-icon-button>
+                        </template>
+                        {{muestraTitulo(selected)}}
+                        
+                    </h5>
+                    
+                    <div class="card-body">
+                        
                         
                     </div>
                 </div>
                 
-            </div>
+            </div> -->
+
+
+            
 
             
         `;

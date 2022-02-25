@@ -141,9 +141,7 @@ let internalMixinAuth = function(superClass) {
 		editaUsuario(user, callbacks) {
 		
 			var actualizaUsuarioKhalia = firebase.functions().httpsCallable('actualizaUsuarioKhalia');
-            if(!user.password){
-                delete user["password"];
-            }
+            
 
             actualizaUsuarioKhalia(user).then(function(result) {
                 if(callbacks && callbacks.finished){

@@ -15,87 +15,74 @@ function deleteDatabaseUser(user,id){
     return admin.firestore().collection('_clientes').doc(id).collection("usuarios").doc(user.uid).update(userData);
 }
 
-function createDatabaseUser(user,id,permisos){
-    var userData={
-        "displayName":user.displayName,
-        "enabled":true,
-        "email":user.email,
-        "uid":user.uid,
-        "_timestamp":admin.firestore.FieldValue.serverTimestamp(),
-        "accessList":permisos
-    };
+function createDatabaseUser(user,data,id){//permisos
     
-    if(user.photoURL){
-        userData.photoURL=user.photoURL;
-	}
+    // var userData={
+    //     "displayName":user.displayName,
+    //     "enabled":true,
+    //     "email":user.email,
+    //     "uid":user.uid,
+    //     "_timestamp":admin.firestore.FieldValue.serverTimestamp(),
+    //     "accessList":permisos
+    // };
     
-    // if(extraData && (typeof extraData === "object")){
-    //     var extraKeys=Object.keys(extraData);
-    //     for(var i=0;i<extraKeys.length;i++){
-    //         var key=extraKeys[i];
-    //         if(key!=="displayName" && key!=="enabled" && key!=="email" && key!=="uid" && key!=="_timestamp"){
-    //             if(typeof extraData[key] !== "undefined"){
-    //                 userData[key]=extraData[key];
-    //             }
-    //         }else{
-    //             console.log("Invalid key name",key);
-	// 		}
-	// 	}
-	// }
-    return admin.firestore().collection('_clientes').doc(id).collection("usuarios").doc(user.uid).set(userData);
+    var userData=data;
+    userData["_timestamp"]=admin.firestore.FieldValue.serverTimestamp();
+    delete userData["password"];
+    delete userData["negocioKey"];
+    delete userData["emailVerified"];
+    delete userData["disabled"];
+     
+    // if(user.photoURL){
+    //     userData.photoURL=user.photoURL;
+    // }
+ 
+    var uid=user.uid;
+     
+    
+    return admin.firestore().collection('_clientes').doc(id).collection("usuarios").doc(uid).set(data);
 }
 
-function updateDatabaseUser(user,id,permisos){
+function updateDatabaseUser(user){
     var userData={
         "displayName":user.displayName,
         "enabled":true,
         "email":user.email,
+        "nombre":user.nombre,
+        "password":user.password,
         "uid":user.uid,
         "_timestamp":admin.firestore.FieldValue.serverTimestamp(),
-        "accessList":permisos
+        "accessList":user.accessList
     };
     
+    var id=user.negocioKey;
     if(user.photoURL){
         userData.photoURL=user.photoURL;
     }
-    
-    // if(extraData && (typeof extraData === "object")){
-    //     var extraKeys=Object.keys(extraData);
-    //     for(var i=0;i<extraKeys.length;i++){
-    //         var key=extraKeys[i];
-    //         if(key!=="displayName" && key!=="enabled" && key!=="email" && key!=="uid" && key!=="_timestamp"){
-    //             if(typeof extraData[key] !== "undefined"){
-    //                 userData[key]=extraData[key];
-    //             }
-    //         }else{
-    //             console.log("Invalid key name",key);
-    //         }
-    //     }
-    // }
+
     return admin.firestore().collection('_clientes').doc(id).collection("usuarios").doc(user.uid).update(userData);
 }
 
 exports.insertNewUser = functions.https.onCall((data, context) => {
-    const email = data.email;
-    const name = data.name;
-    const passwd = data.passwd;
-    var photo = data.photo;
-    const id=data.negocioKey;
-    const permisos=data.accessList
-    
-    var json={
-        email: email,
-        emailVerified: false,
-        password: passwd,
-        displayName: name,
-        disabled: false
-    };
-    if(photo){
-        json.photoURL=photo;
-    }
+    // const email = data.email;
+    // const name = data.name;
+    // const passwd = data.passwd;
+    // var photo = data.photo;
+    // const id=data.negocioKey;
+    // const permisos=data.accessList
+     
+    // var json={
+    //     email: email,
+         
+    //     password: passwd,
+    //     displayName: name,
+         
+    // };
+    var id=data.negocioKey;
+    var json=data;
     
     return admin.auth().createUser(json).then(function(userRecord){
-        return createDatabaseUser(userRecord,id,permisos).then((snapshot) => {
+        return createDatabaseUser(userRecord,json,id).then((snapshot) => {
             console.log("Successfully created new user:", userRecord.uid);
             return {"result":"Successfully created new user:"+userRecord.uid,"user":userRecord};
         });
@@ -107,13 +94,9 @@ exports.insertNewUser = functions.https.onCall((data, context) => {
 
 
 exports.updateUser = functions.https.onCall((data, context) => {
-    const email = data.user.email;
-    const name = data.user.displayName;
-    var photo=data.user.photoURL;
-    const uid=data.user.uid;
-
-    const id=data.user.negocioKey;
-    const lista=data.user.accessList;
+    const uid=data.uid;
+    const email=data.email;
+    const name=data.displayName;
     
     var update={
         email: email,
@@ -121,15 +104,12 @@ exports.updateUser = functions.https.onCall((data, context) => {
         disabled: false
     };
     
-    if(data.user.password){
-        update.password=data.user.password;
-    }
-    if(photo){
-        update.photoURL=photo;
+    if(data.password){
+        update.password=data.password;
     }
     
     return admin.auth().updateUser(uid,update).then(function(userRecord){
-        return updateDatabaseUser(userRecord,id,lista).then((snapshot) => {
+        return updateDatabaseUser(data).then((snapshot) => {
             console.log("Successfully updated user:", userRecord.uid);
             return {"result":"Successfully updated user:"+userRecord.uid,"user":userRecord};
         });
@@ -140,7 +120,7 @@ exports.updateUser = functions.https.onCall((data, context) => {
 });
 
 exports.deleteUser = functions.https.onCall((data, context) => {
-    const uid=data.uid;
+    const uid=data.id;
     const id=data.negocioKey;
     return admin.auth().updateUser(uid,{
         disabled: true
@@ -156,22 +136,46 @@ exports.deleteUser = functions.https.onCall((data, context) => {
 });
 
 
+exports.actualizaPassword=functions.https.onCall((data,context)=>{
+    const uid=data.uid;
+    const email=data.email;
+    const name=data.displayName;
+    var update={
+        email: email,
+        displayName: name,
+        disabled: false
+    };
+     
+    if(data.password){
+        update.password=data.password;
+    }
+    
+     
+    return admin.auth().updateUser(uid,update).then(function(userRecord){
+        return userRecord;
+    }).catch(function(error) {
+        return {"result":"Error updating user: ","error":error};
+    });
+});
+ 
+ 
 //////////////////////////////////////////////////////////////////////////////////////////////
 /** aqui van las funciones para la aplicaicon interna */
 
-function guardaUsuario(user,permisos){
+function guardaUsuario(user,permisos,ps){
     var userData={
         "displayName":user.displayName,
         "enabled":true,
         "email":user.email,
         "uid":user.uid,
         "_timestamp":admin.firestore.FieldValue.serverTimestamp(),
-        "accessList":permisos
+        "accessList":permisos,
+        "password":ps
     };
-    
+     
     if(user.photoURL){
         userData.photoURL=user.photoURL;
-	}
+    }
     
     return admin.firestore().collection('usuarios').doc(user.uid).set(userData);
 }//guardaUsuario
@@ -199,9 +203,9 @@ function deleteDatabaseKhalia(user){
 exports.agregaUsuarioKhalia = functions.https.onCall((data, context) => {
     const email = data.email;
     const name = data.name;
-    const passwd = data.passwd;
-    const permisos=data.accessList
-    
+    const passwd = data.password;
+    const permisos=data.accessList;
+
     var json={
         email: email,
         emailVerified: false,
@@ -211,7 +215,7 @@ exports.agregaUsuarioKhalia = functions.https.onCall((data, context) => {
     };
     
     return admin.auth().createUser(json).then(function(userRecord){
-        return guardaUsuario(userRecord,permisos).then((snapshot) => {
+        return guardaUsuario(userRecord,permisos,passwd).then((snapshot) => {
             console.log("Successfully created new user:", userRecord.uid);
             return {"result":"Successfully created new user:"+userRecord.uid,"user":userRecord};
         });
@@ -226,15 +230,15 @@ exports.actualizaUsuarioKhalia = functions.https.onCall((data, context) => {
     const name = data.displayName;
     var photo=data.photoURL;
     const uid=data.uid;
-
-    const lista=data.accessList;
     
+    const lista=data.accessList;
+
     var update={
         email: email,
         displayName: name,
         disabled: false
     };
-    
+     
     if(data.password){
         update.password=data.password;
     }

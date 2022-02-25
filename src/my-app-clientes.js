@@ -25,12 +25,12 @@ class MyAppClientes extends PolymerElement {
             </style>
 
             <div class="container">
-                <paper-tabs selected="{{selected}}" style="background-color:white;">
-                    <paper-tab>Clientes activos</paper-tab>
-                    <paper-tab>Comentarios</paper-tab>
+                <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:white;">
+                    <paper-tab name="lista">Clientes activos</paper-tab>
+                    <paper-tab name="coment">Comentarios</paper-tab>
                 </paper-tabs>
-                <iron-pages selected="{{selected}}">
-                    <div>
+                <iron-pages selected="{{selected}}" attr-for-selected="name">
+                    <div name="lista">
                         <my-lista-general vista="appClientes" arreglo-items="{{listaClientesApp}}" titulo="razon"
                         lista-filtro="[[listaFiltroApp]]" lista-ordena="[[opcionesOrdena]]"
                         lista-cols="[[datosApp]]"
@@ -38,8 +38,30 @@ class MyAppClientes extends PolymerElement {
                         on-ejecuta-accion="abreNuevoApp" on-ejecuta-item="abreClienteApp"
                         color-boton="#BF360C"></my-lista-general>
                     </div>
-                    <div>
+                    <div name="coment">
                         <my-comentarios-app></my-comentarios-app>
+                    </div>
+                    <div name="elegido">
+
+                        <div class="card">
+                           
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    <span>
+                                        <paper-icon-button icon="arrow-back" on-click="backLista"></paper-icon-button>
+                                    </span>
+                                    [[datosCliente.razon]]
+                                </h3>
+                                <my-datos-app cliente="[[datosCliente]]"></my-datos-app>
+                            </div>
+
+                        </div>
+
+
+
+
+                        
+                        
                     </div>
                    
                 </iron-pages>
@@ -52,7 +74,7 @@ class MyAppClientes extends PolymerElement {
 
     static get properties() {
         return {
-            selected:{type:Number, notify:true, value:0},
+            selected:{type:String, notify:true, value:"lista"},
             datosApp:{type:Array, notify:true, value:[
                 {"titulo":"clave de producto","dato":"_key"},
                 {"titulo":"razon social","dato":"razon"},
@@ -289,21 +311,29 @@ class MyAppClientes extends PolymerElement {
         }
     }
 
+    backLista(){
+        console.log("se dispara backLista");
+        this.set("selected","lista");
+    }
+
     abreClienteApp(e){
         var elegido=e.detail.valor;
         console.log("abreClienteApp",elegido);
-        PolymerUtils.Dialog.createAndShow({
-			type: "modal",
-			element:"my-datos-app",
-			style:"width:700px;max-width:95%;",
-            params:[elegido],
-            negativeButton: {
-                text: "Cerrar",
-                action: function(dialog, element) {
-                    dialog.close();
-                }
-            }
-		});
+
+        this.set("selected","elegido");
+        this.set("datosCliente",elegido);
+        // PolymerUtils.Dialog.createAndShow({
+		// 	type: "modal",
+		// 	element:"my-datos-app",
+		// 	style:"width:700px;max-width:95%;",
+        //     params:[elegido],
+        //     negativeButton: {
+        //         text: "Cerrar",
+        //         action: function(dialog, element) {
+        //             dialog.close();
+        //         }
+        //     }
+		// });
     }
 
     abreNuevoApp(){

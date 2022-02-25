@@ -23,51 +23,45 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
                     display:block;
                 }
             </style>
-            
-            <!-- <div>
-                <paper-radio-group selected="{{selected}}" attr-for-selected="name">
-                    <paper-radio-button name="correo">administrador</paper-radio-button>
-                    <paper-radio-button name="user">usuario</paper-radio-button>
-                </paper-radio-group>
+
+            <div class="card">
                 
-                <iron-pages selected="{{selected}}" attr-for-selected="name">
-                    <div name="correo">
-                        <paper-input id="txtEmail" label="correo electronico" value="{{email}}" error-message="valor inválido"></paper-input>
+                <div class="card-body">
+                    <h5 class="card-title d-flex  align-items-center">
+                        <paper-icon-button icon="arrow-back" on-click="despachaVolver">volver a mis usuarios</paper-icon-button>
+                        
+                        {{muestraTitulo(esEditar)}}
+                    </h5>
+                    <paper-input id="txtUser" label="nombre de usuario" value="{{user}}" error-message="valor inválido" disabled="[[esEditar]]"></paper-input>
+                    <paper-input id="txtNombre" value="{{nombre}}" label="Nombre completo" error-message="valor inválido"></paper-input>                  
+                    <div>
+                        <h4>Lista de permisos de acceso</h4>
+                        <checkbox-tree object-tree="[[mainTree]]" id="mainDomTree"></checkbox-tree>
                     </div>
-                    <div name="user">
-                        <paper-input id="txtUser" label="nombre de usuario" value="{{user}}" error-message="valor inválido"></paper-input>
-                    </div>
-                </iron-pages>
-                                
-            </div> -->
-            <paper-input id="txtUser" label="nombre de usuario" value="{{user}}" error-message="valor inválido"></paper-input>
+                    
+                    <!-- <template is="dom-if" if="[[esEditar]]">
+                        <paper-button on-click="cambiaBolActivo">[[muestraTextoBoton(campoActivo)]]</paper-button>
+                    </template> -->
+                    <paper-input id="txtContra" value="{{pass}}" type="password" label="Contraseña" error-message="valor inválido"></paper-input>
+                    <paper-input id="txtConfirm" value="{{pass2}}" type="password" label="Confirmar contraseña" error-message="valor inválido"></paper-input>
 
-            
-            <paper-input id="txtNombre" value="{{nombre}}" label="Nombre completo" error-message="valor inválido"></paper-input>                  
-                  
-            <!-- <paper-input id="txtEmail" value="{{email}}" label="Correo electrónico" error-message="valor inválido"></paper-input> -->
 
-            <div >
-                <h4>Lista de permisos de acceso</h4>
-                <checkbox-tree object-tree="[[mainTree]]" id="mainDomTree"></checkbox-tree>
+
+
+                </div>
+                <div class="card-footer">
+                    <template is="dom-if" if="[[esEditar]]">
+                        <paper-button on-click="modificaUsuario">modificar usuario</paper-button>
+                    </template>
+                    <template is="dom-if" if="[[!esEditar]]">
+                        <paper-button on-click="guardaUsuario">guardar usuario</paper-button>
+                    </template>
+                </div>
+                
             </div>
             
-            <template is="dom-if" if="[[esEditar]]">
-                <!-- <paper-checkbox checked="{{campoActivo}}">modificar contraseña</paper-checkbox> -->
-                <paper-button on-click="cambiaBolActivo">[[muestraTextoBoton(campoActivo)]]</paper-button>
-            </template>
+           
             
-            <paper-input id="txtContra" value="{{pass}}" type="password" label="Contraseña" error-message="valor inválido" disabled="[[!campoActivo]]"></paper-input>
-            <paper-input id="txtConfirm" value="{{pass2}}" type="password" label="Confirmar contraseña" error-message="valor inválido" disabled="[[!campoActivo]]"></paper-input>
-
-
-            
-            <template is="dom-if" if="[[esEditar]]">
-                <paper-button on-click="modificaUsuario">modificar usuario</paper-button>
-            </template>
-            <template is="dom-if" if="[[!esEditar]]">
-                <paper-button on-click="guardaUsuario">guardar usuario</paper-button>
-            </template>
 
             
         `;
@@ -76,7 +70,8 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
     static get properties() {
         return {
             nombre:{type:String, notify:true},
-            email:{type:String, notify:true},
+            user:{type:String, notify:true},
+            email:{type:String, notify:true,observer:"_muestraUsuario"},
             pass:{type:String, notify:true},
             pass2:{type:String, notify:true},
 
@@ -96,12 +91,28 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
         
     }
 
+    _muestraUsuario(str){
+        if(str && str!=null && str.trim()!=""){
+            var arr=str.split("@");
+            this.set("user",arr[0]);
+        }
+        
+    }
+
     despachaVolver(){
-        this.dispatchEvent(new CustomEvent('vuelve-lista', {
+        this.dispatchEvent(new CustomEvent('cierra-vista', {
             detail: {
                 closed:true
             }
         }));
+    }
+
+    muestraTitulo(editar){
+        if(editar==true){
+            return "Editar usuario";
+        }else{
+            return "Agregar usuario"
+        }
     }
 
     
@@ -233,7 +244,7 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
             name:this.nombre,
             email:correoAcceder,
             nombre:this.nombre,
-            passwd:this.pass,
+            password:this.pass,
             accessList:lista
         };
 
@@ -244,7 +255,7 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
             success:function(){
                 dialog.close();
                 t.borraCampos();
-                t.disparaVolver();
+                t.despachaVolver();
             },
             fail: function(){
                 t.set("saving",false);
@@ -286,7 +297,7 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
     
         var ps=this.pass;
 
-        if(this.campoActivo==true){
+      
             if(!this.ps || this.ps==null || this.ps.trim()==""){
                 return this.$.txtContra.invalid=true;
             }else{
@@ -316,7 +327,7 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
 
 
             editar["password"]=ps;
-        }
+        
 
 
         console.log("veamos el usuario a editar",editar);
@@ -329,7 +340,7 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
             success:function(){
                 dialog.close();
                 t.borraCampos();
-                t.disparaVolver();
+                t.despachaVolver();
             },
             fail: function(){
                 dialog.close();

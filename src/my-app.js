@@ -103,41 +103,54 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			<app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
 			</app-route>
 			
-			<app-drawer-layout fullbleed="" narrow="{{narrow}}"><!--force-narrow="" -->
+			<app-drawer-layout fullbleed="" narrow="{{narrow}}" ><!--force-narrow="" -->
 				<!-- Drawer content -->
 				<app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-					<app-toolbar>
+
+
+				<div style="height: 100%; overflow: auto;">
+				<app-toolbar>
 						Menu
 					</app-toolbar>
 					
-					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-						<dom-access path="admin/prospectos">
-							<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
-						</dom-access>
-						<dom-access path="admin/clientes">
-							<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
-						</dom-access>
-						<dom-access path="admin/productos">
-							<a name="productos" href="[[rootPath]]productos" >Control de productos</a>
-						</dom-access>
-						<dom-access path="admin/cotizaciones">
-							<a name="cotizaciones" href="[[rootPath]]cotizaciones" >Cotizaciones</a>
-						</dom-access>
+					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" >
+						<paper-icon-item on-click="toggleAdmin">
+							<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
+							Ventas
+						</paper-icon-item>
+						<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
+							<dom-access path="admin/prospectos">
+								<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+							</dom-access>
+							<dom-access path="admin/clientes">
+								<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+							</dom-access>
+							<dom-access path="admin/productos">
+								<a name="productos" href="[[rootPath]]productos" >Control de productos</a>
+							</dom-access>
+							<dom-access path="admin/cotizaciones">
+								<a name="cotizaciones" href="[[rootPath]]cotizaciones" >Cotizaciones</a>
+							</dom-access>
+						</iron-collapse>
 						
-						<hr>
+						
+						
+						<paper-icon-item on-click="toggleArea">
+							<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
+							estatus por departamento
+						</paper-icon-item>
+
+						<iron-collapse opened="[[esArea]]" style="padding:15px;">
+							<a name="sasisopa" href="[[rootPath]]sasisopa" >SASISOPA</a>
+							<a name="sgm" href="[[rootPath]]sgm" >SGM</a>
+							<a name="emisiones" href="[[rootPath]]emisiones" >Emisiones</a>
+							<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
+							<a name="admin" href="[[rootPath]]admin" >Administración</a>
+						</iron-collapse>
 
 						<dom-access path="app-clientes">
 							<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
 						</dom-access>
-						
-						<hr>
-						<a name="sasisopa" href="[[rootPath]]sasisopa" >SASISOPA</a>
-						<a name="sgm" href="[[rootPath]]sgm" >SGM</a>
-						<a name="emisiones" href="[[rootPath]]emisiones" >Emisiones</a>
-						<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
-						<a name="admin" href="[[rootPath]]admin" >Administración</a>
-						
-						<hr>
 						
 						<dom-access path="usuarios">
 							<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
@@ -152,6 +165,25 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					
 						
 					</iron-selector>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					
 				</app-drawer>
 
 				<!-- Main content -->
