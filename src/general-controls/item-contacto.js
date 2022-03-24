@@ -18,7 +18,7 @@ class ItemContacto extends PolymerElement {
                 :host{
                     display:block;
                 }
-                ::-webkit-scrollbar {
+                /* ::-webkit-scrollbar {
                     width: 10px;
                 }
                 ::-webkit-scrollbar-track {
@@ -34,44 +34,72 @@ class ItemContacto extends PolymerElement {
                 .dato:hover{
                     cursor:pointer;
                     text-decoration:underline;
-                }
+                } */
                 
             </style>
             
-            <x-select>
-                <div slot="dropdown-trigger" class="dropdownTrigger">
-                    <paper-item style="cursor:pointer;">
-                        <paper-item-body>
-                            <div class="dato">
-                               [[indexContacto]] -  [[muestraNombre(datosContacto)]]
-                            </div>
-                        </paper-item-body>
-                        
-                    </paper-item>
+            <div class="d-flex align-items-center justify-content-between" style="cursor:pointer">
+                <div class="d-flex align-items-center" on-click="despachaLista">
+                    <iron-icon style="margin:5px;" icon="icons:chevron-left"></iron-icon>
+                    <h5 style="margin:5px;">[[muestraNombre(datosContacto)]]</h5>
                 </div>
                 
-                <div slot="dropdown-content" class="dropdownContent" style="margin-left:230px;border:solid 1px var(--paper-blue-500);background-color:white;">
-                    <paper-icon-button icon="create" on-click="activaVista"></paper-icon-button>
-                    <paper-icon-button icon="delete" on-click="despachaBorra"></paper-icon-button>
-                    <paper-listbox>
-                        <template is="dom-repeat" items="[[datosContacto.telefonos]]" as="tels">
-                            <paper-item>
-                                <span style="padding:10px;">
-                                    <iron-icon icon="communication:call"></iron-icon>
-                                </span>[[tels.tipo]]: [[tels.telefono]]
-                            </paper-item>
-                        </template>
-                        
-                        <template is="dom-repeat" items="[[datosContacto.correos]]" as="email">
-                            <paper-item >
-                                <span style="padding:10px;">
-                                    <iron-icon icon="communication:email"></iron-icon>
-                                </span>[[email]]
-                            </paper-item>
-                        </template>
-                    </paper-listbox>
+                <template is="dom-if" if="[[!esEditar]]" restamp>
+                <div>
+                    <button type="button" class="btn btn-warning btn-sm m-3" on-click="cambiaEditar">
+                        <span>
+                            <iron-icon icon="create"></iron-icon>
+                        </span>
+                        EDITAR CONTACTO
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm m-3" on-click="despachaBorra">
+                        <span>
+                            <iron-icon icon="delete"></iron-icon>
+                        </span>BORRAR CONTACTO
+                    </button>
                 </div>
-            </x-select>
+                </template>
+                
+            </div>
+
+
+            <template is="dom-if" if="[[esEditar]]" restamp>
+
+                <dialogo-nuevo-conta id-prospecto="[[idProspecto]]" lista-contactos="[[arregloContactos]]" posicion="[[indexContacto]]"
+                datos-editar="[[datosContacto]]" nombre="[[datosContacto.nombreCliente]]" puesto="[[datosContacto.puesto]]" lista-tels="[[datosContacto.telefonos]]"
+                lista-email="[[datosContacto.correos]]"></dialogo-nuevo-conta>
+                <button type="button" class="btn btn-warning btn-sm m-3" on-click="cambiaEditar">
+                    <span>
+                        <iron-icon icon="create"></iron-icon>
+                    </span>
+                    Cancelar
+                </button>
+
+            </template>
+
+            <template is="dom-if" if="[[!esEditar]]" restamp>
+                <paper-listbox class="bg-light">
+                    <template is="dom-repeat" items="[[datosContacto.telefonos]]" as="tels">
+                        <paper-item>
+                            <span style="padding:10px;">
+                                <iron-icon icon="communication:call"></iron-icon>
+                            </span>
+                            [[tels.tipo]]: [[tels.telefono]]
+                        </paper-item>
+                    </template>
+                    <template is="dom-repeat" items="[[datosContacto.correos]]" as="email">
+                        <paper-item>
+                            <span style="padding:10px;">
+                                <iron-icon icon="communication:email"></iron-icon>
+                            </span>
+                            [[email]]
+                        </paper-item>
+                    </template>
+                </paper-listbox>
+            </template>
+            
+            
+            
 
 
         `;
@@ -82,7 +110,9 @@ class ItemContacto extends PolymerElement {
             idProspecto:{type:String, notify:true},
             datosContacto:{type:Object, notify:true},
             indexContacto:{type:Number, notify:true},
-            arregloContactos:{type:Array, notify:true, value:[]}
+            arregloContactos:{type:Array, notify:true, value:[]},
+
+            esEditar:{type:Boolean, notify:true, value:false}
 
         }
     }
@@ -104,6 +134,15 @@ class ItemContacto extends PolymerElement {
         }));
     }
 
+    despachaLista(){
+        var t=this;
+        this.dispatchEvent(new CustomEvent('muestra-lista', {
+            detail: {
+                closed:true
+            }
+        }));
+    }
+
     constructor() {
         super();
     }
@@ -112,11 +151,8 @@ class ItemContacto extends PolymerElement {
         super.ready();
     }
 
-    activaVista(){
-        var t=this;
-        setTimeout(() => {
-            t.abreDialogo();
-        }, 1000);
+    cambiaEditar(){
+        this.set("esEditar",!this.esEditar);
     }
 
     abreDialogo(){

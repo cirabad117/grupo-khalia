@@ -17,7 +17,7 @@ class MyClientesMain extends PolymerElement {
                 }
             </style>
             
-            <my-lista-general vista="clientes" arreglo-items="[[listaClientes]]"
+            <my-lista-general titulo-pagina="Clientes" vista="clientes" arreglo-items="[[listaClientes]]"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
             funcion-buscar="[[funcionCliente]]"
 
@@ -130,25 +130,25 @@ class MyClientesMain extends PolymerElement {
     }
 
     abreNuevoCliente(){
-        NavigationUtils.navigate("cliente");
-        // PolymerUtils.Dialog.createAndShow({
-		// 	type: "modal",
-		// 	element:"my-nuevo-cliente",
+        //NavigationUtils.navigate("cliente");
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			element:"my-nuevo-cliente",
 			
-		// 	style:"width:400px;max-width:95%;",
-		// 	positiveButton: {
-        //         text: "Crear",
-        //         action: function(dialog, element) {
-        //             element.guardaCliente();
-        //         }
-        //     },
-        //     negativeButton: {
-        //         text: "Cerrar",
-        //         action: function(dialog, element) {
-        //             dialog.close();
-        //         }
-        //     }
-		// });
+			style:"width:450px; max-width:95%;",
+			positiveButton: {
+                text: "Crear",
+                action: function(dialog, element) {
+                    element.guardaCliente();
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
 }
 

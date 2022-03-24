@@ -111,12 +111,12 @@ class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement))
 
             productoActivo:{type:Object, notify:true,observer:"_llenaCampos"},
 
-            idProd:{type:String, notify:true},
-            codigo:{type:String, notify:true,},
-            nombre:{type:String, notify:true,},
-            departamento:{type:String, notify:true,},
-            dependencia:{type:String, notify:true,},
-            cotizacion:{type:String, notify:true,}
+            idProd:{type:String, notify:true,value:""},
+            codigo:{type:String, notify:true,value:""},
+            nombre:{type:String, notify:true,value:""},
+            departamento:{type:String, notify:true,value:""},
+            dependencia:{type:String, notify:true,value:""},
+            cotizacion:{type:String, notify:true,value:""}
         }
     }
 

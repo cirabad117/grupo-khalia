@@ -1,7 +1,8 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin';
 import { DiccionarioMixin } from '../mixins/diccionario-mixin';
 
-class DialogoNuevoSeg extends DiccionarioMixin(PolymerElement) {
+class DialogoNuevoSeg extends DialogLayoutMixin(DiccionarioMixin(PolymerElement)) {
     static get template() {
         return html`
             <style>
@@ -16,16 +17,11 @@ class DialogoNuevoSeg extends DiccionarioMixin(PolymerElement) {
                     <b style$="background-color:[[item.color]];color:[[item.base]]">[[item.texto]]</b>
                 </template>
             </vaadin-combo-box>
+
+            <vaadin-combo-box id="txtActividad"  items="[[listaActividades]]" label="actividad a realizar"
+            selected-item="{{actividad}}" error-message="selecciona una opcion">
+            </vaadin-combo-box>
             
-            <vaadin-select id="txtActividad" label="actividad a realizar" value="{{actividad}}" error-message="selecciona una opcion">
-                <template>
-                    <vaadin-list-box>
-                        <template is="dom-repeat" items="[[listaActividades]]">
-                            <vaadin-item value="[[item]]">[[item]]</vaadin-item>
-                        </template>
-                    </vaadin-list-box>
-                </template>
-            </vaadin-select>
             <paper-textarea style="max-width:400px;"id="txtComentario" label="comentario" value="{{comentario}}"></paper-textarea>
         `;
     }
@@ -89,13 +85,15 @@ class DialogoNuevoSeg extends DiccionarioMixin(PolymerElement) {
         arreglo.push(nuevo);
 
         var id=this.idProspecto
-
+        var t=this;
         var washingtonRef = firebase.firestore().collection("_clientes-khalia").doc(id);
         return washingtonRef.update({
             listaSeguimiento: arreglo
         }).then(() => {
             console.log("Document successfully updated!");
+            t.DialogLayout_closeDialog();
         }).catch((error) => {
+            PolymerUtils.Toast.show("Error al actualizar. Intentalo más tarde");
             console.error("Error updating document: ", error);
         });
     }

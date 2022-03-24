@@ -39,25 +39,19 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                 }
             </style>
 
-            <div class="card">
-                <div class="card-body">
-                <div style="display:flex; align-items:center;">
-                <div style="flex-grow:1; display:flex;" class="sec">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center" >
                     <iron-icon icon="assignment" style="margin:5px;"></iron-icon>
                     <h5>historial de seguimiento</h5>
                 </div>
-                <div style="flex-grow:0;">
-                    <!-- <paper-icon-button style="margin:5px;background-color:#B3E5FC;border-radius:50%;" icon="add" on-click="abreDialogo"></paper-icon-button> -->
-                    <button type="button" style="margin:5px;" class="btn btn-info btn-sm" on-click="abreDialogo">
-                        <span aria-hidden="true">
-                            
-                            <iron-icon icon="add"></iron-icon>
-                            
-                        </span>
-                    </button>
-                </div>
+                
+                <button type="button" class="btn btn-success btn-sm" on-click="abreDialogo">
+                    <span aria-hidden="true"><iron-icon icon="update"></iron-icon></span>
+                    ACTUALIZAR SEGUIMIENTO
+                </button>
+
             </div>
-            
+
             <paper-listbox style="max-height:280px;overflow-y:scroll;">
                 <template is="dom-repeat" items="[[arregloSeguimiento]]" as="seg" sort="sort">
                     <paper-item style="border-bottom: solid 1px #CFD8DC;">
@@ -74,10 +68,7 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                     </paper-item>
                 </template>
             </paper-listbox>
-                </div>
-            </div>
-            
-            
+
         `;
     }
 
@@ -144,6 +135,8 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                 }
             }
 		});
+
+        
     }
 
     muestraFecha(value){

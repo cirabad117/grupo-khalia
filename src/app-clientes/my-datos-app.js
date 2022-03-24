@@ -41,10 +41,10 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                         <iron-pages selected="{{vista}}">
                             <div>
                                 <div class="d-flex flex-wrap align-items-center">
-                                    <data-simple  style="padding:5px;"font-size="25px"value="[[cliente.id]]" title="clave de producto"></data-simple>
-                                    <data-simple  style="padding:5px;"font-size="25px"value="[[cliente.tipoMembresia.tipo]]" title="tipo de vigencia"></data-simple>
-                                    <data-simple  style="padding:5px;"font-size="25px"value="[[showEstatus(cliente)]]" title="estatus de membresia"></data-simple>
-                                    <data-simple  style="padding:5px;"font-size="25px"value="[[PolymerUtils_getDateString(cliente._fechaLimite)]]" title="vigencia de membresia"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.id]]" titulo="clave de producto"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.tipoMembresia.tipo]]" titulo="tipo de vigencia"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[showEstatus(cliente)]]" titulo="estatus de membresia"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[PolymerUtils_getDateString(cliente._fechaLimite)]]" titulo="vigencia de membresia"></data-simple>
                                 </div>
                                 <div>
                                     <div>usuarios registrados</div>
@@ -71,7 +71,7 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                                             [[item.explicacion]]
                                         </template>
                                     </vaadin-combo-box>
-                                    <data-simple class="flex-fill" font-size="15px" value="{{muestraNuevaFecha(fechaActual,nuevaVigencia)}}" title="fecha de vigencia"></data-simple>
+                                    <data-simple class="p-5 flex-fill" font-size="15px" dato="{{muestraNuevaFecha(fechaActual,nuevaVigencia)}}" titulo="fecha de vigencia"></data-simple>
                                 </div>
                                 <paper-button style="margin:10px;background-color:var(--paper-green-500);color:white;" on-click="modificaMembresia">actualizar</paper-button>
 

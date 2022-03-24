@@ -8,6 +8,7 @@ import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-radio-button/paper-radio-button.js';
 import '@polymer/paper-radio-group/paper-radio-group.js';
+import '@polymer/iron-collapse/iron-collapse.js';
 
 import '../bootstrap.js';
 
@@ -36,18 +37,87 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
 				}
             </style>
 
-            <div class="d-flex">
-                <paper-input style="padding:8px;" id="txtNombre" label="Nombre"
+            <div  class="d-flex align-items-center flex-wrap">
+                <paper-input style="margin:5px;"id="txtNombre" label="Nombre"
                 error-message="valor inválido" value="{{nombre}}"></paper-input>
 
-                <paper-input style="padding:8px;" label="puesto" value="{{puesto}}"></paper-input>
-
-
-
+                <paper-input style="margin:5px;"label="puesto" value="{{puesto}}"></paper-input>
 
             </div>
+            
+            <div class="row">
+                <div class="col-md-6 bg-light">
+                    <div class="d-flex justify-content-between">
+                        <p>telefonos</p>
+                        
+                        <button type="button" class="btn btn-sm btn-light" on-click="toggleTel">
+                            <span>
+                                <iron-icon icon$="{{muestraIcono(esNuevoTel)}}"></iron-icon>
+                            </span>agregar telefono
+                        </button>
+                    </div>
+                    
+                    <iron-collapse opened="{{esNuevoTel}}">
+                        <label id="label1">tipo de telefono</label>
+                        <paper-radio-group selected="{{tipoTel}}" aria-labelledby="label1">
+                            <paper-radio-button name="celular">celular</paper-radio-button>
+                            <paper-radio-button name="oficina">oficina</paper-radio-button>
+                        </paper-radio-group>
+                        
+                        <paper-input id="txtTel" label="Telefono" value="{{tel}}" error-message="ingresa un valor válido">
+                            <button slot="suffix" class="btn btn-sm btn-primary" on-click="agregaTelefono">agregar</button>
+                        </paper-input>
+                    </iron-collapse>
+                    
+                    <iron-collapse opened="{{!esNuevoTel}}">
+                        <paper-listbox>
+                            <template is="dom-repeat" items="[[listaTels]]" as="tels" restamp>
+                                <paper-item>
+                                    <paper-item-body>[[tels.tipo]]: [[tels.telefono]]</paper-item-body>
+                                    <paper-icon-button icon="delete" on-click="quitaTel"></paper-icon-button>
+                                </paper-item>
+                            </template>
+                        </paper-listbox>
+                    </iron-collapse>
+                
+                </div>
+                
+                <div class="col-md-6 bg-light">
+                    <div class="d-flex justify-content-between">
+                        <p>correos electronicos</p>
+                        
+                        <button type="button" class="btn btn-sm btn-light" on-click="toggleEmail">
+                            <span>
+                                <iron-icon icon$="{{muestraIcono(esNuevoEmail)}}"></iron-icon>
+                            </span>
+                            agregar correo
+                        </button>
+                    </div>
+                    
+                    <iron-collapse opened="{{esNuevoEmail}}">
+                        <paper-input label="Correo electrónico" value="{{email}}">
+                            <button slot="suffix" class="btn btn-sm btn-primary" on-click="agregaEmail">agregar</button>
+                        </paper-input>
+                    </iron-collapse>
+                    
+                    <iron-collapse opened="{{!esNuevoEmail}}">
+                        <paper-listbox>
+                            <template is="dom-repeat" items="[[listaEmails]]" as="email" restamp>
+                                <paper-item>
+                                    <paper-item-body>[[email]]</paper-item-body>
+                                    <paper-icon-button icon="delete" on-click="quitaEmail"></paper-icon-button>
+                                </paper-item>
+                            </template>
+                        </paper-listbox>
+                    </iron-collapse>
+                </div>
+            </div>
 
-            <div class="relative">
+
+
+
+
+            <!-- <div class="relative">
 				<div class="absolute">Datos de contacto</div>
 
                 <div class="d-flex">
@@ -116,7 +186,7 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
 				
 				
 
-			</div>
+			</div> -->
 
 
             
@@ -132,7 +202,10 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
             listaContactos:{type:Array, notify:true, value:[]},
 
             posicion:{type:Number, notify:true},
-            datosEditar:{type:Object, notify:true}
+            datosEditar:{type:Object, notify:true},
+
+            esNuevoTel:{type:Boolean, notify:true, value:false},
+            esNuevoEmail:{type:Boolean, notify:true, value:false}
         }
     }
 
@@ -184,6 +257,18 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
 
     }
 
+    toggleTel(){
+        this.set("esNuevoTel",!this.esNuevoTel);
+
+    }
+    toggleEmail(){
+        this.set("esNuevoEmail",!this.esNuevoEmail);
+
+    }
+
+    muestraIcono(bol){
+        return bol==true?"expand-less":"expand-more";
+    }
 
     quitaTel(e){
         console.log("quitamos telefono",e.model.tels,e.model.index);
@@ -219,6 +304,7 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
         //this.push("listaTels",agregar);
         telsActuales.push(agregar);
         this.set("listaTels",telsActuales);
+        this.toggleTel();
         if(this._dialog){
             this.DialogLayout_notifyResize();
         }
@@ -231,6 +317,7 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
         }
         emailsActuales.push(email);
         this.set("listaEmails",emailsActuales);
+        this.toggleEmail();
         if(this._dialog){
             this.DialogLayout_notifyResize();
         }
@@ -328,6 +415,7 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
         }).then(() => {
             PolymerUtils.Toast.show("contacto agregado con éxito");
             t.limpiaCamposContacto();
+            t.disparaFinalizado();
             t.DialogLayout_closeDialog();
         }).catch((error) => {
             PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
@@ -355,6 +443,14 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
         this.set("listaContactos",[]);
         console.log("listaContactos",this.listaContactos);
         this.limpiaCamposContacto();
+    }
+
+    disparaFinalizado(){
+        this.dispatchEvent(new CustomEvent('finaliza-accion', {
+            detail: {
+                closed:true
+            }
+        }));
     }
 }
 

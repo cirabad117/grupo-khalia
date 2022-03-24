@@ -3,6 +3,8 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
 
 import './general-controls/my-lista-general.js';
 import './app-clientes/my-nuevo-app.js';
@@ -20,18 +22,28 @@ class MyAppClientes extends PolymerElement {
                 }
 
                 paper-tabs paper-tab.iron-selected {
-                    background-color: #DCEDC8;
+                    background-color: var(--paper-blue-300);
                 }
             </style>
-
+            
             <div class="container">
-                <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:white;">
-                    <paper-tab name="lista">Clientes activos</paper-tab>
-                    <paper-tab name="coment">Comentarios</paper-tab>
-                </paper-tabs>
+                <nav class="navbar navbar-light bg-light">
+                    <a class="navbar-brand" href="#">App Clientes</a>
+                    <div class="form-inline my-2 my-lg-0">
+                        <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:white;">
+                            <paper-tab name="lista"><span>
+                            <iron-icon icon="supervisor-account"></iron-icon>
+                            </span>Clientes activos</paper-tab>
+                            <paper-tab name="coment"><span>
+                            <iron-icon icon="feedback"></iron-icon>
+                            </span>Comentarios</paper-tab>
+                        </paper-tabs>
+                    </div>
+                </nav>
+                
                 <iron-pages selected="{{selected}}" attr-for-selected="name">
                     <div name="lista">
-                        <my-lista-general vista="appClientes" arreglo-items="{{listaClientesApp}}" titulo="razon"
+                        <my-lista-general titulo-pagina="App Clientes" vista="appClientes" arreglo-items="{{listaClientesApp}}" titulo="razon"
                         lista-filtro="[[listaFiltroApp]]" lista-ordena="[[opcionesOrdena]]"
                         lista-cols="[[datosApp]]"
                         funcion-buscar="[[funcionFiltraApp]]" funcion-ordenar="[[funcionOrdena]]"
@@ -42,9 +54,7 @@ class MyAppClientes extends PolymerElement {
                         <my-comentarios-app></my-comentarios-app>
                     </div>
                     <div name="elegido">
-
                         <div class="card">
-                           
                             <div class="card-body">
                                 <h3 class="card-title">
                                     <span>
@@ -54,14 +64,7 @@ class MyAppClientes extends PolymerElement {
                                 </h3>
                                 <my-datos-app cliente="[[datosCliente]]"></my-datos-app>
                             </div>
-
                         </div>
-
-
-
-
-                        
-                        
                     </div>
                    
                 </iron-pages>

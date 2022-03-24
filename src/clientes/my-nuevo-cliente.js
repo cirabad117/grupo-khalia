@@ -21,9 +21,65 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
                     display:block;
                     margin:10px;
                 }
-            </style>
 
-            <div class="container card">
+                div.relative {
+					margin-top:15px;
+					padding:5px;
+					position: relative;
+					border: 3px solid var(--paper-blue-300);
+					border-radius:15px;
+				}
+				div.absolute {
+					position: absolute;
+					top: -15px;
+					left: 20px;
+					background-color:white !important;
+					font-weight: 700;
+					font-size: 14px;
+				}
+            </style>
+            
+            <h6>datos del cliente</h6>
+            
+            <paper-input id="txtRazon" label="Razón social" value="{{razon}}" error-message="valor inválido"></paper-input>
+
+            <paper-input id="txtEstacion" label="número de estación" value="{{noEs}}" error-message="valor inválido"></paper-input>
+            
+            <vaadin-combo-box id="comboVenta"  placeholder="venta por" selected-item="{{objVenta}}" items="[[_ventaPor]]"
+            item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+            
+            <div class="relative">
+                <div class="absolute">Información de contacto</div>
+				
+				<div style="display:flex;">
+					<paper-input style="padding:8px;" id="txtNombre" label="Nombre" error-message="valor inválido" value="{{nombre}}"></paper-input>
+					<paper-input style="padding:8px;" label="puesto" value="{{puesto}}"></paper-input>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-6">
+						<vaadin-select label="tipo de telefono" value="{{tipoTel}}">
+							<template>
+								<vaadin-list-box>
+									<vaadin-item value="celular">celular</vaadin-item>
+									<vaadin-item value="oficina">oficina</vaadin-item>
+								</vaadin-list-box>
+							</template>
+						</vaadin-select>
+					</div>
+					<div class="col-md-6">
+						<paper-input style="padding:8px;" id="txtTel" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
+						</paper-input>
+					</div>	
+				</div>
+
+				<paper-input style="padding:8px;" label="Correo electrónico" value="{{email}}">
+				</paper-input>
+
+			</div>
+
+
+            <!-- <div class="container card">
                 <div class="row card-body">
                     <div class="col-md-6">
                         <h6>datos del cliente</h6>
@@ -33,7 +89,6 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
                         <paper-input id="txtEstacion" label="número de estación" value="{{noEs}}" error-message="valor inválido"></paper-input>
                         
                         
-
                         <vaadin-combo-box id="comboVenta"  placeholder="venta por" selected-item="{{objVenta}}" items="[[_ventaPor]]"
                         item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
 
@@ -48,7 +103,6 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
                                     <p>no hay contactos registrados</p>
                                 </template>
                             </div>
-                            <!--<paper-button raised on-click="toggleContacto"> agregar contacto</paper-button>-->
                             <paper-icon-button style="border:solid 1px var(--paper-blue-500);border-radius:50%;" icon="[[devuelveIcono(bolContacto)]]" on-click="toggleContacto"></paper-icon-button>
                         </div>
                         
@@ -74,15 +128,8 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
                     
                 </div>
 
-                <div class="card-body">
-
-                    <paper-button style="color:white;background-color:var(--paper-green-600);"on-click="guardaCliente">guardar</paper-button>
-                    <paper-button on-click="regresa">cancelar</paper-button>
-
-                    
-                </div>
             
-            </div>
+            </div> -->
             
         `;
     }
@@ -94,10 +141,10 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
             razon:{type:String, notify:true},
             estado:{type:Object, notify:true},
             nombre:{type:String, notify:true},
+            puesto:{type:String, notify:true},
             email:{type:String, notify:true},
             tel:{type:String, notify:true},
            
-            bolContacto:{type:Boolean, notify:true, value:false}
         }
     }
 
@@ -109,31 +156,32 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
         super.ready();
     }
 
-    toggleContacto(){
-        this.set("bolContacto",!this.bolContacto);
-    }
+    // toggleContacto(){
+    //     this.set("bolContacto",!this.bolContacto);
+    //     this.DialogLayout_notifyResize();
+    // }
 
-    devuelveIcono(bol){
-        if(bol==true){
-            return "clear";
-        }else{
-            return "add";
-        }
-    }
+    // devuelveIcono(bol){
+    //     if(bol==true){
+    //         return "clear";
+    //     }else{
+    //         return "add";
+    //     }
+    // }
 
-    revisaContactos(arr){
-        if(arr && arr.length && arr.length>0){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    // revisaContactos(arr){
+    //     if(arr && arr.length && arr.length>0){
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
+    // }
 
-    spliceContactos(e){
-        var eliminar=e.detail.indexEliminar;
-        this.splice("listaContactos",eliminar,1);
+    // spliceContactos(e){
+    //     var eliminar=e.detail.indexEliminar;
+    //     this.splice("listaContactos",eliminar,1);
 
-    }
+    // }
 
     agregaContacto(){
 
@@ -159,7 +207,9 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 
 
         this.push("listaContactos",nuevo);
-        this.limpiaCamposContacto();
+        // 
+        
+
     }
 
     guardaCliente(){
@@ -187,12 +237,10 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
             this.shadowRoot.querySelector("#comboVenta").invalid=false;
         }
 
+        this.agregaContacto();
+
         if(!this.listaContactos || !this.listaContactos.length || this.listaContactos.length<=0){
-            return this.notificacionCreate({
-                texto:"No hay contactos registrados",
-                esError:true,
-                duracion:3000
-            });
+            return PolymerUtils.Toast.show("No hay información de contacto válida");
         }
 
         var cliente={
@@ -236,9 +284,9 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
         this.set("email",null);
     }
 
-    regresa(){
-        window.history.back();
-    }
+    // regresa(){
+    //     window.history.back();
+    // }
 }
 
 customElements.define('my-nuevo-cliente', MyNuevoCliente);

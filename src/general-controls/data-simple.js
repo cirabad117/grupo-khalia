@@ -1,9 +1,11 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
+import '../bootstrap.js';
+
 class DataSimple extends PolymerElement {
     static get template() {
         return html`
-            <style>
+            <style include="bootstrap">
                 :host{
                     display:block;
                     margin:5px;
@@ -11,14 +13,13 @@ class DataSimple extends PolymerElement {
 
                 
             </style>
-
-            <div style="display: flex;">
-				<!-- <div style="margin-right: 8px; margin-top: 2px; margin-left: 2px;"><iron-icon style="min-width: 24px;" icon="[[icon]]"></iron-icon></div> -->
-				<div>
-					<div style$="font-weight: 400; color:[[_getTextColor(textColor)]]; font-size: 13px;">[[title]]</div>
-					<div style$="font-weight: 500; color:[[_getTextColor(valueColor)]]; font-size: [[fontSize]];">{{valor}}</div>
-				</div>
-			</div>
+            
+            <div class="form-group bg-light text-primary">
+                <label for="inputAddress">[[titulo]]</label>
+                <input type="text" readonly class="form-control" id="inputAddress" value="[[dato]]">
+            </div>
+            
+           
 
         `;
     }
@@ -29,8 +30,8 @@ class DataSimple extends PolymerElement {
 			textColor:{type:String,notify:true,value:"grey"},
 			valueColor:{type:String,notify:true,value:"indigo"},
 			icon:{type:String,notify:true,value:"add"},
-			title:{type:String,notify:true},
-			value:{type:String,notify:true,observer:"muestraValor"},
+			titulo:{type:String,notify:true},
+			dato:{type:String,notify:true,observer:"muestraValor"},
             valor:{type:String,notify:true}
         }
     }

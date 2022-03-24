@@ -19,98 +19,83 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             <style include="bootstrap">
                 :host{
                     display:block;
+                    margin:5px;
                 }
-
+                
                 .carta {
-				margin: 10px;
-				color: #757575;
-				border-radius: 5px;
-				background-color: #fff;
-				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-			}
-
-            tr:hover{
-                cursor:pointer;
-            }
+                    margin: 10px;
+                    color: #757575;
+                    border-radius: 5px;
+                    background-color: #fff;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                }
+                tr:hover{
+                    cursor:pointer;
+                }
             </style>
             
-            <div class="container-fluid carta">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="d-flex flex-row bd-highlight mb-3 align-items-center">
-                            <vaadin-select id="selectCotiza" class="m-3" label="filtrar registros" value="{{filtroEstatus}}" error-message="selecciona una opcion">
-                                <template>
-                                    <vaadin-list-box>
-                                        <vaadin-item value="todos">todos los registros</vaadin-item>
-                                        <template is="dom-repeat" items="[[listaFiltro]]" as="filtro">
-                                            <vaadin-item style$="[[muestraSeparador(filtro)]]" value="[[filtro.texto]]">[[filtro.texto]]</vaadin-item>
-                                        </template>
-                                    </vaadin-list-box>
-                                </template>
-                            </vaadin-select>
-                            <vaadin-select id="selectCotiza" class="m-3" label="Ordenar registros" value="{{modoOrdena}}" error-message="selecciona una opcion">
-                                <template>
-                                    <vaadin-list-box>
-                                        <template is="dom-repeat" items="[[listaOrdena]]" as="ordena">
-                                            <vaadin-item value="[[ordena.opcion]]">[[ordena.texto]]</vaadin-item>
-                                        </template>
-                                    </vaadin-list-box>
-                                </template>
-                            </vaadin-select>
-                            <paper-input label="Buscar" class="m-3" id="inputWithButton" value="{{busqueda}}">
-                                <paper-icon-button slot="suffix" on-click="limpia" icon="clear" alt="clear" title="clear">
-                                </paper-icon-button>
-                            </paper-input>
-                        </div>
-                    </div>
-                </div>
+            <template is="dom-if" if="[[esOtros(tituloPagina)]]">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-sm">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <template is="dom-repeat" items="[[listaCols]]" as="col">
-                                            <th>[[col.titulo]]</th>
-                                        </template>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}"
-                                filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}" as="info">
-                                
-                                    <tr on-click="disparaAccionItem">
-                                        <template is="dom-repeat" items="[[listaCols]]" as="tit">
-
-                                            <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
-                                                <my-seguimiento-item obj-buscar="[[info.listaSeguimiento]]"></my-seguimiento-item>
-                                            </template>
-                                            <template is="dom-if" if="[[!esSeguimiento(tit.dato)]]">
-                                                <td>
-                                                    [[muestraInfo(info,tit.dato,tit.valorInterno)]]
-                                                </td>
-                                            </template>
-                                            
-                                        </template>
-                                    </tr>
-                                </template>
-
-
-                                    
-                                </tbody>
-                            </table>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                
+           
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="#">[[tituloPagina]]</a>
+            </nav>
+            </template>
+            
+            <div class="card d-flex flex-row bd-highlight mb-3 align-items-center">
+                <vaadin-select id="selectCotiza" class="m-3" label="filtrar registros" value="{{filtroEstatus}}" error-message="selecciona una opcion">
+                    <template>
+                        <vaadin-list-box>
+                            <vaadin-item value="todos">todos los registros</vaadin-item>
+                            <template is="dom-repeat" items="[[listaFiltro]]" as="filtro">
+                                <vaadin-item style$="[[muestraSeparador(filtro)]]" value="[[filtro.texto]]">[[filtro.texto]]</vaadin-item>
+                            </template>
+                        </vaadin-list-box>
+                    </template>
+                </vaadin-select>
+                <vaadin-select id="selectCotiza" class="m-3" label="Ordenar registros" value="{{modoOrdena}}" error-message="selecciona una opcion">
+                    <template>
+                        <vaadin-list-box>
+                            <template is="dom-repeat" items="[[listaOrdena]]" as="ordena">
+                                <vaadin-item value="[[ordena.opcion]]">[[ordena.texto]]</vaadin-item>
+                            </template>
+                        </vaadin-list-box>
+                    </template>
+                </vaadin-select>
+                <paper-input label="Buscar" class="m-3" id="inputWithButton" value="{{busqueda}}">
+                    <paper-icon-button slot="suffix" on-click="limpia" icon="clear" alt="clear" title="clear">
+                    </paper-icon-button>
+                </paper-input>
             </div>
             
+            <div class="card table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <template is="dom-repeat" items="[[listaCols]]" as="col">
+                                <th>[[col.titulo]]</th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}"
+                        filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}" as="info">
+                            <tr on-click="disparaAccionItem">
+                                <template is="dom-repeat" items="[[listaCols]]" as="tit">
+                                    <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
+                                        <my-seguimiento-item obj-buscar="[[info.listaSeguimiento]]"></my-seguimiento-item>
+                                    </template>
+                                    <template is="dom-if" if="[[!esSeguimiento(tit.dato)]]">
+                                        <td>
+                                            [[muestraInfo(info,tit.dato,tit.valorInterno)]]
+                                        </td>
+                                    </template>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
             <div style="position: fixed; bottom: 24px; right: 24px;">
 				<div style="position: relative; cursor:pointer;" on-clicK="disparaAccionPrincipal">
 					<paper-fab icon="add" style$="color:white;background-color:[[colorBoton]];"></paper-fab>
@@ -122,6 +107,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
     static get properties() {
         return {
+            tituloPagina:{type:String, notify:true,},
             vista:{type:String, notify:true},
             filtroEstatus:{type:String, notify:true,value:"todos"},
             arregloItems:{type:Array, notify:true, value:[]},
@@ -145,6 +131,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
     esSeguimiento(str){
         return str=="listaSeguimiento";
+    }
+
+    esOtros(str){
+        return str!="App Clientes";
     }
     
 

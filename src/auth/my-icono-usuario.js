@@ -103,25 +103,21 @@ class MyIconoUsuario extends AuthMixin(UtilsMixin(PolymerElement)) {
     }
 
     initLogin(){
-         PolymerUtils.Dialog.createAndShow({
-			type: "modal",
-            title:"iniciar sesión",
-			element:"my-inicio-sesion",
+        NavigationUtils.navigate("inicio");
+        //  PolymerUtils.Dialog.createAndShow({
+		// 	type: "modal",
+        //     title:"iniciar sesión",
+		// 	element:"my-inicio-sesion",
 			
-			style:"width:400px;max-width:95%;",
-			// positiveButton: {
-            //     text: "Crear",
-            //     action: function(dialog, element) {
-            //         element.iniciaSesion();
-            //     }
-            // },
-            negativeButton: {
-                text: "Cerrar",
-                action: function(dialog, element) {
-                    dialog.close();
-                }
-            }
-		});
+		// 	style:"width:400px;max-width:95%;",
+	
+        //     negativeButton: {
+        //         text: "Cerrar",
+        //         action: function(dialog, element) {
+        //             dialog.close();
+        //         }
+        //     }
+		// });
     }
 }
 

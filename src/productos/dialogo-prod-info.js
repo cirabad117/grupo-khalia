@@ -29,12 +29,12 @@ class DialogoProdInfo extends DialogLayoutMixin(PolymerElement) {
             <template is="dom-if" if="[[!esEditar]]">
                 <div style="display: flex; align-items: center; flex-wrap: wrap;">
                     
-                    <data-simple value="[[producto.codigo]]" title="código"></data-simple>
-                    <data-simple value="[[producto.nombre]]" title="nombre del producto"></data-simple>
-                    <data-simple value="[[producto.departamento]]" title="departamento"></data-simple>
-                    <data-simple value="[[producto.dependencia]]" title="dependencia"></data-simple>
+                    <data-simple dato="[[producto.codigo]]" titulo="código"></data-simple>
+                    <data-simple dato="[[producto.nombre]]" titulo="nombre del producto"></data-simple>
+                    <data-simple dato="[[producto.departamento]]" titulo="departamento"></data-simple>
+                    <data-simple dato="[[producto.dependencia]]" titulo="dependencia"></data-simple>
                     <template is="dom-if" if="[[producto.cotizacion]]">
-                        <data-simple value="[[producto.cotizacion]]" title="cotizacion"></data-simple>
+                        <data-simple dato="[[producto.cotizacion]]" titulo="cotizacion"></data-simple>
                     </template>
                     <paper-icon-button style="background-color:#FFECB3;border-radius:50%;" icon="create" on-click="cambiaEdita"></paper-icon-button>
 

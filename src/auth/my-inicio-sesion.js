@@ -155,9 +155,9 @@ class MyInicioSesion extends DialogLayoutMixin(UtilsMixin(AuthMixin(PolymerEleme
         var t=this;
         var su=function() {
             //NavigationUtils.navigate("instalaciones");
-            // window.location.reload();
-            // NavigationUtils.navigate("prospectos");
-            t.DialogLayout_closeDialog();
+            window.location.reload();
+            
+            // t.DialogLayout_closeDialog();
             t.set("email",null);
             t.set("pass",null);
             

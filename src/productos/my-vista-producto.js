@@ -18,8 +18,31 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                     display:block;
                 }
             </style>
+            
+            <nav class="navbar navbar-light bg-light titulo">
+                <span class="navbar-brand" on-click="regresa">
+                    <iron-icon icon="arrow-back"></iron-icon>
+                    [[producto.nombre]]
+                    
+                </span>
 
-            <div class="container">
+                <button class=" btn btn-success btn-md" on-click="disparaVentanaProd">
+                        <span><iron-icon icon="save"></iron-icon></span>
+                        GUARDAR CAMBIOS
+                    </button>
+
+            </nav>
+
+            <div class="card">
+                <div class="card-body">
+
+                <dialogo-nuevo-producto style="margin:10px;" id="ventana-editar"
+                es-editar="[[esEditar]]" producto-activo="{{producto}}"></dialogo-nuevo-producto>
+
+                </div>
+            </div>
+
+            <!-- <div class="container">
 
                 <div class="card">
                     <div class="card-header d-flex align-items-center" >
@@ -30,13 +53,7 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                     
                     <div class="row">
                         <div class="col-md-12">
-                           
-
-                            <!-- id-prod="[[producto.id]]" codigo="[[producto.codigo]]"
-                                nombre="[[producto.nombre]]" departamento="[[producto.departamento]]" dependencia="[[producto.dependencia]]" -->
-                               
-                                <dialogo-nuevo-producto style="margin:10px;" id="ventana-editar"
-                                es-editar="[[esEditar]]" producto-activo="{{producto}}"></dialogo-nuevo-producto>
+                            
                           
                         </div>
 
@@ -57,7 +74,7 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                     </div>
                 </div>
                 
-            </div>
+            </div> -->
 
         `;
     }
@@ -111,7 +128,7 @@ class MyVistaProducto extends NavigationMixin(PolymerElement) {
                         t.set("producto",obj);
                         
                     }else{
-                        
+                        t.set("producto",null);
                     }
                 }
             }));

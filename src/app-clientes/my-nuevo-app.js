@@ -62,10 +62,10 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                             </template>
                         </vaadin-combo-box>
                         <div class="d-flex align-items-center">
-                            <data-simple font-size="15px" style="padding:5px;"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
-                            <data-simple font-size="15px" style="padding:5px;"value="[[clienteElegido.alias]]" title="Alias"></data-simple>
+                            <data-simple font-size="15px" style="padding:5px;"dato="[[clienteElegido.razon]]" titulo="Nombre o Razón social"></data-simple>
+                            <data-simple font-size="15px" style="padding:5px;"dato="[[clienteElegido.alias]]" titulo="Alias"></data-simple>
 
-                            <data-simple font-size="15px" style="padding:5px;"value="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" title="fecha de creación"></data-simple>
+                            <data-simple font-size="15px" style="padding:5px;"dato="[[PolymerUtils_getTimeString(clienteElegido._timestamp)]]" titulo="fecha de creación"></data-simple>
                         </div>
                     </div>
                 </div>

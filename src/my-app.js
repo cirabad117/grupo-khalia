@@ -13,6 +13,8 @@ import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils
 import { NavigationMixin } from "./mixins/navigation-mixin.js";
 import { AuthMixin } from "./mixins/auth-mixin.js";
 
+
+
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -34,10 +36,15 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 
+import './general-controls/my-dropdown-button.js';
 import './auth/my-icono-usuario.js';
 import './controles-extra/dom-access.js';
 
+import './bootstrap.js';
+
 import './my-icons.js';
+
+
 
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
@@ -50,7 +57,7 @@ setRootPath(MyAppGlobals.rootPath);
 class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 	static get template() {
 		return html`
-			<style>
+			<style include="bootstrap">
 				:host {
 					--app-primary-color: #4285f4;
 					--app-secondary-color: black;
@@ -86,15 +93,64 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					color: black;
 					font-weight: bold;
 				}
-				
 
-				paper-item:hover{
-					cursor:pointer;
+				.nav-link:hover{
+					color:#FFFFFF;
 				}
-				paper-icon-item:hover{
-					cursor:pointer;
+				
+				/* The side navigation menu */
+				.sidenav {
+					height: 100%; /* 100% Full-height */
+					width: 0; /* 0 width - change this with JavaScript */
+					position: fixed; /* Stay in place */
+					z-index: 1; /* Stay on top */
+					top: 0; /* Stay at the top */
+					right: 0;
+					/* background-color: #006064; */
+					overflow-x: hidden; /* Disable horizontal scroll */
+					padding-top: 60px; /* Place content 60px from the top */
+					transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 				}
-			
+				
+				/* The navigation menu links */
+				.sidenav a {
+					padding: 8px 8px 8px 32px;
+					text-decoration: none;
+					font-size: 18px;
+					color: #f1f1f1;
+					display: block;
+					transition: 0.3s;
+				}
+
+				.item-collapse{
+					padding: 8px 8px 8px 32px;
+					text-decoration: none;
+					font-size: 18px;
+					color: #f1f1f1;
+					transition: 0.3s;
+				}
+				
+				/* When you mouse over the navigation links, change their color */
+				.sidenav a:hover {
+					text-decoration:underline;
+				}
+				/*Position and style the close button (top right corner) */
+				.sidenav .closebtn {
+					position: absolute;
+					top: 0;
+					right: 25px;
+					font-size: 36px;
+					margin-left: 50px;
+				}
+				#main {
+					transition: margin-right .5s;
+				}
+				
+				@media screen and (max-height: 450px) {
+					.sidenav {padding-top: 15px;} 
+					.sidenav a {font-size: 18px;}
+				}
+
 			</style>
 			
 			<app-location route="{{route}}" url-space-regex="^[[rootPath]]" query-params={{routeParams}}>
@@ -102,153 +158,166 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 			<app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
 			</app-route>
-			
-			<app-drawer-layout fullbleed="" narrow="{{narrow}}" ><!--force-narrow="" -->
-				<!-- Drawer content -->
-				<app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
 
+			<div id="mySidenav" class="sidenav bg-info">
+				<a href="javascript:void(0)" class="bg-light" on-click="closeNav">
+					<span>
+						<iron-icon icon="chevron-right" style="color:#000000;"></iron-icon>
+					</span>
+				</a>
 
-				<div style="height: 100%; overflow: auto;">
-				<app-toolbar>
-						Menu
-					</app-toolbar>
-					
-					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" >
-						<paper-icon-item on-click="toggleAdmin">
-							<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
-							Ventas
-						</paper-icon-item>
-						<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
-							<dom-access path="admin/prospectos">
-								<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
-							</dom-access>
-							<dom-access path="admin/clientes">
-								<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
-							</dom-access>
-							<dom-access path="admin/productos">
-								<a name="productos" href="[[rootPath]]productos" >Control de productos</a>
-							</dom-access>
-							<dom-access path="admin/cotizaciones">
-								<a name="cotizaciones" href="[[rootPath]]cotizaciones" >Cotizaciones</a>
-							</dom-access>
-						</iron-collapse>
-						
-						
-						
-						<paper-icon-item on-click="toggleArea">
-							<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
-							estatus por departamento
-						</paper-icon-item>
-
-						<iron-collapse opened="[[esArea]]" style="padding:15px;">
-							<a name="sasisopa" href="[[rootPath]]sasisopa" >SASISOPA</a>
-							<a name="sgm" href="[[rootPath]]sgm" >SGM</a>
-							<a name="emisiones" href="[[rootPath]]emisiones" >Emisiones</a>
-							<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
-							<a name="admin" href="[[rootPath]]admin" >Administración</a>
-						</iron-collapse>
-
-						<dom-access path="app-clientes">
-							<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
-						</dom-access>
-						
-						<dom-access path="usuarios">
-							<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
-						</dom-access>
+				<template is="dom-if" if="[[_loggedUser]]">
 				
-						<hr>
+				<paper-icon-item class="item-collapse" on-click="toggleAdmin">
+					<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
+					Ventas
+				</paper-icon-item>
+				<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
+					<dom-access path="admin/prospectos">
+						<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+					</dom-access>
+					<dom-access path="admin/clientes">
+						<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+					</dom-access>
+					<dom-access path="admin/productos">
+						<a name="productos" href="[[rootPath]]productos" >Control de productos</a>
+					</dom-access>
+					<dom-access path="admin/cotizaciones">
+						<a name="cotizaciones" href="[[rootPath]]cotizaciones" >Cotizaciones</a>
+					</dom-access>
+				</iron-collapse>
+				
+				<paper-icon-item class="item-collapse" on-click="toggleArea">
+					<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
+					Estatus por departamento
+				</paper-icon-item>
+				
+				<iron-collapse opened="[[esArea]]" style="padding:15px;">
+					<a name="sasisopa" href="[[rootPath]]sasisopa">SASISOPA</a>
+					<a name="sgm" href="[[rootPath]]sgm">SGM</a>
+					<a name="emisiones" href="[[rootPath]]emisiones">Emisiones</a>
+					<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
+					<a name="admin" href="[[rootPath]]admin" >Administración</a>
+				</iron-collapse>
+				<dom-access path="app-clientes">
+					<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
+				</dom-access>
+				<dom-access path="usuarios">
+					<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
+				</dom-access>
+				
+					<hr>
+					<a  href="#" on-click="cierraSesion">
+						<span>
+							<iron-icon icon="power-settings-new"></iron-icon>
+						</span>
+						Cerrar sesión
+					</a>
+				</template>
+
+				<template is="dom-if" if="[[!_loggedUser]]">
+					<a  href="[[rootPath]]inicio" on-click="iniciaSesion">
+						<span>
+							<iron-icon icon="touch-app"></iron-icon>
+						</span>
+						Iniciar sesión
+					</a>
+				</template>
+
+
+			</div>
+
+			<div id="main">
+				<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+
+					<a class="navbar-brand" href="#">
+						<img src="../images/gk_icono.png" width="30" height="30" class="d-inline-block align-top" alt="">
+						Grupo Khalia
+					</a>
+
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation" on-click="openNav">
+						<span class="navbar-toggler-icon">
+							<iron-icon icon="menu"></iron-icon>
+						</span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						
-						<template is="dom-if" if="[[_loggedUser]]">
-							<a  href="#" on-click="cierraSesion">Cerrar sesión</a>
-						</template>
-						
-					
-						
-					</iron-selector>
-				</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					
-				</app-drawer>
-
-				<!-- Main content -->
-				<app-header-layout has-scrolling-region="">
-
-					<app-header slot="header" condenses="" reveals="" effects="waterfall">
-						<app-toolbar>
-							<paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
-							<template is="dom-if" if="[[muestraBack]]">
-									<paper-icon-button icon="arrow-back" on-click="regresa"></paper-icon-button>
-								</template>
-							<div main-title="">
-								
-								[[nombrePagina]]
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item dropdown">
+								<my-dropdown-button titulo="Ventas" items="[[listaVentas]]"></my-dropdown-button>
+							</li>
+							<li class="nav-item dropdown">
+								<my-dropdown-button titulo="Estatus por departamento" items="[[listaDepa]]"></my-dropdown-button>
+							</li>
+							<dom-access path="app-clientes">
+								<li class="nav-item">
+									<a class="nav-link" href="[[rootPath]]app-clientes">App clientes</a>
+								</li>
+							</dom-access>
+							<dom-access path="usuarios">
+								<li class="nav-item">
+									<a class="nav-link" href="[[rootPath]]usuarios">Usuarios</a>
+								</li>
+							</dom-access>
+						</ul>
+						<div class="form-inline my-2 my-lg-0">
+							<my-icono-usuario tam="48px"></my-icono-usuario>
+							<div style="padding: 4px 12px;">
+								<div style="font-size: 16px; font-weight: 500;color:#FFFFFF;">[[_loggedUser.displayName]]</div>
 							</div>
-							
-									<my-icono-usuario tam="48px"></my-icono-usuario>
-									<div style="padding: 4px 12px;">
-										<div style="font-size: 16px; font-weight: 500;">[[_loggedUser.displayName]]</div>
-									</div>
-								
-							
-						</app-toolbar>
-					</app-header>
-
+							<paper-icon-button style="color:var(--paper-red-200);" icon="power-settings-new" on-click="cierraSesion"></paper-icon-button>
+						</div>
+					</div>
+				</nav>
+				
+				<div class="container">
 					<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+
+						<my-inicio  name="inicio"></my-inicio>
 						
 						<dom-access name="prospectos" path="admin/prospectos">
-						<my-prospectos-main name="prospectos"></my-prospectos-main>
+							<my-prospectos-main  name="prospectos"></my-prospectos-main>
 						</dom-access>
-
-						<my-datos-prospecto name="prospecto"></my-datos-prospecto>
-
-
-
+						
+						<my-datos-prospecto  name="prospecto"></my-datos-prospecto>
+						
 						<dom-access name="clientes" path="admin/clientes">
-						<my-clientes-main name="clientes"></my-clientes-main>
+							<my-clientes-main  name="clientes"></my-clientes-main>
 						</dom-access>
 
-						<my-cliente name="cliente"></my-cliente>
+						<my-cliente  name="cliente"></my-cliente>
 
 						<dom-access name="productos" path="admin/productos">
-						<my-productos-main name="productos"></my-productos-main>
+							<my-productos-main  name="productos"></my-productos-main>
 						</dom-access>
 
-						<my-vista-producto name="producto"></my-vista-producto>
+						<my-vista-producto  name="producto"></my-vista-producto>
 
 						<dom-access name="cotizaciones" path="admin/cotizaciones">
-						<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
+							<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
 						</dom-access>
 
 						<my-vista-cotiza name="cotizacion"></my-vista-cotiza>
 
 						<my-nueva-cotizacion name="nueva-cotizacion"></my-nueva-cotizacion>
 
-						<my-usuarios name="usuarios"></my-usuarios>
+						<dom-access name="usuarios" path="usuarios">
+							<my-usuarios name="usuarios"></my-usuarios>
+						</dom-access>
 
-						<my-app-clientes name="app-clientes"></my-app-clientes>
-						<!-- <my-nuevo-app name="nuevo-app"></my-nuevo-app> -->
+						<dom-access name="app-clientes" path="app-clientes">
+							<my-app-clientes name="app-clientes"></my-app-clientes>
+						</dom-access>
 					
-						
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
-				</app-header-layout>
-			</app-drawer-layout>
+			</div>
+			
+			</div><!--div main-->
+			
+
 		`;
 	}
 
@@ -264,6 +333,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				observer: '_pageChanged'
 			},
 			paginas:{type:Array, notify:true, value:[
+				'inicio',
 				'prospecto','prospectos','clientes','cliente',
 				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
 				'app-clientes','cotizacion']
@@ -273,14 +343,25 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			muestraBack:{type:Boolean, notify:true, value:false},
 			
 			routeData: Object,
-			subroute: Object
+			subroute: Object,
+
+			listaVentas:{type:Array, notify:true, value:[
+				{"nombre":"Prospectos","link":"prospectos","permiso":"admin/prospectos"},
+				{"nombre":"Clientes","link":"clientes","permiso":"admin/clientes"},
+				{"nombre":"Productos","link":"productos","permiso":"admin/productos"},
+				{"nombre":"Cotizaciones","link":"cotizaciones","permiso":"admin/cotizaciones"},
+			]},
+			listaDepa:{type:Array, notify:true, value:[
+				{"nombre":"SASISOPA","link":""},
+				{"nombre":"SGM","link":""},
+				{"nombre":"Emisiones","link":""},
+				{"nombre":"Seguridad","link":""},
+				{"nombre":"Administración","link":""},
+			]}
+
 		};
 	}
 
-	/**
-	 * Use for one-time configuration of your component after local DOM is
-	 * initialized.
-	 */
 	ready() {
 		super.ready();
 		_initNavigationUtils(this,this.route,"route",this.routeParams,"routeParams");
@@ -289,6 +370,16 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 	regresa(){
 		window.history.back();
+	}
+
+	/* Set the width of the side navigation to 250px */
+	openNav() {
+		this.shadowRoot.querySelector("#mySidenav").style.width = "250px";
+	}
+	
+	/* Set the width of the side navigation to 0 */
+	closeNav() {
+		this.shadowRoot.querySelector("#mySidenav").style.width = "0";
 	}
 
 	getIcono(bol){
@@ -302,9 +393,11 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 	toggleAdmin(){
 		this.set("esAdmin",!this.esAdmin);
 	}
+
 	toggleArea(){
 		this.set("esArea",!this.esArea);
 	}
+
 	static get observers() {
 		return [
 			'_routePageChanged(routeData.page)'
@@ -312,41 +405,29 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 	}
 
 	iniciaSesion(){
-		NavigationUtils.navigate("login");
+		NavigationUtils.navigate("inicio");
 	}
 
 	cierraSesion(){
 		this.signOut();
 	}
-
 	
-
 	_routePageChanged(page) {
-		 // Show the corresponding page according to the route.
-		 //
-		 // If no page was found in the route data, page will be an empty string.
-		 // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
 		if (!page) {
-			this.page = 'prospectos';
+			this.page = 'inicio';
 		} else if (this.paginas.indexOf(page) !== -1) {
 			
 			this.page = page;
 		} else {
 			this.page = 'view404';
 		}
-
-		// Close a non-persistent drawer when the page & route are changed.
-		if (!this.$.drawer.persistent) {
-			this.$.drawer.close();
-		}
 	}
 
 	_pageChanged(page) {
-		// Import the page component on demand.
-		//
-		// Note: `polymer build` doesn't like string concatenation in the import
-		// statement, so break it up.
 		switch (page) {
+			case 'inicio':
+				import('./my-inicio.js');
+			break;
 			case 'prospectos':
 				import('./my-prospectos-main.js');
 				this.set("nombrePagina","Prospectos");
@@ -362,13 +443,6 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				this.set("nombrePagina","Clientes");
 				this.set("muestraBack",false);
 			break;
-			// case 'inicio':
-			// 	import('./my-inicio.js');
-			// 	break;
-
-			// case 'lista-clientes':
-			// 	import('./my-clientes-main.js');
-			// 	break;
 			
 			case 'cliente':
 				import('./clientes/my-cliente.js');
@@ -410,11 +484,6 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				import ('./my-app-clientes.js');
 				this.set("nombrePagina","App Clientes");
 			break;
-			// case 'nuevo-app':
-			// 	import ('./app-clientes/my-nuevo-app.js');
-			// break;
-			
-			
 			case 'view404':
 				import('./my-view404.js');
 			break;

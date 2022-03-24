@@ -124,8 +124,8 @@ class MyNuevaCotizacion extends PolymerElement {
                                     <div class="col-md-12">
                                         
                                         <paper-input label="dirigida a" value="{{nombreDirigido}}"></paper-input>
-                                        <data-simple font-size="20px"value="[[clienteElegido.razon]]" title="Nombre o Razón social"></data-simple>
-                                        <data-simple font-size="20px"value="[[nombreDirigido]]" title="Dirigida a"></data-simple>
+                                        <data-simple font-size="20px"dato="[[clienteElegido.razon]]" titulo="Nombre o Razón social"></data-simple>
+                                        <data-simple font-size="20px"dato="[[nombreDirigido]]" titulo="Dirigida a"></data-simple>
                                         <h5>lista de trámites</h5>
                                         
                                         <paper-listbox style="max-height:250px;overflow-y:scroll;">

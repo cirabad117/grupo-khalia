@@ -13,14 +13,11 @@ class MyProductosMain extends PolymerElement {
                 }
             </style>
             
-            <my-lista-general vista="productos" arreglo-items="[[listaProductos]]"
+            <my-lista-general titulo-pagina="Control de productos" vista="productos" arreglo-items="[[listaProductos]]"
             lista-filtro="[[listaSeccion]]" lista-ordena="[[opcionesOrdena]]"
             lista-cols="[[datosProd]]"
             funcion-ordenar="[[funcionOrdenaProd]]" funcion-buscar="[[funcionFiltraProd]]"
             on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="abreInfo"></my-lista-general>
-
-         
-
 
 
         `;
@@ -84,8 +81,7 @@ class MyProductosMain extends PolymerElement {
                 value:{
                     nombre:"funcionOrdenaProd",
                     funcion:function(a,b,str) {
-                        // var at=PolymerUtils.convertFirebaseTimestamp(a._timestamp);
-                        // var bt=PolymerUtils.convertFirebaseTimestamp(b._timestamp);
+
                         var textoA=a.nombre.toLowerCase();
                         var textoB=b.nombre.toLowerCase();
                     
@@ -105,20 +101,7 @@ class MyProductosMain extends PolymerElement {
                                     return (textoA>textoB ? -1 : 1);
                                 } 
                             break;
-                            // case "fechaAs":
-                            //     if(at==bt){
-                            //         return 0;
-                            //     }else{
-                            //         return (at<bt ? -1 : 1);
-                            //     }
-                            // break;
-                            // case "fechaDe":
-                            //     if(at==bt){
-                            //         return 0;
-                            //     }else{
-                            //         return (at>bt ? -1 : 1);
-                            //     }
-                            // break;
+
                             default:
                             break;
                         }
@@ -146,47 +129,12 @@ class MyProductosMain extends PolymerElement {
 
     abreNuevoProd(){
         NavigationUtils.navigate("producto");
-        // PolymerUtils.Dialog.createAndShow({
-		// 	type: "modal",
-        //     title:"Agrear nuevo producto",
-		// 	element:"dialogo-nuevo-producto",
-			
-		// 	style:"width:400px;max-width:95%;",
-		// 	positiveButton: {
-        //         text: "Crear",
-        //         action: function(dialog, element) {
-        //             element.guardaProducto();
-                    
-        //         }
-        //     },
-        //     negativeButton: {
-        //         text: "Cerrar",
-        //         action: function(dialog, element) {
-                    
-        //             dialog.close();
-        //         }
-        //     }
-		// });
     }
 
     abreInfo(e){
         var elegido=e.detail.valor;
         NavigationUtils.navigate("producto",{id:elegido.id});
-        // PolymerUtils.Dialog.createAndShow({
-		// 	type: "modal",
-        //     title:"Información del producto",
-		// 	element:"dialogo-prod-info",
-		// 	params:[elegido],
-		// 	style:"width:400px;max-width:95%;",
-		
-        //     negativeButton: {
-        //         text: "Cerrar",
-        //         action: function(dialog, element) {
-                    
-        //             dialog.close();
-        //         }
-        //     }
-		// });
+
     }
 }
 

@@ -1,6 +1,9 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { UtilsMixin } from '../mixins/utils-mixin.js';
 
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-icons/iron-icons.js';
+
 import './my-muestra-mensaje.js';
 
 import '../bootstrap.js';
@@ -12,12 +15,14 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
             <style include="bootstrap shared-styles">
                 :host{
                     display:block;
+                    margin:5px;
                 }
             </style>
 
-            <div class="container-fluid carta">
-                <div class="row">
-                    <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
                         <ul class="list-unstyled">
                             <template is="dom-repeat" items="[[listaComentarios]]">
                                 <li class="media">
@@ -26,7 +31,11 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
                                         <h5 class="mt-0 mb-1">[[item._idCliente]] - [[PolymerUtils_getDateString(item._timestamp)]]</h5>
                                         <my-muestra-mensaje mensaje="[[item.coment]]"></my-muestra-mensaje>
                                     </div>
-                                    <my-botones-mensaje id="[[item.id]]"></my-botones-mensaje>
+                                    <!-- <my-botones-mensaje id="[[item.id]]"></my-botones-mensaje> -->
+                                    
+                                    <paper-icon-button icon="create"></paper-icon-button>
+                                    <paper-icon-button icon="delete"></paper-icon-button>
+                                    
                                 </li>
                                 <hr>
                             </template>
@@ -34,6 +43,8 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
                         </ul>
                     </div>
                 </div>
+                </div>
+                
             </div>
 
             
