@@ -39,26 +39,25 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 				}
             </style>
             
-            <h6>datos del cliente</h6>
+           
             
             <paper-input id="txtRazon" label="Razón social" value="{{razon}}" error-message="valor inválido"></paper-input>
 
             <paper-input id="txtEstacion" label="número de estación" value="{{noEs}}" error-message="valor inválido"></paper-input>
             
-            <vaadin-combo-box id="comboVenta"  placeholder="venta por" selected-item="{{objVenta}}" items="[[_ventaPor]]"
+            <vaadin-combo-box id="comboVenta"  placeholder="Proveedor" selected-item="{{objVenta}}" items="[[_ventaPor]]"
             item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
             
             <div class="relative">
                 <div class="absolute">Información de contacto</div>
 				
-				<div style="display:flex;">
+				<div class="d-flex flex-wrap align-items-center">
 					<paper-input style="padding:8px;" id="txtNombre" label="Nombre" error-message="valor inválido" value="{{nombre}}"></paper-input>
 					<paper-input style="padding:8px;" label="puesto" value="{{puesto}}"></paper-input>
 				</div>
-				
-				<div class="row">
-					<div class="col-md-6">
-						<vaadin-select label="tipo de telefono" value="{{tipoTel}}">
+
+                <div class="d-flex flex-wrap align-items-center">
+                <vaadin-select label="tipo de telefono" value="{{tipoTel}}">
 							<template>
 								<vaadin-list-box>
 									<vaadin-item value="celular">celular</vaadin-item>
@@ -66,12 +65,14 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 								</vaadin-list-box>
 							</template>
 						</vaadin-select>
-					</div>
-					<div class="col-md-6">
-						<paper-input style="padding:8px;" id="txtTel" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
+                        <paper-input style="padding:8px;" id="txtTel" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
 						</paper-input>
-					</div>	
-				</div>
+                </div>
+
+
+
+
+				
 
 				<paper-input style="padding:8px;" label="Correo electrónico" value="{{email}}">
 				</paper-input>

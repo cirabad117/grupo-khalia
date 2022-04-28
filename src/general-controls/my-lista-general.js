@@ -1,13 +1,16 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import '@polymer/paper-fab/paper-fab.js';
-import '@polymer/iron-icons/iron-icons.js';
 import '@vaadin/vaadin-select/vaadin-select.js';
 import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/communication-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
 
 import './my-item-lista.js';
 
 import '../prospectos/my-seguimiento-item.js';
+import './my-botones-lista.js';
 
 
 import '../bootstrap.js';
@@ -35,11 +38,14 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             </style>
             
             <template is="dom-if" if="[[esOtros(tituloPagina)]]">
-
-           
-            <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand" href="#">[[tituloPagina]]</a>
-            </nav>
+                <nav class="navbar navbar-light" style$="[[estiloNavega]]">
+                    <a class="navbar-brand">
+                        
+                        <iron-icon icon="[[icono]]"></iron-icon>
+                        
+                        [[tituloPagina]]
+                    </a>
+                </nav>
             </template>
             
             <div class="card d-flex flex-row bd-highlight mb-3 align-items-center">
@@ -63,7 +69,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     </template>
                 </vaadin-select>
                 <paper-input label="Buscar" class="m-3" id="inputWithButton" value="{{busqueda}}">
-                    <paper-icon-button slot="suffix" on-click="limpia" icon="clear" alt="clear" title="clear">
+                    <paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'limpiar')" slot="suffix" on-click="limpia" icon="clear"S>
                     </paper-icon-button>
                 </paper-input>
             </div>
@@ -80,16 +86,27 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     <tbody>
                         <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}"
                         filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}" as="info">
-                            <tr on-click="disparaAccionItem">
+                            <tr>
                                 <template is="dom-repeat" items="[[listaCols]]" as="tit">
-                                    <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
-                                        <my-seguimiento-item obj-buscar="[[info.listaSeguimiento]]"></my-seguimiento-item>
-                                    </template>
-                                    <template is="dom-if" if="[[!esSeguimiento(tit.dato)]]">
-                                        <td>
+                                    <td>
+                                        <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
+                                            <my-seguimiento-item obj-buscar="[[info.listaSeguimiento]]"></my-seguimiento-item>
+                                        </template>
+                                        <template is="dom-if" if="[[!esSeguimiento(tit.dato)]]">
                                             [[muestraInfo(info,tit.dato,tit.valorInterno)]]
-                                        </td>
-                                    </template>
+                                        </template>
+                                        <template is="dom-if" if="[[tit.listaAcciones]]">
+                                            <div class="d-flex">
+                                            <template is="dom-repeat" items="[[tit.listaAcciones]]" as="ac">
+
+                                                <my-botones-lista icono="[[ac.icono]]" accion="[[ac.accion]]"
+                                                obj="[[info]]" texto="[[ac.texto]]" on-lanza-accion="activaAccionBoton">
+                                                </my-botones-lista>
+
+                                            </template>
+                                            </div>
+                                        </template>
+                                    </td>
                                 </template>
                             </tr>
                         </template>
@@ -109,6 +126,8 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         return {
             tituloPagina:{type:String, notify:true,},
             vista:{type:String, notify:true},
+            icono:{type:String, notify:true},
+            estiloNavega:{type:String, notify:true},
             filtroEstatus:{type:String, notify:true,value:"todos"},
             arregloItems:{type:Array, notify:true, value:[]},
             arregloMostrar:{type:Array, notify:true, value:[]},
@@ -122,13 +141,16 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             // funcionFiltro:{type:Object, notify:true},
             colorBoton:{type:String, notify:true, value:"var(--paper-pink-500)"},
 
-            fechaActual:{type:Object, notify:true}
+            fechaActual:{type:Object, notify:true},
+
+            acciones:{type:Array, notify:true, value:[]}
 
 
 
         }
     }
 
+ 
     esSeguimiento(str){
         return str=="listaSeguimiento";
     }
@@ -139,6 +161,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
     
 
     muestraInfo(obj,dato,valorInterno){
+      
 
         if(valorInterno){
             var extra=valorInterno;
@@ -164,7 +187,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             
 
         }else{
-            return obj[dato];
+            if(!obj.listaAcciones){
+                return obj[dato];
+            }
+            
         }
         
         
@@ -210,6 +236,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         }
     }
 
+    ejecutaAccion(texto,info){
+        console.log("ejecuta accion",texto,info);
+    }
+
     muestraSeparador(item){
         if(item.esSeparador && item.esSeparador==true){
             return "border-bottom:solid 1px var(--paper-blue-400);";
@@ -231,9 +261,37 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         }
     }
 
+    activaAccionBoton(e){
+        var info=e.detail;
+        var ac=info.texto;
+
+        switch (ac) {
+            case "disparaAccionItem":
+                this.disparaAccionItem(info.dato);
+                
+            break;
+            case "disparaAccionEliminar":
+                this.disparaAccionEliminar(info.dato);
+                
+            break;
+        
+            default:
+            break;
+        }
+    }
+
     disparaAccionItem(e){
-        var elegido=e.model.info;
+        var elegido=e;
         this.dispatchEvent(new CustomEvent('ejecuta-item', {
+            detail: {
+                valor:elegido
+            }
+        }));
+    }
+
+    disparaAccionEliminar(e){
+        var elegido=e;
+        this.dispatchEvent(new CustomEvent('elimina-item', {
             detail: {
                 valor:elegido
             }

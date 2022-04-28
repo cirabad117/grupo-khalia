@@ -33,8 +33,9 @@ import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-collapse/iron-collapse.js';
-import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/communication-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
 
 import './general-controls/my-dropdown-button.js';
 import './auth/my-icono-usuario.js';
@@ -159,55 +160,54 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			<app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
 			</app-route>
 
-			<div id="mySidenav" class="sidenav bg-info">
+			<div id="mySidenav" class="sidenav bg-secondary">
 				<a href="javascript:void(0)" class="bg-light" on-click="closeNav">
 					<span>
 						<iron-icon icon="chevron-right" style="color:#000000;"></iron-icon>
 					</span>
 				</a>
-
+				
 				<template is="dom-if" if="[[_loggedUser]]">
-				
-				<paper-icon-item class="item-collapse" on-click="toggleAdmin">
-					<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
-					Ventas
-				</paper-icon-item>
-				<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
-					<dom-access path="admin/prospectos">
-						<a name="prospectos" href="[[rootPath]]prospectos">Prospectos</a>
+					<paper-icon-item class="item-collapse" on-click="toggleAdmin">
+						<iron-icon icon$="[[getIcono(esAdmin)]]" slot="item-icon"></iron-icon>
+						Ventas
+					</paper-icon-item>
+					
+					<iron-collapse opened="[[esAdmin]]" style="padding:15px;">
+						<dom-access path="admin/prospectos">
+							<a name="prospectos" href="[[rootPath]]prospectos"><iron-icon style="margin:3px;" icon="communication:contact-phone"></iron-icon>Prospectos</a>
+						</dom-access>
+						<dom-access path="admin/clientes">
+							<a name="clientes" href="[[rootPath]]clientes"><iron-icon style="margin:3px;" icon="icons:assignment-ind"></iron-icon>Clientes</a>
+						</dom-access>
+						<dom-access path="admin/productos">
+							<a name="productos" href="[[rootPath]]productos"><iron-icon style="margin:3px;" icon="icons:book"></iron-icon>Productos</a>
+						</dom-access>
+						<dom-access path="admin/cotizaciones">
+							<a name="cotizaciones" href="[[rootPath]]cotizaciones"><iron-icon style="margin:3px;" icon="icons:list"></iron-icon>Cotizaciones</a>
+						</dom-access>
+					</iron-collapse>
+					
+					<paper-icon-item class="item-collapse" on-click="toggleArea">
+						<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
+						Estatus por departamento
+					</paper-icon-item>
+					
+					<iron-collapse opened="[[esArea]]" style="padding:15px;">
+						<a name="sasisopa" href="[[rootPath]]sasisopa">SASISOPA</a>
+						<a name="sgm" href="[[rootPath]]sgm">SGM</a>
+						<a name="emisiones" href="[[rootPath]]emisiones">Emisiones</a>
+						<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
+						<a name="admin" href="[[rootPath]]admin" >Administración</a>
+					</iron-collapse>
+					<dom-access path="app-clientes">
+						<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
 					</dom-access>
-					<dom-access path="admin/clientes">
-						<a name="clientes" href="[[rootPath]]clientes">Clientes</a>
+					<dom-access path="usuarios">
+						<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
 					</dom-access>
-					<dom-access path="admin/productos">
-						<a name="productos" href="[[rootPath]]productos" >Control de productos</a>
-					</dom-access>
-					<dom-access path="admin/cotizaciones">
-						<a name="cotizaciones" href="[[rootPath]]cotizaciones" >Cotizaciones</a>
-					</dom-access>
-				</iron-collapse>
-				
-				<paper-icon-item class="item-collapse" on-click="toggleArea">
-					<iron-icon icon$="[[getIcono(esArea)]]" slot="item-icon"></iron-icon>
-					Estatus por departamento
-				</paper-icon-item>
-				
-				<iron-collapse opened="[[esArea]]" style="padding:15px;">
-					<a name="sasisopa" href="[[rootPath]]sasisopa">SASISOPA</a>
-					<a name="sgm" href="[[rootPath]]sgm">SGM</a>
-					<a name="emisiones" href="[[rootPath]]emisiones">Emisiones</a>
-					<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
-					<a name="admin" href="[[rootPath]]admin" >Administración</a>
-				</iron-collapse>
-				<dom-access path="app-clientes">
-					<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
-				</dom-access>
-				<dom-access path="usuarios">
-					<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
-				</dom-access>
-				
 					<hr>
-					<a  href="#" on-click="cierraSesion">
+					<a  href="#" on-click="cierraSesion" >
 						<span>
 							<iron-icon icon="power-settings-new"></iron-icon>
 						</span>
@@ -225,12 +225,11 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				</template>
 
 
-			</div>
-
+			</div><!--sidebar-->
+			
 			<div id="main">
 				<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-
-					<a class="navbar-brand" href="#">
+					<a class="navbar-brand" href="/">
 						<img src="../images/gk_icono.png" width="30" height="30" class="d-inline-block align-top" alt="">
 						Grupo Khalia
 					</a>
@@ -267,7 +266,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							<div style="padding: 4px 12px;">
 								<div style="font-size: 16px; font-weight: 500;color:#FFFFFF;">[[_loggedUser.displayName]]</div>
 							</div>
-							<paper-icon-button style="color:var(--paper-red-200);" icon="power-settings-new" on-click="cierraSesion"></paper-icon-button>
+
+							<template is="dom-if" if="[[_loggedUser]]">
+								<paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'Cerrar sesión')" style="color:var(--paper-red-200);" icon="power-settings-new" on-click="cierraSesion"></paper-icon-button>
+							</template>
 						</div>
 					</div>
 				</nav>
@@ -275,22 +277,22 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				<div class="container">
 					<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
 
-						<my-inicio  name="inicio"></my-inicio>
+						<my-inicio name="inicio"></my-inicio>
 						
 						<dom-access name="prospectos" path="admin/prospectos">
-							<my-prospectos-main  name="prospectos"></my-prospectos-main>
+							<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]"></my-prospectos-main>
 						</dom-access>
 						
-						<my-datos-prospecto  name="prospecto"></my-datos-prospecto>
+						<my-datos-prospecto  name="prospecto" lista-usuarios="[[listaUsuarios]]"></my-datos-prospecto>
 						
 						<dom-access name="clientes" path="admin/clientes">
-							<my-clientes-main  name="clientes"></my-clientes-main>
+							<my-clientes-main name="clientes" lista-clientes="[[listaClientes]]"></my-clientes-main>
 						</dom-access>
 
-						<my-cliente  name="cliente"></my-cliente>
+						<my-cliente name="cliente" lista-usuarios="[[listaUsuarios]]"></my-cliente>
 
 						<dom-access name="productos" path="admin/productos">
-							<my-productos-main  name="productos"></my-productos-main>
+							<my-productos-main name="productos" lista-productos="[[arregloProductos]]"></my-productos-main>
 						</dom-access>
 
 						<my-vista-producto  name="producto"></my-vista-producto>
@@ -301,10 +303,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 						<my-vista-cotiza name="cotizacion"></my-vista-cotiza>
 
-						<my-nueva-cotizacion name="nueva-cotizacion"></my-nueva-cotizacion>
+						<my-nueva-cotizacion name="nueva-cotizacion" lista-clientes="[[arregloClientes]]" lista-productos="[[arregloProductos]]"></my-nueva-cotizacion>
 
 						<dom-access name="usuarios" path="usuarios">
-							<my-usuarios name="usuarios"></my-usuarios>
+							<my-usuarios name="usuarios" lista-usuarios="[[listaUsuarios]]"></my-usuarios>
 						</dom-access>
 
 						<dom-access name="app-clientes" path="app-clientes">
@@ -313,7 +315,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
-			</div>
+				</div>
 			
 			</div><!--div main-->
 			
@@ -323,7 +325,6 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 	static get properties() {
 		return {
-
 			esAdmin:{type:Boolean, notify:true, value:false},
 			esArea:{type:Boolean, notify:true, value:false},
 			
@@ -337,7 +338,6 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				'prospecto','prospectos','clientes','cliente',
 				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
 				'app-clientes','cotizacion']
-				// 'nuevo-app'
 			},
 			nombrePagina:{type:String, notify:true, value:"Grupo Khalia"},
 			muestraBack:{type:Boolean, notify:true, value:false},
@@ -346,10 +346,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			subroute: Object,
 
 			listaVentas:{type:Array, notify:true, value:[
-				{"nombre":"Prospectos","link":"prospectos","permiso":"admin/prospectos"},
-				{"nombre":"Clientes","link":"clientes","permiso":"admin/clientes"},
-				{"nombre":"Productos","link":"productos","permiso":"admin/productos"},
-				{"nombre":"Cotizaciones","link":"cotizaciones","permiso":"admin/cotizaciones"},
+				{"nombre":"Prospectos","icono":"communication:contact-phone","link":"prospectos","permiso":"admin/prospectos"},
+				{"nombre":"Clientes","icono":"icons:assignment-ind","link":"clientes","permiso":"admin/clientes"},
+				{"nombre":"Productos","icono":"icons:book","link":"productos","permiso":"admin/productos"},
+				{"nombre":"Cotizaciones","icono":"icons:list","link":"cotizaciones","permiso":"admin/cotizaciones"},
 			]},
 			listaDepa:{type:Array, notify:true, value:[
 				{"nombre":"SASISOPA","link":""},
@@ -357,7 +357,14 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				{"nombre":"Emisiones","link":""},
 				{"nombre":"Seguridad","link":""},
 				{"nombre":"Administración","link":""},
-			]}
+			]},
+
+			listaUsuarios:{type:Array, notify:true, value:[]},
+			arregloClientes:{type:Array, notify:true, value:[]},
+			arregloProductos:{type:Array, notify:true, value:[]},
+
+			listaProspectos:{type:Array, notify:true, value:[]},
+			listaClientes:{type:Array, notify:true, value:[]}
 
 		};
 	}
@@ -366,8 +373,46 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 		super.ready();
 		_initNavigationUtils(this,this.route,"route",this.routeParams,"routeParams");
 
+		if(this.lastInstalaciones){
+            this.lastInstalaciones();
+            this.set("lastInstalaciones",null);
+        }
+
+        this.set("lastInstalaciones",DataHelper.queryCollection(this,{
+            "collection":"usuarios",
+            "array":this.listaUsuarios,
+            "arrayName":"listaUsuarios"
+        }));
+
+		var binder=new QueryBinder("_clientes-khalia");
+        
+        binder.bindArray(this,this.arregloClientes,"arregloClientes");
+
+		var binder2=new QueryBinder("_productos-khalia");
+        
+        binder2.bindArray(this,this.arregloProductos,"arregloProductos");
+
 	}
 
+	_revisaClientes(arr){
+		if(arr && arr.length>0){
+			var arrPros=[];
+			var arrClie=[];
+
+			for(var i=0;i<arr.length;i++){
+				var item=arr[i];
+
+				if(item._esCliente==true){
+					arrClie.push(item);
+				}else{
+					arrPros.push(item);
+				}
+			}
+
+			this.set("listaProspectos",arrPros);
+			this.set("listaClientes",arrClie);
+		}
+	}
 	regresa(){
 		window.history.back();
 	}
@@ -400,7 +445,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 	static get observers() {
 		return [
-			'_routePageChanged(routeData.page)'
+			'_routePageChanged(routeData.page)',
+			'_revisaClientes(arregloClientes,arregloClientes.*)'
 		];
 	}
 
@@ -410,12 +456,14 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 	cierraSesion(){
 		this.signOut();
+		NavigationUtils.navigate("inicio");
 	}
 	
 	_routePageChanged(page) {
 		if (!page) {
 			this.page = 'inicio';
 		} else if (this.paginas.indexOf(page) !== -1) {
+			this.closeNav();
 			
 			this.page = page;
 		} else {

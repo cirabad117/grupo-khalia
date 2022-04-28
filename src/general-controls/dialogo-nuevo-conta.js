@@ -20,22 +20,149 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
                     display:block;
                 }
 
-                div.relative {
-					margin-top:15px;
-					padding:5px;
-					position: relative;
-					border: 3px solid var(--paper-blue-300);
-					border-radius:15px;
-				}
-				div.absolute {
-					position: absolute;
-					top: -15px;
-					left: 20px;
-					background-color:white !important;
-					font-weight: 700;
-					font-size: 14px;
-				}
+                paper-input{
+                    background-color:white,
+                }
+
+
+                .btn-secundario{
+                    color:white;
+                }
+
+               .btn-secundario:hover{
+                   color:var(--paper-blue-100);
+                   background-color:white;
+                }
+                
+                paper-radio-button.red {
+                    --paper-radio-button-checked-color: white;
+                    --paper-radio-button-checked-ink-color: white;
+                    --paper-radio-button-unchecked-color: white;
+                    --paper-radio-button-unchecked-ink-color: white;
+                    --paper-radio-button-label-color: white;
+                }
             </style>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="d-flex flex-wrap">
+                            <paper-input class="flex-fill m-1 p-3" style="margin:5px;"id="txtNombre" label="Nombre"
+                            error-message="valor inválido" value="{{nombre}}"></paper-input>
+
+                            <paper-input class="flex-fill m-1 p-3" style="margin:5px;"label="puesto" value="{{puesto}}"></paper-input>
+                        </div>
+
+                        
+                        <div class="d-flex justify-content-center flex-wrap">
+                            
+                            <!--comienza div telefonos-->
+                            <div class="flex-fill m-1 p-3 bg-info text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p>
+                                        <span>
+                                            <iron-icon icon="icons:perm-phone-msg"></iron-icon>
+                                        </span>
+                                        Teléfonos
+                                    </p>
+                                    
+                                    <template is="dom-if" if="{{!esNuevoTel}}">
+                                        <paper-icon-button icon="icons:add-circle" class="btn-secundario"
+                                        on-click="toggleTel" onmouseover="PolymerUtils.Tooltip.show(event,'Agregar número')">
+                                        </paper-icon-button>
+                                    </template>
+                                </div>
+                                
+                                <iron-collapse opened="{{esNuevoTel}}">
+                                    <label id="label1">tipo de teléfono</label>
+                                    <paper-radio-group  selected="{{tipoTel}}" aria-labelledby="label1">
+                                        <paper-radio-button class="red" name="celular">celular</paper-radio-button>
+                                        <paper-radio-button class="red" name="oficina">oficina</paper-radio-button>
+                                    </paper-radio-group>
+                                    
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="{{tel::input}}" placeholder="Número telefónico" aria-describedby="button-addon4">
+                                        <div class="input-group-append" id="button-addon4">
+                                            <paper-icon-button icon="icons:done" on-click="agregaTelefono" 
+                                            onmouseover="PolymerUtils.Tooltip.show(event,'Aceptar')">
+                                            </paper-icon-button>
+                                            
+                                            <paper-icon-button icon="icons:clear" on-click="toggleTel"
+                                            onmouseover="PolymerUtils.Tooltip.show(event,'Cancelar')">
+                                            </paper-icon-button>
+                                        </div>
+                                    </div>
+                                </iron-collapse>
+                                
+                                <iron-collapse opened="{{!esNuevoTel}}">
+                                    <paper-listbox>
+                                        <template is="dom-repeat" items="[[listaTels]]" as="tels" restamp>
+                                            <paper-item>
+                                                <paper-item-body>[[tels.tipo]]: [[tels.telefono]]</paper-item-body>
+                                                <paper-icon-button icon="delete" on-click="quitaTel" onmouseover="PolymerUtils.Tooltip.show(event,'Quitar')"></paper-icon-button>
+                                            </paper-item>
+                                        </template>
+                                    </paper-listbox>
+                                </iron-collapse>
+                            </div><!--termina div telefonos-->
+                            
+                            <!--empieza div emails-->
+                            <div class="flex-fill m-1 p-3 bg-info text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p>
+                                        <span>
+                                            <iron-icon icon="icons:mail"></iron-icon>
+                                        </span>
+                                        correos electronicos
+                                    </p>
+                                
+                                    <template is="dom-if" if="{{!esNuevoEmail}}">
+                                        <paper-icon-button icon="add-circle" class="btn-secundario" on-click="toggleEmail"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Agregar correo')">
+                                        </paper-icon-button>
+                                    </template>
+                                </div>
+                                
+                                <iron-collapse opened="{{esNuevoEmail}}">
+                                    
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" value="{{email::input}}"
+                                        placeholder="Dirección de correo" aria-describedby="button-addon5">
+                                    
+                                        <div class="input-group-append" id="button-addon5">
+                                            <paper-icon-button icon="icons:done" on-click="agregaEmail"
+                                            onmouseover="PolymerUtils.Tooltip.show(event,'Aceptar')">
+                                            </paper-icon-button>
+                                        
+                                            <paper-icon-button icon="icons:clear" on-click="toggleEmail"
+                                            onmouseover="PolymerUtils.Tooltip.show(event,'Cancelar')">
+                                            </paper-icon-button>
+                                        </div>
+                                    </div>
+                                </iron-collapse>
+                                
+                                <iron-collapse opened="{{!esNuevoEmail}}">
+                                    <paper-listbox>
+                                        <template is="dom-repeat" items="[[listaEmails]]" as="email" restamp>
+                                            <paper-item>
+                                                <paper-item-body>[[email]]</paper-item-body>
+                                                <paper-icon-button icon="delete" on-click="quitaEmail" onmouseover="PolymerUtils.Tooltip.show(event,'Quitar')"></paper-icon-button>
+                                            </paper-item>
+                                        </template>
+                                    </paper-listbox>
+                                </iron-collapse>
+                            </div><!--termina div emails-->
+
+                        </div><!--termina contenedor flex-->
+
+                    </div><!--col-md-12-->
+                </div><!--row-->
+            </div><!--container-->
+            
+            <!-- 
+
+
 
             <div  class="d-flex align-items-center flex-wrap">
                 <paper-input style="margin:5px;"id="txtNombre" label="Nombre"
@@ -111,85 +238,8 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
                         </paper-listbox>
                     </iron-collapse>
                 </div>
-            </div>
+            </div>-->
 
-
-
-
-
-            <!-- <div class="relative">
-				<div class="absolute">Datos de contacto</div>
-
-                <div class="d-flex">
-
-
-                <div class="flex-fill">
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex flex-column">
-                            <label id="label1">tipo de telefono</label>
-                            <paper-radio-group selected="{{tipoTel}}" aria-labelledby="label1">
-                                <paper-radio-button name="celular">celular</paper-radio-button>
-                                <paper-radio-button name="oficina">oficina</paper-radio-button>
-                            </paper-radio-group>
-                        </div>
-                        
-                        <paper-input style="padding:8px;" id="txtTel" label="Telefono" value="{{tel}}" error-message="ingresa un valor válido">
-                        <button slot="suffix" class="btn btn-sm btn-primary" on-click="agregaTelefono">agregar telefono a la lista</button>
-
-                        </paper-input>
-
-                    </div>
-                    <div id="lista-tels" style="overflow-y:scroll;max-height:110px;">
-                        <paper-listbox>
-                            <template is="dom-repeat" items="[[listaTels]]" as="tels" restamp>
-                                <paper-item>
-                                    <paper-item-body>[[tels.tipo]]: [[tels.telefono]]</paper-item-body>
-                                    <paper-icon-button icon="clear" on-click="quitaTel"></paper-icon-button>
-                                </paper-item>
-                            </template>
-                        </paper-listbox>
-                    </div>
-                </div>
-
-
-
-
-                <div class="flex-fill">
-                    <paper-input style="padding:8px;" label="Correo electrónico" value="{{email}}">
-                    <button slot="suffix" class="btn btn-sm btn-primary" on-click="agregaEmail">agregar correo a la lista</button>
-
-                    </paper-input>
-                    
-                    <div id="lista-email" style="overflow-y:scroll;max-height:110px;">
-                        <paper-listbox>
-                            <template is="dom-repeat" items="[[listaEmails]]" as="email" restamp>
-                                <paper-item>
-                                    <paper-item-body>[[email]]</paper-item-body>
-                                    <paper-icon-button icon="clear" on-click="quitaEmail"></paper-icon-button>
-                                </paper-item>
-                            </template>
-                        </paper-listbox>
-                    </div>
-                </div>
-
-
-
-                </div>
-
-               
-                
-                
-
-                
-
-                
-				
-				
-
-			</div> -->
-
-
-            
 
         `;
     }
@@ -209,48 +259,56 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
         }
     }
 
-    constructor(obj) {
+    constructor(id,arr) {
         // id,arr,pos,data
         super();
 
-        if(obj){
-            console.log("recibimos el objeto",obj);
-            if(obj.id){
-                this.set("idProspecto",obj.id);
+              if(id){
+                this.set("idProspecto",id);
             }
     
-            if(obj.arr){
-                this.set("listaContactos",obj.arr);
+            if(arr){
+                this.set("listaContactos",arr);
             }
-            console.log("veamos que llega al constructor",obj.pos);
+
+        // if(obj){ 
+        //     console.log("recibimos el objeto",obj);
+        //     if(obj.id){
+        //         this.set("idProspecto",obj.id);
+        //     }
     
-            if(obj.pos){
+        //     if(obj.arr){
+        //         this.set("listaContactos",obj.arr);
+        //     }
+        //     console.log("veamos que llega al constructor",obj.pos);
+    
+        //     if(obj.pos){
                 
-                var num=Number(obj.pos);
-                console.log("veamos la posicion",num);
-                this.set("posicion",num);
-            }else{
-                console.log("no llega la posicion");
-            }
+        //         var num=Number(obj.pos);
+        //         console.log("veamos la posicion",num);
+        //         this.set("posicion",num);
+        //     }else{
+        //         console.log("no llega la posicion");
+        //     }
     
-            if(obj.data){
-                console.log("veamos que nos llega de contactos",obj.data);
-                this.set("datosEditar",obj.data);
-                if(obj.data.nombreCliente){
-                    this.set("nombre",obj.data.nombreCliente);
-                }
+        //     if(obj.data){
+        //         console.log("veamos que nos llega de contactos",obj.data);
+        //         this.set("datosEditar",obj.data);
+        //         if(obj.data.nombreCliente){
+        //             this.set("nombre",obj.data.nombreCliente);
+        //         }
     
-                if(obj.data.puesto){
-                    this.set("puesto",obj.data.puesto);
-                }
-                if(obj.data.telefonos){
-                    this.set("listaTels",obj.data.telefonos);
-                }
-                if(obj.data.correos){
-                    this.set("listaEmails",obj.data.correos);
-                }
-            }
-        }
+        //         if(obj.data.puesto){
+        //             this.set("puesto",obj.data.puesto);
+        //         }
+        //         if(obj.data.telefonos){
+        //             this.set("listaTels",obj.data.telefonos);
+        //         }
+        //         if(obj.data.correos){
+        //             this.set("listaEmails",obj.data.correos);
+        //         }
+        //     }
+        // }
 
         
 
@@ -259,10 +317,12 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
 
     toggleTel(){
         this.set("esNuevoTel",!this.esNuevoTel);
+        this.set("tel",null);
 
     }
     toggleEmail(){
         this.set("esNuevoEmail",!this.esNuevoEmail);
+        this.set("email",null);
 
     }
 

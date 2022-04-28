@@ -14,10 +14,11 @@ class MyProductosMain extends PolymerElement {
             </style>
             
             <my-lista-general titulo-pagina="Control de productos" vista="productos" arreglo-items="[[listaProductos]]"
+            estilo-navega="background-color:var(--paper-yellow-200);color:#000000;" icono="icons:class"
             lista-filtro="[[listaSeccion]]" lista-ordena="[[opcionesOrdena]]"
             lista-cols="[[datosProd]]"
             funcion-ordenar="[[funcionOrdenaProd]]" funcion-buscar="[[funcionFiltraProd]]"
-            on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="abreInfo"></my-lista-general>
+            on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="abreInfo" on-elimina-item="eliminaProd"></my-lista-general>
 
 
         `;
@@ -42,13 +43,19 @@ class MyProductosMain extends PolymerElement {
             datosProd:{type:Array, notify:true, value:[
                 {"titulo":"Código","dato":"codigo"},
                 {"titulo":"Nombre","dato":"nombre"},
-                {"titulo":"departamento","dato":"departamento"},
-                {"titulo":"dependencia","dato":"dependencia"},
+                {"titulo":"Departamento","dato":"departamento"},
+                {"titulo":"Dependencia","dato":"dependencia"},
+                {"titulo":"Acciones","listaAcciones":[
+                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Mostrar producto"},
+                    {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                ]}
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"razonAs","texto":"nombre del producto (ascendente)"},
-                {"opcion":"razonDe","texto":"nombre del producto (descendente)"},
+                {"opcion":"codAs","texto":"Código (ascendente)"},
+                {"opcion":"codDe","texto":"Código (descendente)"},
+                {"opcion":"razonAs","texto":"Nombre del producto (ascendente)"},
+                {"opcion":"razonDe","texto":"Nombre del producto (descendente)"},
                 
             ]},
             funcionFiltraProd:{
@@ -84,6 +91,8 @@ class MyProductosMain extends PolymerElement {
 
                         var textoA=a.nombre.toLowerCase();
                         var textoB=b.nombre.toLowerCase();
+                        var codA=a.codigo.toLowerCase();
+                        var codB=b.codigo.toLowerCase();
                     
                         switch (str) {
                             case "razonAs":
@@ -95,6 +104,20 @@ class MyProductosMain extends PolymerElement {
                                 }
                             break;
                             case "razonDe":
+                                if(codA==codB){
+                                    return 0;
+                                }else{
+                                    return (codA>codB ? -1 : 1);
+                                } 
+                            break;
+                            case "codAs":
+                                if(codA==codB){
+                                    return 0;
+                                }else{
+                                    return (codA<codB ? -1 : 1);
+                                } 
+                            break;
+                            case "codDe":
                                 if(textoA==textoB){
                                     return 0;
                                 }else{
@@ -118,9 +141,7 @@ class MyProductosMain extends PolymerElement {
 
     ready() {
         super.ready();
-        var binder=new QueryBinder("_productos-khalia");
         
-        binder.bindArray(this,this.listaProductos,"listaProductos");
     }
 
     cambiaOrdena(e){
@@ -135,6 +156,46 @@ class MyProductosMain extends PolymerElement {
         var elegido=e.detail.valor;
         NavigationUtils.navigate("producto",{id:elegido.id});
 
+    }
+
+    eliminaProd(e){
+        var elegido=e.detail.valor;
+        var id=elegido.id;
+
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"Eliminar producto",
+            message:"El producto <strong>"+elegido.codigo+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
+			saveSpinner:{
+				message:"Eliminando producto"
+			  },
+			style:"width:500px;max-width:95%;",
+			positiveButton: {
+                text: "Elimniar",
+                style:"background-color:var(--paper-red-500);color:white;",
+                action: function(dialog, element) {
+                    dialog.setSaving(true);
+                    firebase.firestore().collection("productos-khalia").doc(id).delete().then(() => {
+                        PolymerUtils.Toast.show("Producto eliminado con éxito");
+                        
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+                        dialog.setSaving(false);
+                        console.error("Error removing document: ", error);
+                    });
+                    
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                
+                    dialog.close();
+                }
+            }
+		});
     }
 }
 

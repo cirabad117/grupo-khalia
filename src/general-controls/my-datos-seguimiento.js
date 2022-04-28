@@ -37,20 +37,44 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
                 ::-webkit-scrollbar-thumb:hover {
                     background: #555; 
                 }
+
+                .btn-accion{
+                   
+                   margin:5px;
+                   border-radius:50%;
+                   color:var(--paper-grey-600);
+                   background-color:var(--paper-grey-300);
+               }
+
+               .btn-accion:hover{
+                   background-color:var(--paper-blue-600);
+                   color:white;
+               }
             </style>
 
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center" >
-                    <iron-icon icon="assignment" style="margin:5px;"></iron-icon>
+                    <iron-icon icon="timeline" style="margin:5px;"></iron-icon>
                     <h5>historial de seguimiento</h5>
                 </div>
+
+                <paper-icon-button class="btn-accion"
+                onmouseover="PolymerUtils.Tooltip.show(event,'Actualizar seguimiento')"
+                icon="update" on-click="abreDialogo">
+                </paper-icon-button>
                 
-                <button type="button" class="btn btn-success btn-sm" on-click="abreDialogo">
+                <!-- <button type="button" class="btn btn-success btn-sm" on-click="abreDialogo">
                     <span aria-hidden="true"><iron-icon icon="update"></iron-icon></span>
                     ACTUALIZAR SEGUIMIENTO
-                </button>
+                </button> -->
 
             </div>
+
+            <template is="dom-if" if="[[muestraError]]">
+                <div class="alert alert-warning" role="alert">
+                    No hay registros disponibles
+                </div>
+            </template>
 
             <paper-listbox style="max-height:280px;overflow-y:scroll;">
                 <template is="dom-repeat" items="[[arregloSeguimiento]]" as="seg" sort="sort">
@@ -89,6 +113,20 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
         super.ready();
     }
 
+    static get observers() {
+        return [
+            '_revisaArreglo(arregloSeguimiento,arregloSeguimiento.*)'
+        ];
+    }
+
+    _revisaArreglo(arr){
+        if(arr && arr.length>0){
+            this.set("muestraError",false);
+        }else{
+            this.set("muestraError",true);
+        }
+    }
+
     despachaDialogo(){
         this.dispatchEvent(new CustomEvent('despacha-dialogo', {
             detail: {
@@ -116,14 +154,15 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
         
          PolymerUtils.Dialog.createAndShow({
 			type: "modal",
-            title:"Agregar estatus",
+            title:"Actualizar seguimiento",
 			element:"dialogo-nuevo-seg",
             params:[id,arr],
 
 			
 			style:"width:400px;max-width:95%;",
 			positiveButton: {
-                text: "Crear",
+                text: "agregar estatus",
+                style:"background-color:var(--paper-green-500);color:white;",
                 action: function(dialog, element) {
                     element.agregaEstatus();
                 }

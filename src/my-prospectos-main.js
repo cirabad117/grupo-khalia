@@ -1,6 +1,9 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { DiccionarioMixin } from './mixins/diccionario-mixin.js';
 
+import '@polymer/paper-spinner/paper-spinner.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+
 import './general-controls/my-lista-general.js';
 import './prospectos/dialogo-nuevo-prospecto.js';
 
@@ -16,11 +19,12 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
                 }
             </style>
 
-            <my-lista-general titulo-pagina="Prospectos" vista="prospectos" arreglo-items="[[listaProspectos]]"
-            lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
-            lista-cols="[[datosProspecto]]"
+            <my-lista-general titulo-pagina="Prospectos" vista="prospectos" icono="communication:contact-phone"
+            estilo-navega="background-color:var(--paper-blue-50);color:#000000;" arreglo-items="[[listaProspectos]]"
+            lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]" lista-cols="[[datosProspecto]]"
             funcion-buscar="[[funcionProspecto]]" funcion-ordenar="[[funcionOrdena]]"
             on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="abreProspecto"
+            on-elimina-item="eliminaProspecto"
             color-boton="var(--paper-green-600)"></my-lista-general>
 
 
@@ -35,15 +39,20 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
             modoOrdena:{type:String, notify:true},
 
             datosProspecto:{type:Array, notify:true, value:[
-                {"titulo":"razon social","dato":"razon"},
-                {"titulo":"estatus de prospecto","dato":"listaSeguimiento"}
+                {"titulo":"Razón social","dato":"razon"},
+                {"titulo":"Fecha de creación","dato":"_timestamp"},
+                {"titulo":"Estatus de prospecto","dato":"listaSeguimiento"},
+                {"titulo":"Acciones","listaAcciones":[
+                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Abrir prospecto"},
+                    {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                ]}
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"razonAs","texto":"razón social (ascendente)"},
-                {"opcion":"razonDe","texto":"razón social (descendente)"},
-                {"opcion":"fechaAs","texto":"fecha de creacion (ascendente)"},
-                {"opcion":"fechaDe","texto":"fecha de creacion (descendente)"}
+                {"opcion":"razonAs","texto":"Razón social (ascendente)"},
+                {"opcion":"razonDe","texto":"Razón social (descendente)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (ascendente)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (descendente)"}
                 
             ]},
 
@@ -54,7 +63,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
                     nombre:"funcionProspecto",
                     funcion:function(prospecto,texto,filtro) {
                         var estatus=null;
-                        if(prospecto.listaSeguimiento){
+                        if(prospecto._esCliente==false && prospecto.listaSeguimiento){
                             estatus=PolymerUtils.getLastItemEstatusFecha(prospecto.listaSeguimiento);
                         }
                     
@@ -157,11 +166,11 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
 
     ready() {
         super.ready();
-        var binder=new QueryBinder("_clientes-khalia",{
-            "specialRef":firebase.firestore().collection("_clientes-khalia").where("_esCliente","==",false)
-        });
+        // var binder=new QueryBinder("_clientes-khalia",{
+        //     "specialRef":firebase.firestore().collection("_clientes-khalia").where("_esCliente","==",false)
+        // });
         
-        binder.bindArray(this,this.listaProspectos,"listaProspectos");
+        // binder.bindArray(this,this.listaProspectos,"listaProspectos");
 
     }
 
@@ -181,8 +190,49 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
 			style:"width:500px;max-width:95%;",
 			positiveButton: {
                 text: "Guardar prospecto",
+                style:"background-color:var(--paper-green-500);color:white;",
                 action: function(dialog, element) {
                     element.guardaCliente();
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                
+                    dialog.close();
+                }
+            }
+		});
+    }
+
+    eliminaProspecto(e){
+        var elegido=e.detail.valor;
+        var id=elegido.id;
+
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"Eliminar prospecto",
+            message:"El prospecto <strong>"+elegido.razon+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
+			saveSpinner:{
+				message:"Eliminando prospecto"
+			  },
+			style:"width:500px;max-width:95%;",
+			positiveButton: {
+                text: "Elimniar",
+                style:"background-color:var(--paper-red-500);color:white;",
+                action: function(dialog, element) {
+                    dialog.setSaving(true);
+                    firebase.firestore().collection("_clientes-khalia").doc(id).delete().then(() => {
+                        PolymerUtils.Toast.show("Prospecto eliminado con éxito");
+                        
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+                        dialog.setSaving(false);
+                        console.error("Error removing document: ", error);
+                    });
+                    
                 }
             },
             negativeButton: {

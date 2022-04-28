@@ -33,105 +33,144 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                 h5:hover{
                     cursor:pointer;
                 }
+
+                .btn-accion{
+                    
+                    margin:5px;
+                    border-radius:50%;
+                    color:var(--paper-grey-600);
+                    background-color:var(--paper-grey-100);
+                }
+
+                .btn-accion:hover{
+                    background-color:var(--paper-blue-400);
+                    color:white;
+                }
+
+                .collapse:hover{
+                    cursor:pointer;
+                    text-decoration:underline;
+                }
                 
             </style>
             
-            <nav class="navbar navbar-light bg-light titulo">
+            <nav class="navbar" style="background-color:var(--paper-green-100);color:#000000; cursor:pointer;">
                 <span class="navbar-brand" on-click="navegaLista">
                     <iron-icon icon="arrow-back"></iron-icon>
-                    {{prospecto.razon}} - {{prospecto.alias}}
+                    Cliente "{{prospecto.razon}}"
                     
                 </span>
 
-                <my-seguimiento-item obj-buscar="[[listaSeguimiento]]"></my-seguimiento-item>
-                
-         
+                <my-seguimiento-item obj-buscar="{{listaSeguimiento}}"></my-seguimiento-item>
                 
                 <template is="dom-if" if="[[esEditar]]" restamp>
-                    <button class=" btn btn-light btn-md" on-click="toggleEditar">
-                        <span><iron-icon icon="clear"></iron-icon></span>
-                        CANCELAR
-                    </button>
-                    <button class=" btn btn-info btn-md" on-click="actualizaDatos">
-                        <span><iron-icon icon="save"></iron-icon></span>
-                        GUARDAR CAMBIOS
-                    </button>
+                    <div class="d-flex">
+                        <paper-icon-button class="btn-accion"
+                        onmouseover="PolymerUtils.Tooltip.show(event,'Guardar cambios')"
+                        icon="icons:save" on-click="actualizaDatos">
+                        </paper-icon-button>
+                        <paper-icon-button class="btn-accion"
+                        onmouseover="PolymerUtils.Tooltip.show(event,'Cancelar')"
+                        icon="icons:clear" on-click="toggleEditar">
+                        </paper-icon-button>
+                    </div>
                 </template>
-
+                
                 <template is="dom-if" if="[[!esEditar]]" restamp>
-                    <button class=" btn btn-warning btn-md" on-click="toggleEditar">
-                        <span><iron-icon icon="create"></iron-icon></span>
-                        EDITAR INFORMACIÓN
-                    </button>
+                    <div class="d-flex">
+                        <paper-icon-button class="btn-accion"
+                        onmouseover="PolymerUtils.Tooltip.show(event,'Editar')"
+                        icon="icons:create" on-click="toggleEditar">
+                        </paper-icon-button>
+
+                        <paper-icon-button class="btn-accion"
+                        onmouseover="PolymerUtils.Tooltip.show(event,'Eliminar')"
+                        icon="icons:delete" on-click="eliminaCliente">
+                        </paper-icon-button>
+                    </div>
+                   
                 </template>
             </nav>
             
             <div class="card">
                 <div class="card-body">
+
                     <template is="dom-if" if="[[esEditar]]" restamp>
-                        <paper-input  style="margin:5px;" id="txtRazon" label="Nombre o Razón social" value="{{razon}}"
-                        error-message="valor inválido"></paper-input>
 
-                        <paper-input  style="margin:5px;" id="txtAlias" label="Alias"
-                        value="{{alias}}" error-message="valor inválido"></paper-input>
-                       
+                        <div class="d-flex flex-wrap align-items-center">
+                            <paper-input  style="margin:5px;" id="txtRazon" label="Nombre o Razón social" value="{{razon}}"
+                            error-message="valor inválido"></paper-input>
 
-                        <selector-usuarios style="margin:5px;" etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
+                            <paper-input  style="margin:5px;" id="txtAlias" label="Alias"
+                            value="{{alias}}" error-message="valor inválido"></paper-input>
+
+                            <paper-input style="margin:5px;" id="txtFran" label="Franquicia"
+                            value="{{franquicia}}" error-message="valor inválido"></paper-input>
+
+                            <paper-input style="margin:5px;" id="txtPl" label="PL" value="{{pl}}" placeholder="PL/XXXX/EXP/ES/XXXX" error-message="valor inválido"></paper-input>
+
+                            <paper-input style="margin:5px;" id="txtEs" label="ES" value="{{es}}" error-message="valor inválido"></paper-input>
+                        </div>
 
                         <paper-input style="margin:5px;" id="txtDom" label="Domicilio" value="{{domicilio}}" error-message="valor inválido"></paper-input>
 
-                        <paper-input style="margin:5px;" id="txtFran" label="Franquicia" value="{{franquicia}}" error-message="valor inválido"></paper-input>
+                        <div class="d-flex flex-wrap">
+                            
+                        <vaadin-combo-box class="m-2" id="comboAgente" label="Agente" selected-item="{{agente}}" items="[[listaUsuarios]]"
+                        item-value-path="id" item-label-path="displayName" error-message="seleccione una opción"></vaadin-combo-box>
+                                    
 
-                        <vaadin-combo-box style="margin:5px;" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
+                        
+
+                        <vaadin-combo-box class="m-2" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
                         item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
 
-                        <div class="d-flex">
-                            <paper-input style="margin:5px; width:50%;" id="txtPl" label="PL" value="{{pl}}" placeholder="PL/XXXX/EXP/ES/XXXX" error-message="valor inválido"></paper-input>
-
-                            <paper-input style="margin:5px; width:50%;" id="txtEs" label="ES" value="{{es}}" error-message="valor inválido"></paper-input>
                         </div>
+
+
+                      
 
                     </template>
                     <template is="dom-if" if="[[!esEditar]]" restamp>
-                        <form class="d-flex flex-wrap">
-                            <data-simple dato="{{razon}}" titulo="Nombre o razón social" font-size="20px"></data-simple>
-                            <data-simple dato="{{alias}}" titulo="alias" font-size="20px"></data-simple>
+                        <div class="d-flex flex-wrap">
+                            <data-simple dato="{{prospecto.razon}}" titulo="Nombre o razón social" font-size="20px"></data-simple>
+                            <data-simple dato="{{prospecto.alias}}" titulo="alias" font-size="20px"></data-simple>
                             <data-simple dato="{{PolymerUtils_getTimeString(prospecto._timestamp)}}" titulo="fecha de creación" font-size="20px"></data-simple>
-                        </form>
-                            <data-simple dato="{{domicilio}}" titulo="Domicilio" font-size="20px"></data-simple>
-                            <form class="d-flex flex-wrap">
-                            <data-simple dato="{{agente.displayName}}" titulo="Agente" font-size="20px"></data-simple>
-                            <data-simple dato="{{franquicia}}" titulo="Franquicia" font-size="20px"></data-simple>
-                            <data-simple dato="{{estado.nombre}}" titulo="Estado" font-size="20px"></data-simple>
-                            <data-simple dato="{{pl}}" titulo="PL" font-size="20px"></data-simple>
-                            <data-simple dato="{{es}}" titulo="ES" font-size="20px"></data-simple>
-                            </form>
+                        
+                            <data-simple dato="{{prospecto.domicilio}}" titulo="Domicilio" font-size="20px"></data-simple>
+                           
+                            <data-simple dato="{{prospecto.agente.displayName}}" titulo="Agente" font-size="20px"></data-simple>
+                            <data-simple dato="{{prospecto.franquicia}}" titulo="Franquicia" font-size="20px"></data-simple>
+                            <data-simple dato="{{prospecto.estado.nombre}}" titulo="Estado" font-size="20px"></data-simple>
+                            <data-simple dato="{{prospecto.pl}}" titulo="PL" font-size="20px"></data-simple>
+                            <data-simple dato="{{prospecto.es}}" titulo="ES" font-size="20px"></data-simple>
+                        </div>
                         
 
                     </template>
                 </div>
             </div>
             
-            <div class="card">
-                <h5 class="card-header d-flex justify-content-between align-items-center" on-click="toggleConta">
+            <div class="card mt-2">
+                <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleConta">
                     Información de contacto
                     <span><iron-icon icon="[[muestraIcono(bolConta)]]"></iron-icon></span>
                 </h5>
                 <div class="card-body">
-                    <iron-collapse id="collapse" opened="{{bolConta}}">
+                    <iron-collapse opened="{{bolConta}}">
                         <my-datos-contacto style="padding:10px;" id-prospecto="[[prospecto.id]]"
                         arreglo-contactos="[[listaContactos]]"></my-datos-contacto>
                     </iron-collapse>
                 </div>
             </div>
             
-            <div class="card">
-                <h5 class="card-header d-flex justify-content-between align-items-center" on-click="toggleExtra">
+            <div class="card mt-2">
+                <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleExtra">
                     Seguimiento
                     <span class="btn-label"><iron-icon icon="[[muestraIcono(bolExtra)]]"></iron-icon></span>
                 </h5>
                 <div class="card-body">
-                    <iron-collapse id="collapse" opened="{{bolExtra}}">
+                    <iron-collapse  opened="{{bolExtra}}">
                         <my-datos-seguimiento style="padding:10px;" id-prospecto="[[prospecto.id]]"
                         arreglo-seguimiento="[[prospecto.listaSeguimiento]]"></my-datos-seguimiento>
                     </iron-collapse>
@@ -148,6 +187,7 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             prospecto:{type:Object, notify:true,observer:"_llenaCampos"},
             listaContactos:{type:Array, notify:true, value:[]},
             listaSeguimiento:{type:Array, notify:true, value:[]},
+            listaUsuarios:{type:Array, notify:true, value:[]},
             objCliente:{type:Object, notify:true},
             agente:{type:Object, notify:true},
             _routeParams:{observer: "_routeChanged"},
@@ -173,6 +213,9 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
 
     navegaLista(){
         NavigationUtils.navigate("clientes");
+        if(this.esEditar==true){
+            this.set("esEditar",false);
+        }
     }
 
     muestraIcono(bol){
@@ -236,13 +279,17 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             }
 
             if(obj.listaContactos){
-                var arrCon=PolymerUtils.cloneObject(obj.listaContactos);
-                this.set("listaContactos",arrCon);
+                // var arrCon=PolymerUtils.cloneObject(obj.listaContactos);
+                this.set("listaContactos",obj.listaContactos);
+            }else{
+                this.set("listaContactos",[]);
             }
 
             if(obj.listaSeguimiento){
-                var arrSeg=PolymerUtils.cloneObject(obj.listaSeguimiento);
-                this.set("listaSeguimiento",arrSeg);
+                // var arrSeg=PolymerUtils.cloneObject(obj.listaSeguimiento);
+                this.set("listaSeguimiento",obj.listaSeguimiento);
+            }else{
+                this.set("listaSeguimiento",[]);
             }
         }else{
             console.log("no hay datos de prospecto");
@@ -336,7 +383,7 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                         t.set("prospecto",obj);
                         
                     }else{
-                        
+                        t.set("prospecto",null);
                     }
                 }
             }));
@@ -489,6 +536,47 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
         var eliminar=e.detail.indexEliminar;
         this.splice("listaContactos",eliminar,1);
 
+    }
+
+    eliminaCliente(){
+        var elegido=this.prospecto;
+        var id=elegido.id;
+
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"Eliminar Cliente",
+            message:"El cliente <strong>"+elegido.razon+"</strong> y toda su información relacionada no podra recuperarse. ¿Desea continuar?",
+			saveSpinner:{
+				message:"Eliminando cliente"
+			  },
+			style:"width:500px;max-width:95%;",
+			positiveButton: {
+                text: "Elimniar",
+                style:"background-color:var(--paper-red-500);color:white;",
+                action: function(dialog, element) {
+                    dialog.setSaving(true);
+                    firebase.firestore().collection("_clientes-khalia").doc(id).delete().then(() => {
+                        PolymerUtils.Toast.show("Prospecto eliminado con éxito");
+                        NavigationUtils.navigate("clientes");
+                        
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+                        dialog.setSaving(false);
+                        console.error("Error removing document: ", error);
+                    });
+                    
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                
+                    dialog.close();
+                }
+            }
+		});
     }
 }
 

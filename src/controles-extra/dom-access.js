@@ -66,7 +66,6 @@ class DomAccess extends AuthMixin(PolymerElement) {
                 //return true;
                 this.set("permiso",true);
                 this.$.vista.render();
-                console.warn("permiso",this.permiso);
                 
             }else{
                 //console.log("accessList[path]",path,accessList);

@@ -51,7 +51,7 @@ class MyPreArsh extends UtilsMixin(PolymerElement) {
             <div class="separador">
                 <h1>analisis de riesgo</h1>
                 
-                <paper-checkbox checked>informacion enviada</paper-checkbox>
+                <paper-checkbox checked>información enviada</paper-checkbox>
                 
                 <paper-checkbox checked>visto bueno y respaldo en drive</paper-checkbox>
                 

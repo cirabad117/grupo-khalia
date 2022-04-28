@@ -18,224 +18,132 @@ class MyVistaCotiza extends UtilsMixin(NavigationMixin(PolymerElement)) {
                     border:1px solid black;
                 }
 
-                /* div.relative {
-					margin-top:15px;
-					padding:5px;
+                div.relative {
+				
 					position: relative;
 					
-					border-radius:15px;
-                    background-position: center;
-                    background-repeat: no-repeat;
-                    background-size: contain;
-                    background-image: url("../../images/fondo.png");
 				}
 				div.absolute {
 					position: absolute;
 					
-					left: 20px;
-				
-				} */
-                .container {
-                    position: relative;
+					background-color:white !important;
+					
+				}
+                .btn-accion{
+                    
+                    margin:5px;
+                    border-radius:50%;
+                    color:white;
+                    background-color:var(--paper-grey-500);
                 }
+
+                .btn-accion:hover{
+                    background-color:var(--paper-blue-400);
+                    color:white;
+                }
+
+                .volver:hover{
+                    text-decoration:underline;
+                    cursor:pointer;
+                }
+
                 
-                .centered {
-                    width:85%;
-                    height:300px;
-                    position: absolute;
-                    top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-                }
             </style>
             
             <nav class="navbar navbar-light bg-light titulo">
-                <span class="navbar-brand" on-click="navegaLista">
+                <span class="navbar-brand volver" on-click="navegaLista">
                     <iron-icon icon="arrow-back"></iron-icon>
                     Cotización [[muestraCodigo(cotizacion.id)]]
                 </span>
+
+                <paper-icon-button class="btn-accion"
+                onmouseover="PolymerUtils.Tooltip.show(event,'Descargar cotización')"
+                icon="icons:cloud-download" on-click="descarga">
+                </paper-icon-button>
                 
-                <button type="button" style="margin:5px;" class="btn btn-primary btn-sm" on-click="cambiaEdita">
-                    <span aria-hidden="true">
-                        <iron-icon icon="cloud-download"></iron-icon>
-                    </span>
-                    DESCARGAR
-                </button>
                
             </nav>
-
-            <div class="container">
-                <img src="../../images/fondo.png" alt="Snow" style="width:100%;">
-                <div class="centered">
-                
-                            <p style="text-align:left;">
-                                <b>FECHA: [[PolymerUtils_getDateString(cotizacion._timestamp)]]</b>
-                                <br>
-                                <b>FOLIO: </b><b>[[muestraCodigo(cotizacion.id)]]</b>
-                            </p>
-                            <p style="text-align:right;">
-                                <b>RAZÓN SOCIAL: </b>[[cotizacion.cliente.razon]]<br>
-                                <b>DIRIGIDO A: </b>[[cotizacion.nombreDirigido]]<br>
-                                <b>P R E S E N T E</b>
-                            </p>
-                            <p>
-                                <b>¿QUIÉNES SOMOS?</b><br>
-                                Un grupo integro en consultoría y gestoría enfocado en materia ambiental y de seguridad, con servicios eficientes y de calidad para nuestros clientes ante instituciones gubernamentales correspondientes.
-                            </p>
-                            <p>
-                                <b>MISIÓN</b><br>
-                                Resguardar la regularización de nuestros clientes en base a nuestro equipo multidisciplinario y capacitado, brindando servicios acreditados por las autoridades correspondientes.
-                            </p>
-                            
-                            <div id="products"></div>
-                            
-                            <p>
-                                <b>PROPUESTA ECONÓMICA</b>
-                                <table style="width:100%;">
-                                    <tr class="text-center" style='background-color:#02023D;color:white;padding: 10px;font-size: 20px;'>
-                                        <td colspan="2">
-                                            RESUMEN DE PRECIOS
-                                        </td>
-                                    </tr>
-                                    <template is="dom-repeat" items="[[listaProductos]]">
-                                        <tr>
-                                            <td>[[item.nombre]]</td>
-                                            <td>$10000</td>
-                                        </tr>
-                                    </template>
-                                </table>
-                                <br>
-                                *La Propuesta No Incluye Impuestos.
-                            </p>
-                            <p>
-                                <b>FORMA DE PAGO</b>
-                                50% para inicio de trámites y 50% al término de la misma.
-                            </p>
-                            <p>
-                                <b>VIGENCIA DE LA PROPUESTA</b>
-                                15 días naturales a partir de su emisión.
-                            </p>
-                            <div id="observa"></div>
-                            
-                            <p>
-                                <b>DATOS BANCARIOS: </b><br>
-                                <b>RAZÓN SOCIAL:</b> GRUPO KHALIA QUERETARO S DE RL DE CV<br>
-                                <b>RFC:</b> GKQ201015CS2<br>
-                                <b>BANCO:</b> BANCOMER<br>
-                                <b>CUENTA:</b> 0116400957<br>
-                                <b>CLAVE:</b> 0126 8000 1164 009574<br>
-                                <b>NÚMERO DE TARJETA:</b> 4555 1130 0801 9269<br>
-                                <b>ENVÍO DE COMPROBANTE DE PAGO:</b><br>
-                                contacto@grupokhalia.com<br>
-                                <b>TEL:</b> 442 251 1652<br>
-                            </p>
-                            
-                            <div class="text-center">
-                                <p>
-                                    Sin otro particular por el momento, reciba un cordial saludo quedando a su distinguida consideración.
-                                </p>
-                                <p>
-                                    ATENTAMENTE
-                                </p>
-                                <img class="img img-fluid w-25" src="../../images/khalia.jpeg">
-                            </div>
-                        
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
             
-            <!-- <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p style="text-align:left;">
-                                <b>FECHA: [[PolymerUtils_getDateString(cotizacion._timestamp)]]</b>
-                                <br>
-                                <b>FOLIO: </b><b>[[muestraCodigo(cotizacion.id)]]</b>
-                            </p>
-                            <p style="text-align:right;">
-                                <b>RAZÓN SOCIAL: </b>[[cotizacion.cliente.razon]]<br>
-                                <b>DIRIGIDO A: </b>[[cotizacion.nombreDirigido]]<br>
-                                <b>P R E S E N T E</b>
-                            </p>
-                            <p>
-                                <b>¿QUIÉNES SOMOS?</b><br>
-                                Un grupo integro en consultoría y gestoría enfocado en materia ambiental y de seguridad, con servicios eficientes y de calidad para nuestros clientes ante instituciones gubernamentales correspondientes.
-                            </p>
-                            <p>
-                                <b>MISIÓN</b><br>
-                                Resguardar la regularización de nuestros clientes en base a nuestro equipo multidisciplinario y capacitado, brindando servicios acreditados por las autoridades correspondientes.
-                            </p>
+            <div class="relative container bg-white">
+               <img class="absolute" src="../../images/header.png" alt="Snow" style="width:100%;"> 
+               <div>
+                   <p style="text-align:left;">
+                        <b>FECHA: [[PolymerUtils_getDateString(cotizacion._timestamp)]]</b>
+                        <br>
+                        <b>FOLIO: </b><b>[[muestraCodigo(cotizacion.id)]]</b>
+                    </p>
+                    <p style="text-align:right;">
+                        <b>RAZÓN SOCIAL: </b>[[cotizacion.cliente.razon]]<br>
+                        <b>DIRIGIDO A: </b>[[cotizacion.nombreDirigido]]<br>
+                        <b>P R E S E N T E</b>
+                    </p>
+                    
+                    <p>
+                        <b>¿QUIÉNES SOMOS?</b><br>
+                        Un grupo integro en consultoría y gestoría enfocado en materia ambiental y de seguridad, con servicios eficientes y de calidad para nuestros clientes ante instituciones gubernamentales correspondientes.
+                    </p>
+                    <p>
+                        <b>MISIÓN</b><br>
+                        Resguardar la regularización de nuestros clientes en base a nuestro equipo multidisciplinario y capacitado, brindando servicios acreditados por las autoridades correspondientes.
+                    </p>
+                    <div id="products"></div>
+                    
+                    <p>
+                        <b>PROPUESTA ECONÓMICA</b>
+                        <table style="width:100%;">
+                            <tr class="text-center" style='background-color:#02023D;color:white;padding: 10px;font-size: 20px;'>
+                                <td colspan="2">
+                                    RESUMEN DE PRECIOS
+                                </td>
+                            </tr>
+                            <template is="dom-repeat" items="[[listaProductos]]">
+                                <tr>
+                                    <td>[[item.nombre]]</td>
+                                    <td>$10000</td>
+                                </tr>
+                            </template>
                             
-                            <div id="products"></div>
-                            
-                            <p>
-                                <b>PROPUESTA ECONÓMICA</b>
-                                <table style="width:100%;">
-                                    <tr class="text-center" style='background-color:#02023D;color:white;padding: 10px;font-size: 20px;'>
-                                        <td colspan="2">
-                                            RESUMEN DE PRECIOS
-                                        </td>
-                                    </tr>
-                                    <template is="dom-repeat" items="[[listaProductos]]">
-                                        <tr>
-                                            <td>[[item.nombre]]</td>
-                                            <td>$10000</td>
-                                        </tr>
-                                    </template>
-                                </table>
-                                <br>
-                                *La Propuesta No Incluye Impuestos.
-                            </p>
-                            <p>
-                                <b>FORMA DE PAGO</b>
-                                50% para inicio de trámites y 50% al término de la misma.
-                            </p>
-                            <p>
-                                <b>VIGENCIA DE LA PROPUESTA</b>
-                                15 días naturales a partir de su emisión.
-                            </p>
-                            <div id="observa"></div>
-                            
-                            <p>
-                                <b>DATOS BANCARIOS: </b><br>
-                                <b>RAZÓN SOCIAL:</b> GRUPO KHALIA QUERETARO S DE RL DE CV<br>
-                                <b>RFC:</b> GKQ201015CS2<br>
-                                <b>BANCO:</b> BANCOMER<br>
-                                <b>CUENTA:</b> 0116400957<br>
-                                <b>CLAVE:</b> 0126 8000 1164 009574<br>
-                                <b>NÚMERO DE TARJETA:</b> 4555 1130 0801 9269<br>
-                                <b>ENVÍO DE COMPROBANTE DE PAGO:</b><br>
-                                contacto@grupokhalia.com<br>
-                                <b>TEL:</b> 442 251 1652<br>
-                            </p>
-                            
-                            <div class="text-center">
-                                <p>
-                                    Sin otro particular por el momento, reciba un cordial saludo quedando a su distinguida consideración.
-                                </p>
-                                <p>
-                                    ATENTAMENTE
-                                </p>
-                                <img class="img img-fluid w-25" src="../../images/khalia.jpeg">
-                            </div>
-                        </div>
+                        </table>
+                        <br>
+                        *La Propuesta No Incluye Impuestos.
+                    </p>
+                    <p>
+                        <b>FORMA DE PAGO</b>
+                        50% para inicio de trámites y 50% al término de la misma.
+                    </p>
+                    <p>
+                        <b>VIGENCIA DE LA PROPUESTA</b>
+                        15 días naturales a partir de su emisión.
+                    </p>
+                    <div id="observa"></div>
+                    
+                    <p>
+                        <b>DATOS BANCARIOS: </b><br>
+                        <b>RAZÓN SOCIAL:</b> GRUPO KHALIA QUERETARO S DE RL DE CV<br>
+                        <b>RFC:</b> GKQ201015CS2<br>
+                        <b>BANCO:</b> BANCOMER<br>
+                        <b>CUENTA:</b> 0116400957<br>
+                        <b>CLAVE:</b> 0126 8000 1164 009574<br>
+                        <b>NÚMERO DE TARJETA:</b> 4555 1130 0801 9269<br>
+                        <b>ENVÍO DE COMPROBANTE DE PAGO:</b><br>
+                        contacto@grupokhalia.com<br>
+                        <b>TEL:</b> 442 251 1652<br>
+                    </p>
+                    
+                    <div class="text-center">
+                        <p>
+                            Sin otro particular por el momento, reciba un cordial saludo quedando a su distinguida consideración.
+                        </p>
+                        <p>
+                            ATENTAMENTE
+                        </p>
+                        <img class="img img-fluid w-25" src="../../images/khalia.jpeg">
                     </div>
                 </div>
-            </div> -->
+                
+                <img class="absolute" src="../../images/footer.png" alt="Snow" style="width:100%;">
             
-
-
+            </div>
 
         `;
     }
@@ -257,7 +165,7 @@ class MyVistaCotiza extends UtilsMixin(NavigationMixin(PolymerElement)) {
     }
 
     navegaLista(){
-        NavigationUtils.navigate("cotizaciones")
+        NavigationUtils.navigate("cotizaciones");
     }
 
     descarga(){
@@ -312,7 +220,7 @@ class MyVistaCotiza extends UtilsMixin(NavigationMixin(PolymerElement)) {
                     }
                 }
 
-                observa.innerHTML=cadena;
+                observa.innerHTML=cadena+"<br>";
                 pro.innerHTML=cuerpo
             }
         }

@@ -3,7 +3,7 @@ import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
 
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/communication-icons.js';
-import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/social-icons.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 
 import './dialogo-nuevo-conta.js';
@@ -23,46 +23,70 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                 .sec:hover{
                     cursor:pointer;
                 }
+
+                .btn-accion{
+                   
+                    margin:5px;
+                    border-radius:50%;
+                    color:var(--paper-grey-600);
+                    background-color:var(--paper-grey-300);
+                }
+
+                .btn-accion:hover{
+                    background-color:var(--paper-blue-600);
+                    color:white;
+                }
+
+                .btn-secundario{
+                    color:var(--paper-yellow-700);
+                }
+
+               .btn-secundario:hover{
+                   background-color:var(--paper-yellow-700);
+                   color:white;
+                }
               
             
             </style>
             
             <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex text-primary">
-                    <iron-icon style="margin:5px;" icon="communication:contact-phone"></iron-icon>
+                <div class="d-flex">
+                    <iron-icon style="margin:5px;" icon="icons:folder-shared"></iron-icon>
                     <h5  style="margin:5px;">Lista de contactos</h5>
                 </div>
                 
-                <button type="button" style="margin:5px;" class="btn btn-primary btn-sm" on-click="abreDialogo">
-                    <span aria-hidden="true">
-                        <iron-icon icon="add"></iron-icon>
-                    </span>
-                    ARGREGAR CONTACTO
-                </button>
+                <paper-icon-button class="btn-accion"
+                onmouseover="PolymerUtils.Tooltip.show(event,'Agregar contacto')"
+                icon="social:person-add" on-click="abreDialogo">
+                </paper-icon-button>
             </div>
 
-           
+            <template is="dom-if" if="[[muestraError]]">
+                <div class="alert alert-warning" role="alert">
+                    No hay registros disponibles
+                </div>
+            </template>
 
-            
             
             <iron-pages selected="{{selected}}" attr-for-selected="name">
+                
                 <div name="lista">
-
                     <div class="row row-cols-1 row-cols-md-3">
                         <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]" index-as="numero">
                             <div class="col mb-4">
-                                <div class="card bg-light" >
-                                <!-- on-click="muestraContacto" -->
+                                <div class="card">
                                     <paper-icon-item style="cursor:pointer;">
-                                        <iron-icon icon="icons:account-circle" slot="item-icon"></iron-icon>
+                                        <iron-icon style="color:var(--paper-blue-700);" icon="icons:account-circle" slot="item-icon"></iron-icon>
                                         <paper-item-body two-line>
                                             <div>[[item.nombreCliente]]</div>
                                             <div secondary>[[item.puesto]]</div>
                                         </paper-item-body>
-                                        <paper-icon-button icon="create" class="text-warning" on-click="muestraContacto"></paper-icon-button>
-                                        <paper-icon-button icon="delete" class="text-danger" on-click="eliminaContacto"></paper-icon-button>
+                                        <paper-icon-button icon="create" class="btn-secundario"
+                                        on-click="muestraContacto" onmouseover="PolymerUtils.Tooltip.show(event,'Modificar')"></paper-icon-button>
+                                        <paper-icon-button icon="delete" class="btn-secundario"
+                                        on-click="eliminaContacto" onmouseover="PolymerUtils.Tooltip.show(event,'Quitar')"></paper-icon-button>
                                     </paper-icon-item>
-                                    <paper-listbox class="bg-light">
+                                    <paper-listbox>
                                         <template is="dom-repeat" items="[[item.telefonos]]" as="tels">
                                             <paper-item>
                                                 <span style="padding:10px;">
@@ -85,90 +109,35 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                             
                         </template>
                     </div>
-                   
-                    <!-- <paper-listbox class="bg-light" style="overflow-y:scroll;height:280px;">
-                        <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]" index-as="numero">
-                            <paper-icon-item style="cursor:pointer;" on-click="muestraContacto">
-                                <iron-icon icon="communication:phone" slot="item-icon"></iron-icon>
-                                <paper-item-body two-line>
-                                    <div>[[item.nombreCliente]]</div>
-                                    <div secondary>[[item.puesto]]</div>
-                                </paper-item-body>
-                            </paper-icon-item>
-                        </template>
-
-                    </paper-listbox> -->
                 </div><!--lista-->
+
                 <div  name="contacto">
-
-                <dialogo-nuevo-conta id="dialogo-editar" id-prospecto="[[idProspecto]]" lista-contactos="[[arregloContactos]]"
-                posicion="[[numeroElegido]]" datos-editar="[[contactoElegido]]" nombre="[[contactoElegido.nombreCliente]]"
-                puesto="[[contactoElegido.puesto]]" lista-tels="[[contactoElegido.telefonos]]"
-                lista-email="[[contactoElegido.correos]]" on-finaliza-accion="muestraLista"></dialogo-nuevo-conta>
-                
-                <button type="button" class="btn btn-light btn-sm m-3" on-click="muestraLista">
-                    <span>
-                        <iron-icon icon="close"></iron-icon>
-                    </span>
-                    Cancelar
-                </button>
-                <button type="button" class="btn btn-sm m-3 btn-success" on-click="ejecutaDialogo">
-                    <span>
-                        <iron-icon icon="save"></iron-icon>
-                    </span>
-                    Guardar cambios
-                </button>
-
                     
-                    <!-- <item-contacto class="bg-light mt-1 ml-5 mr-5" id-prospecto="[[idProspecto]]" datos-contacto="[[contactoElegido]]" arreglo-contactos="[[arregloContactos]]"
-                    index-contacto="{{numeroElegido}}" on-quita-contacto="spliceContactos" on-muestra-lista="muestraLista"></item-contacto> -->
+                    <dialogo-nuevo-conta id="dialogo-editar" id-prospecto="[[idProspecto]]" lista-contactos="[[arregloContactos]]"
+                    posicion="[[numeroElegido]]" datos-editar="[[contactoElegido]]" nombre="[[contactoElegido.nombreCliente]]"
+                    puesto="[[contactoElegido.puesto]]" lista-tels="[[contactoElegido.telefonos]]"
+                    lista-email="[[contactoElegido.correos]]" on-finaliza-accion="muestraLista"></dialogo-nuevo-conta>
 
+                    <div class="d-flex align-items-center flex-row-reverse">
+                        <button type="button" class="btn m-1 btn-success" on-click="ejecutaDialogo">
+                            <span>
+                                <iron-icon icon="save"></iron-icon>
+                            </span>
+                            Guardar cambios
+                        </button>
+                        <button type="button" class="btn btn-light m-1" on-click="muestraLista">
+                            <span>
+                                <iron-icon icon="close"></iron-icon>
+                            </span>
+                            Cancelar
+                        </button>
+                    </div>
+                
+                
 
+                  
                 </div><!--contacto-->
             </iron-pages>
-
-           
-            
-
-            <!-- <div class="card">
-                <div class="card-body">
-                <div style="display:flex; align-items:center;">
-                <div style="flex-grow:1; display:flex;" class="sec">
-                    <iron-icon icon="communication:contact-phone" style="margin:5px;"></iron-icon>
-                    <h5>contactos del prospecto</h5>
-                </div>
-                <div style="flex-grow:0;">
-                    <button type="button" style="margin:5px;" class="btn btn-info btn-sm" on-click="abreDialogo">
-                        <span aria-hidden="true">
-                            
-                            <iron-icon icon="add"></iron-icon>
-                            
-                        </span>
-                    </button>
-                </div>
-            </div>
-
-            <paper-listbox style="overflow-y:scroll;height:280px;">
-                <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]" index-as="numero">
-                    <item-contacto style="width:100%; border-bottom: solid 1px #CFD8DC;" id-prospecto="[[idProspecto]]" datos-contacto="[[item]]" arreglo-contactos="[[arregloContactos]]"
-                    index-contacto="{{numero}}" on-quita-contacto="spliceContactos"></item-contacto>
-                   
-                </template>
-            </paper-listbox>
-                </div>
-            </div> -->
-
-
-
-
-
-
-
-            
-            
-            
-           
-                
             
 
         `;
@@ -182,7 +151,7 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
             esAgregar:{type:Boolean, notify:true,value:false},
             contactoElegido:{type:Object, notify:true},
             numeroElegido:{type:Number,notify:true},
-
+            muestraError:{type:Boolean, notify:true, value:false},
             listaTels:{type:Array, notify:true, value:[]},
             listaEmails:{type:Array, notify:true, value:[]},
             arregloContactos:{type:Array, notify:true, value:[]},
@@ -197,6 +166,25 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
     ready() {
         super.ready();
     }
+
+    /**
+      * Array of strings describing multi-property observer methods and their
+      * dependant properties
+      */
+    static get observers() {
+        return [
+            '_revisaArreglo(arregloContactos,arregloContactos.*)'
+        ];
+    }
+
+    _revisaArreglo(arr){
+        if(arr && arr.length>0){
+            this.set("muestraError",false);
+        }else{
+            this.set("muestraError",true);
+        }
+    }
+    
 
     muestraContacto(e){
         var elegido=e.model.item;
@@ -262,8 +250,6 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
             title:"Agregar nuevo contacto",
 			element:"dialogo-nuevo-conta",
             params:[id,arr],
-
-			
 			style:"width:70%;",
 			positiveButton: {
                 text: "Crear",

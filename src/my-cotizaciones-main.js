@@ -21,6 +21,7 @@ class MyCotizacionesMain extends PolymerElement {
 			
 			
 			<my-lista-general titulo-pagina="Cotizaciones" vista="cotizacion" arreglo-items="[[listaCotizaciones]]" titulo="cliente.razon"
+            estilo-navega="background-color:var(--paper-red-100);color:#000000;" icono="icons:list"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
 			lista-cols="[[datosCotiza]]"
 			funcion-buscar="[[funcionCotizacion]]" funcion-ordenar="[[funcionOrdenaCoti]]"
@@ -35,16 +36,20 @@ class MyCotizacionesMain extends PolymerElement {
 			datosCotiza:{type:Array, notify:true, value:[
                 {"titulo":"Folio","dato":"id"},
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
-				{"titulo":"Cliente/Prospecto","dato":"cliente","valorInterno":"razon"},
-				{"titulo":"Dirigida a","dato":"nombreDirigido"},
+				{"titulo":"Razón social","dato":"cliente","valorInterno":"razon"},
+				
+                {"titulo":"Acciones","listaAcciones":[
+                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Abrir cotización"},
+                    // {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                ]}
 				
             ]},
 
 			opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"razonAs","texto":"Cliente/Prospecto (ascendente)"},
-                {"opcion":"razonDe","texto":"Cliente/Prospecto (descendente)"},
-                {"opcion":"fechaAs","texto":"Fecha de creacion (ascendente)"},
-                {"opcion":"fechaDe","texto":"Fecha de creacion (descendente)"}
+                {"opcion":"razonAs","texto":"Razón social (ascendente)"},
+                {"opcion":"razonDe","texto":"Razón social (descendente)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (ascendente)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (descendente)"}
                 
             ]},
 

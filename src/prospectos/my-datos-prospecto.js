@@ -8,6 +8,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-icons/social-icons.js';
 
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 
@@ -32,22 +33,42 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                 .titulo:hover{
                     cursor:pointer;
                 }
+
+                paper-tab.iron-selected {
+                    background-color: var(--paper-cyan-900);
+                    color:white;
+                
+                }
+
+                .btn-accion{
+                    width:50px; height:50px;
+                    margin:5px;
+                    border-radius:50%;
+                    color:var(--paper-grey-600);
+                    background-color:var(--paper-grey-100);
+                }
+
+                .btn-accion:hover{
+                    background-color:var(--paper-blue-400);
+                    color:white;
+                }
             </style>
             
-            <nav class="navbar navbar-light bg-light titulo">
+            <nav class="navbar navbar-light titulo" style="background-color:var(--paper-blue-50);">
                 <span class="navbar-brand" on-click="navegaLista">
                     <iron-icon icon="arrow-back"></iron-icon>
-                    {{razon}}
+                    Prospecto "{{razon}}"
                     
                 </span>
+
                 <my-seguimiento-item obj-buscar="[[listaSeguimiento]]"></my-seguimiento-item>
 
                 <div class="form-inline my-2 my-lg-0">
                     
-                    <paper-tabs selected="{{selected}}" attr-for-selected="name">
-                        <paper-tab name="info">Información</paper-tab>
-                        <paper-tab name="contacto">Contactos</paper-tab>
-                        <paper-tab name="seg">Seguimiento</paper-tab>
+                    <paper-tabs style="background-color:#FFFFFF;" selected="{{selected}}" attr-for-selected="name">
+                        <paper-tab name="info" onmouseover="PolymerUtils.Tooltip.show(event,'Información')"><iron-icon icon="icons:assignment"></iron-icon></paper-tab>
+                        <paper-tab name="contacto" onmouseover="PolymerUtils.Tooltip.show(event,'Contactos')"><iron-icon icon="icons:folder-shared"></iron-icon></paper-tab>
+                        <paper-tab name="seg" onmouseover="PolymerUtils.Tooltip.show(event,'Seguimiento')"><iron-icon icon="icons:timeline"></iron-icon></paper-tab>
                     </paper-tabs>
                     
                 </div>
@@ -58,55 +79,94 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                     <iron-pages selected="[[selected]]" attr-for-selected="name">
                         <div name="info">
                             <template is="dom-if" if="[[!esEditar]]" restamp>
-                                <form class="d-flex flex-wrap">
-                                    <data-simple dato="{{razon}}" titulo="Nombre o razón social" font-size="20px"></data-simple>
-                                    <data-simple dato="{{alias}}" titulo="alias" font-size="20px"></data-simple>
-                                    <data-simple dato="{{nombreAgente}}" titulo="Agente" font-size="20px"></data-simple>
-                                    <data-simple dato="{{franquicia}}" titulo="Franquicia" font-size="20px"></data-simple>
-                                    <data-simple dato="{{estado.nombre}}" titulo="Estado" font-size="20px"></data-simple>
-                                </form>
-
-                                <button type="button" style="margin:5px;" class="btn btn-warning btn-sm" on-click="cambiaEdita">
-                                <span aria-hidden="true">
-                                    <iron-icon icon="create"></iron-icon>
-                                </span>
-                                EDITAR PROSPECTO
-                                </button>
-                            </template>
-
-                            <template is="dom-if" if="[[esEditar]]" restamp>
-                                <div class="d-flex flex-wrap align-items-center mb-3">
-                                    <paper-input class="m-3" id="txtAlias" label="Razón social"
-                                    value="{{razon}}" error-message="valor inválido"></paper-input>
                                 
-                                    <paper-input class="m-3" id="txtAlias" label="Alias"
-                                    value="{{alias}}" error-message="valor inválido"></paper-input>
-
-                                    <paper-input class="m-3" id="txtAlias" label="Franquicia"
-                                    value="{{franquicia}}" error-message="valor inválido"></paper-input>
-                                
-                                    <selector-usuarios class="m-3" etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
-                                
-                                    <vaadin-combo-box class="m-3" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
-                                    item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex">
+                                            <iron-icon style="margin:5px;" icon="icons:assignment"></iron-icon>
+                                            <h5  style="margin:5px;">Información del prospecto</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <data-simple dato="{{razon}}" titulo="Nombre o razón social" font-size="20px"></data-simple>
+                                            <data-simple dato="{{alias}}" titulo="alias" font-size="20px"></data-simple>
+                                            <data-simple dato="{{nombreAgente}}" titulo="Agente" font-size="20px"></data-simple>
+                                            <data-simple dato="{{franquicia}}" titulo="Franquicia" font-size="20px"></data-simple>
+                                            <data-simple dato="{{estado.nombre}}" titulo="Estado" font-size="20px"></data-simple>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3 d-flex flex-wrap">
                                         
+                                        <paper-icon-button class="btn-accion"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Editar')"
+                                        icon="icons:create" on-click="cambiaEdita">
+                                        </paper-icon-button>
+                                        
+                                        <paper-icon-button class="btn-accion"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Eliminar')"
+                                        icon="icons:delete" on-click="eliminaProspecto">
+                                        </paper-icon-button>
+                                        
+                                        <paper-icon-button class="btn-accion"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Agregar a Clientes')"
+                                        icon="social:group-add" on-click="cambiaCliente"></paper-icon-button>
+                                    </div>
                                 </div>
-                                
-                                <button type="button" class="btn btn-sm btn-light" on-click="cambiaEdita">
-                                    <span><iron-icon icon="clear"></iron-icon></span>
-                                    Cancelar
-                                </button>
-                                <button type="button" class="btn btn-sm btn-success" on-click="actualizaDatos">
-                                    <span><iron-icon icon="save"></iron-icon></span>Guardar cambios
-                                </button>
+                            
                             </template>
                             
-                            <button type="button" style="float:right;" class="btn btn-info btn-sm" on-click="cambiaCliente">
-                                <span aria-hidden="true">
-                                    <iron-icon icon="supervisor-account"></iron-icon>
-                                </span>
-                                AGREGAR A CLIENTES
-                            </button>
+                            <template is="dom-if" if="[[esEditar]]" restamp>
+                                
+                                <div class="d-flex flex-column justify-content-center mr-5 ml-5">
+                                    
+                                    <div class="d-flex align-items-center">
+                                        <paper-input class="m-3" id="txtAlias" label="Razón social"
+                                        value="{{razon}}" error-message="valor inválido"></paper-input>
+                                        
+                                        <paper-input class="m-3" id="txtAlias" label="Alias"
+                                        value="{{alias}}" error-message="valor inválido"></paper-input>
+                                        
+                                        <paper-input class="m-3" id="txtAlias" label="Franquicia"
+                                        value="{{franquicia}}" error-message="valor inválido"></paper-input>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center">
+                                        
+                                        <!-- <selector-usuarios class="m-3" etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios> -->
+
+                                        <vaadin-combo-box class="m-3" id="comboAgente" label="Agente" selected-item="{{agente}}" items="[[listaUsuarios]]"
+                                        item-value-path="id" item-label-path="displayName" error-message="seleccione una opción"></vaadin-combo-box>
+                                    
+                                        
+                                        <vaadin-combo-box class="m-3" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
+                                        item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+                                    
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center flex-row-reverse">
+                                        
+                                        <button type="button" class="btn btn-success m-1" on-click="actualizaDatos">
+                                            <span>
+                                                <iron-icon icon="save"></iron-icon>
+                                            </span>
+                                            Guardar cambios
+                                        </button>
+
+                                        <button type="button" class="btn btn-light m-1" on-click="cambiaEdita">
+                                            <span>
+                                                <iron-icon icon="clear"></iron-icon>
+                                            </span>
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                
+                                </div>
+                            
+                            </template>
+                            
+                            
                         </div><!--info-->
                         
                         <div name="contacto">
@@ -142,6 +202,7 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
             agente:{type:Object, notify:true},
             nombreAgente:{type:String, notify:true},
             alias:{type:String, notify:true},
+            listaUsuarios:{type:Array, notify:true, value:[]},
             listaSeguimiento:{type:Array, notify:true, value:[]},
             listaContactos:{type:Array, notify:true, value:[]},
 
@@ -165,6 +226,10 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
 
     navegaLista(){
         NavigationUtils.navigate("prospectos");
+        if(this.esEditar==true){
+            this.set("esEditar",false);
+        }
+        
     }
     
     _routeChanged(params){
@@ -273,6 +338,7 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
             message:"El prospecto seleccionado sera agregado a la lista de clientes activos. ¿Desea continuar?",
 			positiveButton: {
                 text: "crear cliente",
+                style:"background-color:var(--paper-blue-500);color:white;",
                 action: function(dialog, element) {
                     t.DialogLayout_setSaving(true);
                     var washingtonRef = firebase.firestore().collection("_clientes-khalia").doc(idEditar);
@@ -292,6 +358,7 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
             },
             negativeButton: {
                 text: "cancelar",
+                style:"border:solid 1px var(--paper-blue-500);",
                 action: function(dialog, element) {
                     dialog.close();
                 }
@@ -333,6 +400,47 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
             PolymerUtils.Toast.show("Error al guardar; intentalo más tarde.");
             console.error("Error writing document: ", error);
         });
+    }
+
+    eliminaProspecto(){
+        var elegido=this.prospecto;
+        var id=elegido.id;
+
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+            title:"Eliminar prospecto",
+            message:"El prospecto <strong>"+elegido.razon+"</strong> y toda su información relacionada no podra recuperarse. ¿Desea continuar?",
+			saveSpinner:{
+				message:"Eliminando prospecto"
+			  },
+			style:"width:500px;max-width:95%;",
+			positiveButton: {
+                text: "Elimniar",
+                style:"background-color:var(--paper-red-500);color:white;",
+                action: function(dialog, element) {
+                    dialog.setSaving(true);
+                    firebase.firestore().collection("_clientes-khalia").doc(id).delete().then(() => {
+                        PolymerUtils.Toast.show("Prospecto eliminado con éxito");
+                        NavigationUtils.navigate("prospectos");
+                        
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+                        dialog.setSaving(false);
+                        console.error("Error removing document: ", error);
+                    });
+                    
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                
+                    dialog.close();
+                }
+            }
+		});
     }
     
 }

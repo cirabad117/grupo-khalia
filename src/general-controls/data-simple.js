@@ -11,12 +11,31 @@ class DataSimple extends PolymerElement {
                     margin:5px;
                 }
 
+                .titulo{
+                    font-style:italic;
+                    font-size: small;
+                    margin: 0 !important;
+                    color:var(--paper-grey-700);
+                }
+
+                .texto{
+                    font-weight:bold;
+                    font-size:20px;
+                    font-family: Arial, Helvetica, sans-serif;
+                    color:var(--paper-blue-700);
+                }
+
+                .contenedor{
+                    margin:5px;
+                }
+               
+
                 
             </style>
             
-            <div class="form-group bg-light text-primary">
-                <label for="inputAddress">[[titulo]]</label>
-                <input type="text" readonly class="form-control" id="inputAddress" value="[[dato]]">
+            <div class="contenedor">
+                <label class="titulo" for="inputAddress">[[titulo]]</label>
+                <p class="texto" id="inputAddress" >[[muestraValor(dato)]]</p>
             </div>
             
            
@@ -42,9 +61,9 @@ class DataSimple extends PolymerElement {
 
     muestraValor(va){
         if(va && va!=null && va.trim()!=""){
-            this.set("valor",va);
+            return va;
         }else{
-            this.set("valor"," - ");
+            return " - ";
         }
     }
 

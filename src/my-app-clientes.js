@@ -28,22 +28,28 @@ class MyAppClientes extends PolymerElement {
             
             <div class="container">
                 <nav class="navbar navbar-light bg-light">
-                    <a class="navbar-brand" href="#">App Clientes</a>
+                    <a class="navbar-brand" >
+                        <iron-icon icon="important-devices"></iron-icon>
+                        App Clientes
+                    </a>
                     <div class="form-inline my-2 my-lg-0">
                         <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:white;">
-                            <paper-tab name="lista"><span>
-                            <iron-icon icon="supervisor-account"></iron-icon>
-                            </span>Clientes activos</paper-tab>
-                            <paper-tab name="coment"><span>
-                            <iron-icon icon="feedback"></iron-icon>
-                            </span>Comentarios</paper-tab>
+                            <paper-tab name="lista" onmouseover="PolymerUtils.Tooltip.show(event,'Clientes activos')">
+                                <span><iron-icon icon="supervisor-account"></iron-icon></span>
+                                
+                            </paper-tab>
+                            <paper-tab name="coment" onmouseover="PolymerUtils.Tooltip.show(event,'Comentarios')">
+                                <span><iron-icon icon="feedback"></iron-icon></span>
+                                
+                            </paper-tab>
                         </paper-tabs>
                     </div>
                 </nav>
                 
                 <iron-pages selected="{{selected}}" attr-for-selected="name">
                     <div name="lista">
-                        <my-lista-general titulo-pagina="App Clientes" vista="appClientes" arreglo-items="{{listaClientesApp}}" titulo="razon"
+                        <my-lista-general titulo-pagina="App Clientes" vista="appClientes" arreglo-items="{{listaClientesApp}}"
+             
                         lista-filtro="[[listaFiltroApp]]" lista-ordena="[[opcionesOrdena]]"
                         lista-cols="[[datosApp]]"
                         funcion-buscar="[[funcionFiltraApp]]" funcion-ordenar="[[funcionOrdena]]"
@@ -79,10 +85,14 @@ class MyAppClientes extends PolymerElement {
         return {
             selected:{type:String, notify:true, value:"lista"},
             datosApp:{type:Array, notify:true, value:[
-                {"titulo":"clave de producto","dato":"_key"},
-                {"titulo":"razon social","dato":"razon"},
-                {"titulo":"tipo de membresia","dato":"tipoMembresia","valorInterno":"tipo"},
-                {"titulo":"estado","dato":"objCliente",}
+                {"titulo":"Clave de producto","dato":"_key"},
+                {"titulo":"Razón social","dato":"razon"},
+                {"titulo":"Tipo de membresia","dato":"tipoMembresia","valorInterno":"tipo"},
+                {"titulo":"Estado","dato":"objCliente"},
+                {"titulo":"Acciones","listaAcciones":[
+                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Ver detalles"},
+                    // {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                ]}
                 
             ]},
             listaClientesApp:{type:Array, notify:true, value:[]},
@@ -99,12 +109,12 @@ class MyAppClientes extends PolymerElement {
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"claveAs","texto":"clave de producto (ascendente)"},
-                {"opcion":"claveDe","texto":"clave de producto (descendente)"},
-                {"opcion":"razonAs","texto":"razón social (ascendente)"},
-                {"opcion":"razonDe","texto":"razón social (descendente)"},
-                {"opcion":"fechaAs","texto":"fecha de creacion (ascendente)"},
-                {"opcion":"fechaDe","texto":"fecha de creacion (descendente)"}
+                {"opcion":"claveAs","texto":"Clave de producto (ascendente)"},
+                {"opcion":"claveDe","texto":"Clave de producto (descendente)"},
+                {"opcion":"razonAs","texto":"Razón social (ascendente)"},
+                {"opcion":"razonDe","texto":"Razón social (descendente)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (ascendente)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (descendente)"}
                 
             ]},
 

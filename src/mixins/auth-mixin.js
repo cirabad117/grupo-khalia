@@ -174,7 +174,7 @@ let internalMixinAuth = function(superClass) {
                     if(callbacks && callbacks.success){
                         callbacks.success();
                     }   
-                    PolymerUtils.Toast.show("Usuario elminado de la plataforma");
+                    PolymerUtils.Toast.show("Usuario eliminado de la plataforma");
                 }
                 else{
                     if(callbacks && callbacks.fail){

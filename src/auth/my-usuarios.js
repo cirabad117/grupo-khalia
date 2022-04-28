@@ -6,7 +6,8 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
-
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import '../controles-extra/checkbox-tree.js';
 import './my-nuevo-usuario.js';
 
@@ -23,85 +24,74 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                     margin:15px;
                 }
             </style>
+            
+            <nav class="navbar bg-light">
+                <span class="navbar-brand" >
+                    <iron-icon icon="face"></iron-icon>
+                    Usuarios
 
-            <div class="container">
+                </span>
+            </nav>
+
+            <div class="container mt-3">
                 <div class="row">
                     <div class="col-md-12">
-
-                    <iron-pages selected="{{selected}}" attr-for-selected="name">
+                        <iron-pages selected="{{selected}}" attr-for-selected="name">
                             <div name="lista">
-                                <div class="row">
+                                <div class="row text-center">
                                     <template is="dom-repeat" items="[[listaUsuarios]]" sort="_sortInstalaciones">
-                                        <div class="col-xl-3 col-md-6 mb-4 ins-item">
-                                            <div class="card border-left-primary h-100 py-2 bg-light text-primary">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col">
-                                                            <div class="h4 font-weight-bold text-uppercase mb-1">
-                                                                [[item.displayName]]
-                                                            </div>
-                                                            <div class="mb-0 text-xs">[[item.email]]</div>
-                                                        </div>
-                                                        <div class="col-auto mr-2" style="display:flex;flex-direction:column;">
-                                                            <paper-icon-button style="color:var(--paper-blue-500);" icon="create" on-click="abreEditaUsuario"></paper-icon-button>
-                                                            <paper-icon-button style="color:var(--paper-blue-500);" icon="delete" on-click="abreBorraUsuario"></paper-icon-button>
-                                                        </div>
-                                                    </div>
+                                        <div class="col-xl-3 col-sm-6 mb-5">
+                                            <div class="bg-white rounded shadow-sm py-5 px-4 text-center">
+                                                <img src="../../images/user.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                                                <h5 class="mb-0">{{item.displayName}}</h5>
+                                                <div class="d-flex justify-content-center mb-0 mt-3">
+                                                <paper-icon-button style="color:var(--paper-blue-500);" onmouseover="PolymerUtils.Tooltip.show(event,'Eliminar')"
+                                                        icon="delete" on-click="abreBorraUsuario">
+                                                        </paper-icon-button>
+                                                   
+                                                        <paper-icon-button style="color:var(--paper-blue-500);" onmouseover="PolymerUtils.Tooltip.show(event,'Editar')"
+                                                        icon="create" on-click="abreEditaUsuario">
+                                                        </paper-icon-button>
                                                 </div>
+
+                                               
+                                                
+                                                        
+                                                    
+                                                    
+                                                </ul>
                                             </div>
                                         </div>
+                                            
+                                        
                                     </template>
                                 </div>
-                                    <div style="position: fixed; bottom: 24px; right: 24px;">
-                                        <div style="position: relative; cursor:pointer;" on-clicK="abreNuevoUsuario">
-                                            <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
-                                        </div>
+                                <div style="position: fixed; bottom: 24px; right: 24px;">
+                                    <div style="position: relative; cursor:pointer;" on-clicK="abreNuevoUsuario">
+                                        <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
                                     </div>
+                                </div>
                             </div><!--div name="lista"-->
                             
                             <div name="editar">
-                               
-                                        <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" campo-activo="[[!esEditarUsuario]]"
-                                        main-tree="[[listaPermisos]]" uid="[[usuarioActivo.id]]" nombre="[[usuarioActivo.displayName]]"
-                                        email="[[usuarioActivo.email]]" perfil="[[usuarioActivo.accessList]]"
-                                        pass="[[usuarioActivo.password]]" pass2="[[usuarioActivo.password]]"></my-nuevo-usuario>
+                                <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" campo-activo="[[!esEditarUsuario]]"
+                                main-tree="[[listaPermisos]]" uid="[[usuarioActivo.id]]" nombre="[[usuarioActivo.displayName]]"
+                                email="[[usuarioActivo.email]]" perfil="[[usuarioActivo.accessList]]"
+                                pass="[[usuarioActivo.password]]" pass2="[[usuarioActivo.password]]"></my-nuevo-usuario>
                                     
                             </div><!--div name="editar"-->
                             
                             <div name="crear">
-                                
-                                        <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" 
-                                        campo-activo="[[!esEditarUsuario]]" main-tree="[[listaPermisos]]"></my-nuevo-usuario>
+                                <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" 
+                                campo-activo="[[!esEditarUsuario]]" main-tree="[[listaPermisos]]"></my-nuevo-usuario>
                                    
                             </div>
                         </iron-pages>
-
                     </div>
                 </div>
             </div>
             
-            <!-- <div class="container-fluid">
             
-                <div class="card m-4">
-                    <h5 class="card-header d-flex  align-items-center">
-                        <template is="dom-if" if="{{esAccion(selected)}}">
-                            <paper-icon-button icon="arrow-back" on-click="abreListaUsuario">volver a mis usuarios</paper-icon-button>
-                        </template>
-                        {{muestraTitulo(selected)}}
-                        
-                    </h5>
-                    
-                    <div class="card-body">
-                        
-                        
-                    </div>
-                </div>
-                
-            </div> -->
-
-
-            
-
             
         `;
     }
@@ -153,16 +143,7 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
     ready() {
         super.ready();
         
-        if(this.lastInstalaciones){
-            this.lastInstalaciones();
-            this.set("lastInstalaciones",null);
-        }
-
-        this.set("lastInstalaciones",DataHelper.queryCollection(this,{
-            "collection":"usuarios",
-            "array":this.listaUsuarios,
-            "arrayName":"listaUsuarios"
-        }));
+   
     }
 
   

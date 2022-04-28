@@ -9,6 +9,7 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 
 import '../controles-extra/checkbox-tree.js';
 

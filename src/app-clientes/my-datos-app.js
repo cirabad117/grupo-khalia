@@ -46,8 +46,8 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                                     <data-simple  style="padding:5px;"font-size="25px"dato="[[showEstatus(cliente)]]" titulo="estatus de membresia"></data-simple>
                                     <data-simple  style="padding:5px;"font-size="25px"dato="[[PolymerUtils_getDateString(cliente._fechaLimite)]]" titulo="vigencia de membresia"></data-simple>
                                 </div>
-                                <div>
-                                    <div>usuarios registrados</div>
+                                <div class="m-3">
+                                    <h5>Usuarios registrados</h5>
                                     <div class="d-flex flex-wrap align-items-center">
                                         <template is="dom-repeat" items="[[listaUsuarios]]">
                                             <div class="alert alert-primary" role="alert">
@@ -63,15 +63,15 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                             </div>
                             
                             <div>
-                                <div class="d-flex align-items-center">
-                                    <vaadin-combo-box class="flex-fill" id="combo-vigencia" label="Tipo de membresia" selected-item="{{nuevaVigencia}}"
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <vaadin-combo-box  id="combo-vigencia" label="Tipo de membresia" selected-item="{{nuevaVigencia}}"
                                     items="[[listaOpciones]]" item-label-path="tipo" item-id-path="cantidad">
                                         <template>
                                             <b>[[item.tipo]]</b>
                                             [[item.explicacion]]
                                         </template>
                                     </vaadin-combo-box>
-                                    <data-simple class="p-5 flex-fill" font-size="15px" dato="{{muestraNuevaFecha(fechaActual,nuevaVigencia)}}" titulo="fecha de vigencia"></data-simple>
+                                    <data-simple dato="{{muestraNuevaFecha(fechaActual,nuevaVigencia)}}" titulo="Fecha de vigencia"></data-simple>
                                 </div>
                                 <paper-button style="margin:10px;background-color:var(--paper-green-500);color:white;" on-click="modificaMembresia">actualizar</paper-button>
 
@@ -82,7 +82,7 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                                     Todo acceso realizado con la llave de producto ya no sera
                                     válido.
                                 </p>
-                                <paper-button style="background-color:white;color:var(--paper-red-500);margin:5px;"
+                                <paper-button style="background-color:white;color:var(--paper-red-500);margin:5px;border:solid 1px var(--paper-red-500);border-radius:5px;"
                                 on-click="cancela">
                                     Cancelar membresia
                                 </paper-button>
@@ -216,8 +216,6 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
     }
 
     cancela(){
-       
-
         var id=this.cliente.id;
         var t=this;
         var washingtonRef = firebase.firestore().collection("_clientes").doc(id);

@@ -1,5 +1,9 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/communication-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
+
 import '../controles-extra/dom-access.js';
 
 import '../bootstrap.js';
@@ -42,12 +46,13 @@ class MyDropdownButton extends PolymerElement {
                 .dropdown-content span {
                     display: block;
                     color: #000000;
+                    margin:5px;
                     padding: 5px;
                     text-decoration: none;
                 }
                 .dropdown-content span:hover {
                     color: #FFFFFF;
-                    background-color: #00A4BD;
+                    background-color: var(--paper-blue-700);
                 }
             </style>
             
@@ -58,7 +63,7 @@ class MyDropdownButton extends PolymerElement {
                 <div class="dropdown-content">
                     <template is="dom-repeat" items="[[items]]">
                         <dom-access path="[[item.permiso]]">
-                            <span on-click="navega">[[item.nombre]]</span>
+                            <span on-click="navega" class="d-flex align-items-center justify-content-start"><iron-icon style="margin:3px;"icon="[[item.icono]]"></iron-icon>[[item.nombre]]</span>
 
                         </dom-access>
 

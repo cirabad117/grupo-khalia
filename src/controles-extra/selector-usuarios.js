@@ -37,16 +37,7 @@ class SelectorUsuarios extends PolymerElement {
     ready() {
         super.ready();
         
-        if(this.lastInstalaciones){
-            this.lastInstalaciones();
-            this.set("lastInstalaciones",null);
-        }
-
-        this.set("lastInstalaciones",DataHelper.queryCollection(this,{
-            "collection":"usuarios",
-            "array":this.listaUsuarios,
-            "arrayName":"listaUsuarios"
-        }));
+     
     }
 }
 

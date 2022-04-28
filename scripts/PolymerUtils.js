@@ -1699,8 +1699,8 @@ return day;
                 cancelButton.innerText=options.negativeButton.text;
                 cancelButton.raised=(options.negativeButton.raised==true);
                 if(options.negativeButton.style){
-                    okButton.setAttribute("style",
-                    okButton.getAttribute("style")+options.negativeButton.style);
+                    cancelButton.setAttribute("style",
+                    cancelButton.getAttribute("style")+options.negativeButton.style);
                 }
                 if(options.negativeButton.action){
                     var negativeFunction=function(){
@@ -2288,8 +2288,8 @@ while (titleContainer.firstChild) {
                 cancelButton.innerText=options.negativeButton.text;
                 cancelButton.raised=(options.negativeButton.raised==true);
                 if(options.negativeButton.style){
-                    okButton.setAttribute("style",
-                    okButton.getAttribute("style")+options.negativeButton.style);
+                    cancelButton.setAttribute("style",
+                    cancelButton.getAttribute("style")+options.negativeButton.style);
                 }
                 if(options.negativeButton.action){
                     var negativeFunction=function(){

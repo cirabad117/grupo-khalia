@@ -8,6 +8,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 
@@ -56,23 +57,36 @@ class MyNuevaCotizacion extends PolymerElement {
                 }
             </style>
             
-            <div class="containeR">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <paper-tabs selected="{{pasoElegido}}" attr-for-selected="name">
-                                    <paper-tab name="cliente">CLIENTE</paper-tab>
-                                    <paper-tab name="productos">PRODUCTOS</paper-tab>
-                                    <paper-tab name="finalizaCoti">VISTA PREVIA</paper-tab>
-                                </paper-tabs>
-                            </div>
-                        </div>
+            <nav class="navbar" style="background-color:var(--paper-red-100);color:#000000; cursor:pointer;">
+                <span class="navbar-brand" on-click="navegaLista">
+                    <iron-icon icon="arrow-back"></iron-icon>
+                    Nueva cotización
+                </span>
+            </nav>
+            
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <paper-listbox selected="{{pasoElegido}}" attr-for-selected="name">
+                            <paper-item name="cliente">CLIENTE</paper-item>
+                            <paper-item name="productos">PRODUCTOS</paper-item>
+                            <paper-item name="finalizaCoti">VISTA PREVIA</paper-item>
+                        </paper-listbox>
+                    </div>
+
+                    <div class="col-md-9">
                         <iron-pages selected="{{pasoElegido}}" attr-for-selected="name">
                             <div name="cliente">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <paper-input label="Buscar" value="{{busqueda}}"></paper-input>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Seleccionar cliente</h5>
+                                        
+                                        <paper-input label="Buscar cliente/prospecto" value="{{busqueda}}">
+                                            <div slot="prefix">
+                                                <iron-icon icon="search"></iron-icon>
+                                            </div>
+                                        </paper-input>
+                                        
                                         <paper-listbox style="max-height:250px;overflow-y:scroll;">
                                             <template is="dom-repeat" items="{{listaClientes}}" filter="{{_funcionBusca(busqueda)}}">
                                                 <paper-item on-click="asignaCliente">
@@ -85,13 +99,20 @@ class MyNuevaCotizacion extends PolymerElement {
                                         </paper-listbox>
                                     </div>
                                 </div>
-                            </div><!--cliente-->
-                            <div name="productos">
-                               
+                            </div>
 
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <paper-input label="buscar" value="{{productoBuscar}}" ></paper-input>
+                            <div name="productos">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h5 class="card-title">Seleccionar productos</h5>
+                                            
+                                            <paper-button style="background-color:var(--paper-blue-400);color:white;"
+                                            on-click="cambiaCotiza">Finalizar cotización</paper-button>
+                                            
+                                        </div>
+                                        
+                                        <paper-input label="Buscar producto" value="{{productoBuscar}}" ></paper-input>
                                         <paper-listbox style="max-height:250px;overflow-y:scroll;">
                                             <template is="dom-repeat" items="[[listaProductos]]" filter="{{_buscaProd(productoBuscar)}}">
                                                 <paper-item on-click="agregaProducto">
@@ -102,31 +123,30 @@ class MyNuevaCotizacion extends PolymerElement {
                                                 </paper-item>
                                             </template>
                                         </paper-listbox>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5 style="margin-top:30px;">productos seleccionados</h5>
-                                        <paper-listbox style="max-height:200px;overflow-y:scroll;">
-                                            <template is="dom-repeat" items="[[listaProds]]">
-                                                <paper-item>
-                                                    <paper-item-body two-line>
-                                                        <div>[[item.codigo]]</div>
-                                                    </paper-item-body>
-                                                    <paper-icon-button icon="clear" on-click="eliminaProd" style="color:var(--paper-red-500);"></paper-icon-button>
-                                                </paper-item>
-                                            </template>
-                                        </paper-listbox>
+
+                                        <div class="mt-3 p-2 bg-light">
+                                            <h6>Productos selecccionados</h6>
+                                            <div class="d-flex flex-wrap " style="max-height:100px;overflow-y:scroll;">
+                                                <template is="dom-repeat" items="[[listaProds]]">
+                                                    <paper-item>
+                                                        <paper-item-body>
+                                                            <div>[[item.codigo]]</div>
+                                                        </paper-item-body>
+                                                        <paper-icon-button icon="clear" on-click="eliminaProd" style="color:var(--paper-red-500);"></paper-icon-button>
+                                                    </paper-item>
+                                                </template>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
+
                             <div name="finalizaCoti">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        
-                                        <paper-input label="dirigida a" value="{{nombreDirigido}}"></paper-input>
+                                <div class="card">
+                                    <div class="card-body">
                                         <data-simple font-size="20px"dato="[[clienteElegido.razon]]" titulo="Nombre o Razón social"></data-simple>
-                                        <data-simple font-size="20px"dato="[[nombreDirigido]]" titulo="Dirigida a"></data-simple>
-                                        <h5>lista de trámites</h5>
+                                        <paper-input label="dirigida a" value="{{nombreDirigido}}"></paper-input>
+                                        <h5>Lista de trámites</h5>
                                         
                                         <paper-listbox style="max-height:250px;overflow-y:scroll;">
                                             <template is="dom-repeat" items="[[listaProds]]">
@@ -140,21 +160,16 @@ class MyNuevaCotizacion extends PolymerElement {
                                             </template>
                                         </paper-listbox>
                                     </div>
+                                    <div class="card-footer">
+                                        <paper-button style="color:white;background-color:var(--paper-green-500);" on-click="guardaCotiza">
+                                            guardar cotización
+                                        </paper-button>
+                                    </div>
                                 </div>
                             </div>
+
                         </iron-pages>
                     </div>
-                    
-                    <template is="dom-if" if="[[esGuardar(pasoElegido)]]">
-                        <div class="card-footer">
-                            <paper-button style="color:white;background-color:var(--paper-green-500);" on-click="guardaCotiza">
-                                <span>
-                                    <iron-icon icon="save"></iron-icon>
-                                </span>
-                                guardar cotización
-                            </paper-button>
-                        </div>
-                    </template>
                 </div>
             </div>
 
@@ -177,15 +192,15 @@ class MyNuevaCotizacion extends PolymerElement {
 
     ready() {
         super.ready();
-        var binder=new QueryBinder("_clientes-khalia",{
-            "specialRef":firebase.firestore().collection("_clientes-khalia")
-        });
+        // var binder=new QueryBinder("_clientes-khalia",{
+        //     "specialRef":firebase.firestore().collection("_clientes-khalia")
+        // });
         
-        binder.bindArray(this,this.listaClientes,"listaClientes");
+        // binder.bindArray(this,this.listaClientes,"listaClientes");
 
-        var binderProducto=new QueryBinder("_productos-khalia");
+        // var binderProducto=new QueryBinder("_productos-khalia");
         
-        binderProducto.bindArray(this,this.listaProductos,"listaProductos");
+        // binderProducto.bindArray(this,this.listaProductos,"listaProductos");
         
         const comboBox = this.shadowRoot.querySelector('vaadin-combo-box');
         
@@ -227,11 +242,7 @@ class MyNuevaCotizacion extends PolymerElement {
 
     muestraNumProds(arr){
         return arr.length;
-        // if(arr && arr.length>0){
-        //     return true;
-        // }else{
-        //     return false;
-        // }
+    
     }
 
     asignaCliente(e){
@@ -346,28 +357,9 @@ class MyNuevaCotizacion extends PolymerElement {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
+    navegaLista(){
+        NavigationUtils.navigate("cotizaciones");
+    }
 
 
 

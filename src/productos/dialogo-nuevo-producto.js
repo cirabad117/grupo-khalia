@@ -24,7 +24,7 @@ class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement))
                 <div class="row">
                     <div class="col-md-12">
                         <paper-input id="txtCod" label="codigo" value="{{codigo}}" error-message="ingrese un valor válido"></paper-input>
-                        <paper-input id="txtNom" label="nombre del tramite" value="{{nombre}}" error-message="ingrese un valor válido"></paper-input>
+                        <paper-textarea id="txtNom" label="nombre del tramite" value="{{nombre}}" error-message="ingrese un valor válido"></paper-textarea>
                         
                         <vaadin-select id="selectDepa" label="Departamento" value="{{departamento}}" error-message="selecciona una opcion">
                             <template>
@@ -143,6 +143,8 @@ class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement))
             if(obj.cotizacion){
                 this.set("esCotizacion",true)
                 this.set("cotizacion",obj.cotizacion);
+            }else{
+                this.set("esCotizacion",false);
             }
 
             var t=this;

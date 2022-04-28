@@ -43,7 +43,7 @@ class MyIconoUsuario extends AuthMixin(UtilsMixin(PolymerElement)) {
 
             <template is="dom-if" if="[[!_loggedUser]]">
                 
-                <paper-button on-click="initLogin">iniciar sesion</paper-button>
+                <paper-button style="color:#FFFFFF;" on-click="initLogin">iniciar sesión</paper-button>
                 
             </template>
 
