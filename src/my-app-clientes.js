@@ -83,6 +83,7 @@ class MyAppClientes extends PolymerElement {
 
     static get properties() {
         return {
+            listaUsuarios:{type:Array, notify:true, value:[]},
             selected:{type:String, notify:true, value:"lista"},
             datosApp:{type:Array, notify:true, value:[
                 {"titulo":"Clave de producto","dato":"_key"},
@@ -350,11 +351,13 @@ class MyAppClientes extends PolymerElement {
     }
 
     abreNuevoApp(){
+        var arrUsers=PolymerUtils.cloneObject(this.listaUsuarios);
        PolymerUtils.Dialog.createAndShow({
 			type: "modal",
 			element:"my-nuevo-app",
 			title:"Agregar cliente a plataforma",
 			style:"width:600px;max-width:95%;",
+            params:[arrUsers],
 			positiveButton: {
                 text: "Crear",
                 action: function(dialog, element) {

@@ -44,7 +44,8 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
                     item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
 				</div>
 				<div class="col-md-6">
-					<selector-usuarios etiqueta="Agente" usuario-elegido="{{agente}}"></selector-usuarios>
+				<vaadin-combo-box class="m-2" id="comboAgente" label="Agente" selected-item="{{agente}}" items="[[listaUsuarios]]"
+                        item-value-path="id" item-label-path="displayName" error-message="seleccione una opción"></vaadin-combo-box>
 				</div>
 			</div>
 			
@@ -82,6 +83,7 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 
 	static get properties() {
 		return {
+			listaUsuarios:{type:Array, notify:true, value:[]},
 			esForzarCliente:{type:Boolean, notify:true, value:false},
 			listaTels:{type:Array, notify:true, value:[]},
 			listaEmails:{type:Array, notify:true, value:[]},
@@ -90,8 +92,12 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 		}
 	}
 
-	constructor() {
+	constructor(users) {
 		super();
+
+		if(users){
+			this.set("listaUsuarios",users);
+		}
 	}
 
 	ready() {

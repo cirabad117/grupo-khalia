@@ -280,7 +280,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<my-inicio name="inicio"></my-inicio>
 						
 						<dom-access name="prospectos" path="admin/prospectos">
-							<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]"></my-prospectos-main>
+							<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]" lista-usuarios="[[listaUsuarios]]"></my-prospectos-main>
 						</dom-access>
 						
 						<my-datos-prospecto  name="prospecto" lista-usuarios="[[listaUsuarios]]"></my-datos-prospecto>
@@ -310,7 +310,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						</dom-access>
 
 						<dom-access name="app-clientes" path="app-clientes">
-							<my-app-clientes name="app-clientes"></my-app-clientes>
+							<my-app-clientes name="app-clientes" lista-usuarios="[[listaUsuarios]]"></my-app-clientes>
 						</dom-access>
 					
 						<my-view404 name="view404"></my-view404>

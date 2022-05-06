@@ -33,6 +33,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
 
     static get properties() {
         return {
+            listaUsuarios:{type:Array, notify:true, value:[]},
             listaProspectos:{type:Array, notify:true, value:[]},
             busqueda:{type:String, notify:true},
             filtroEstatus:{type:String, notify:true, value:"todos"},
@@ -182,11 +183,12 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
     }
 
     abreNuevoCliente(){
+        var arrUsers=PolymerUtils.cloneObject(this.listaUsuarios);
         PolymerUtils.Dialog.createAndShow({
 			type: "modal",
             title:"Agregar prospecto",
 			element:"dialogo-nuevo-prospecto",
-			
+            params:[arrUsers],
 			style:"width:500px;max-width:95%;",
 			positiveButton: {
                 text: "Guardar prospecto",

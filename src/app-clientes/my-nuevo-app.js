@@ -70,7 +70,7 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                     </div>
                 </div>
                 <div name="nuevo">
-                    <dialogo-nuevo-prospecto id="creador-cliente" es-forzar-cliente="{{esCliente}}" on-prospecto-guardado="ejecutaNuevoApp" ></dialogo-nuevo-prospecto>
+                    <dialogo-nuevo-prospecto lista-usuarios="{{usuariosApp}}" id="creador-cliente" es-forzar-cliente="{{esCliente}}" on-prospecto-guardado="ejecutaNuevoApp" ></dialogo-nuevo-prospecto>
                 </div>
             </iron-pages>
             
@@ -95,6 +95,7 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 
     static get properties() {
         return {
+            usuariosApp:{type:Array, notify:true, value:[]},
             esCliente:{type:Boolean, notify:true, value:true},
             selected:{type:String, notify:true, value:"elige", observer:"_actualiza"},
             listaClientes:{type:Array, notify:true, value:[]},
@@ -111,8 +112,12 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         }
     }
 
-    constructor() {
+    constructor(users) {
         super();
+
+        if(users){
+            this.set("usuariosApp",users);
+        }
 
         var fecha=firebase.firestore.Timestamp.now().toDate();
 
