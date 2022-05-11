@@ -120,8 +120,22 @@ class DialogoNuevoProducto extends UtilsMixin(DialogLayoutMixin(PolymerElement))
         }
     }
 
+    /**
+      * Array of strings describing multi-property observer methods and their
+      * dependant properties
+      */
+    static get observers() {
+        return [
+            '_cambiaBols(esFundamento,esAlcance,esEntregable,esObserva)'
+        ];
+    }
+
     constructor() {
         super();
+    }
+
+    _cambiaBols(fu,al,en,ob){
+        this.DialogLayout_notifyResize();
     }
 
     _llenaCampos(objeto){

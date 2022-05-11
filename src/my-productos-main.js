@@ -2,7 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import './productos/dialogo-nuevo-producto.js';
 import './general-controls/my-lista-general.js';
-// import './productos/dialogo-prod-info.js';
+import './productos/dialogo-nuevo-producto.js';
 
 class MyProductosMain extends PolymerElement {
     static get template() {
@@ -149,7 +149,27 @@ class MyProductosMain extends PolymerElement {
     }
 
     abreNuevoProd(){
-        NavigationUtils.navigate("producto");
+
+        // NavigationUtils.navigate("producto");
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			element:"dialogo-nuevo-producto",
+			title:"Agregar cliente",
+			style:"width:500px;max-width:95%;",
+			positiveButton: {
+                text: "guardar",
+                style:"background-color:var(--paper-blue-500);color:white",
+                action: function(dialog, element) {
+                    element.guardaProducto();
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
 
     abreInfo(e){
@@ -175,7 +195,7 @@ class MyProductosMain extends PolymerElement {
                 style:"background-color:var(--paper-red-500);color:white;",
                 action: function(dialog, element) {
                     dialog.setSaving(true);
-                    firebase.firestore().collection("productos-khalia").doc(id).delete().then(() => {
+                    firebase.firestore().collection("_productos-khalia").doc(id).delete().then(() => {
                         PolymerUtils.Toast.show("Producto eliminado con éxito");
                         
                         dialog.close();
