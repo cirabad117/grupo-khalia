@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { UtilsMixin } from '../mixins/utils-mixin.js';
 
 import '@polymer/paper-fab/paper-fab.js';
 import '@vaadin/vaadin-select/vaadin-select.js';
@@ -14,7 +15,6 @@ import './my-botones-lista.js';
 
 
 import '../bootstrap.js';
-import { UtilsMixin } from '../mixins/utils-mixin.js';
 
 class MyListaGeneral extends UtilsMixin(PolymerElement) {
     static get template() {
@@ -161,13 +161,25 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
     
 
     muestraInfo(obj,dato,valorInterno){
-      
-
+        if(obj!=null && dato!=null){
+            console.log("muestraINfo",obj,dato,valorInterno);
         if(valorInterno){
-            var extra=valorInterno;
-            var interno=obj[dato];
-            //console.log("interno",interno);
-            return interno[extra];
+            
+            var datoInterno=obj[dato];
+            console.log("interno",datoInterno);
+            if(datoInterno && datoInterno!=null){
+                var encontrado=datoInterno[valorInterno];
+                console.log("encontrado",encontrado);
+                if(!encontrado || encontrado==null){
+                    return "-";
+                }else{
+                    return encontrado;
+                }
+            }else{
+                return "-"
+            }
+            
+            
         }else if(dato=="_timestamp"){
             return this.PolymerUtils_getDateString(obj._timestamp);
         }else if(dato=="objCliente"){
@@ -192,6 +204,9 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             }
             
         }
+
+        }
+        
         
         
         

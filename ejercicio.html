@@ -1,0 +1,156 @@
+<html>
+    <head>
+        <title>Ciro Cruz ejercicio tecnico </title>
+        <style>
+            .container-nums{
+                display:flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+
+            }
+            .caja-num{
+                margin:2px;
+                display:flex;
+                flex-direction: column;
+            }
+
+        </style>
+
+        <script>
+            var array=[];
+
+            function getNumbers() {
+                var content=document.querySelectorAll("input");
+                console.log("content",content);
+                for(var i=0;i<content.length;i++){
+                    var box=content[i];
+                    
+                    array.push(box.value);
+                }
+                console.log("array",array);
+
+                var water=0;
+                for(var l=0;l<array.length;l++){
+                    var previous=array[l-1];
+                    var actual=array[l];
+                    var next=array[l+1];
+                    
+                    var trapped=getTrapped(previous,actual,next);
+                  
+                    water=water+trapped;
+
+                }
+
+                console.log("trapped water",water);
+                var showResult=document.querySelector(".result");
+                showResult.appendChild
+                showResult.innerHTML+='<p>'+water+'</p>';
+                
+            }
+
+            function getTrapped(p,a,n){
+                console.log("getTrapped",p,a,n);
+               
+                var result=0;
+                if(p>a && n>a){
+                    console.log("se cumple");
+                    var resta1=0;
+                    if(n>p){
+                        resta1=n-p;
+                    }else{
+                        resta1=p-n;
+                    }
+                    
+                    var resta2=0;
+                    if(p>a){
+                        resta2=p-a;
+                    }else{
+                        resta2=a-p;
+                    }
+
+                    var resta3=0
+                    if(n>a){
+                        resta3=n-a;
+                    }else{
+                        resta3=a-n;
+                    }
+
+                
+
+                    var sumas=resta2+resta3;
+                  
+                    var diff=sumas-resta1;
+                
+                    result=result+diff;
+
+
+                }
+
+               return result;
+
+            }
+
+        </script>
+    </head>
+    <body>
+        <p>
+            Given n non-negative integers representing an elevation map
+            where the width of each bar is 1, compute how much water it can trap after raining.
+        </p>
+        <div class="container-nums">
+            <div class="caja-num">
+                <label for="n1">1</label>
+                <input type="number" id="n1" >
+            </div>
+            <div class="caja-num">
+                <label for="n2">2</label>
+                <input type="number" id="n2" >
+                
+            </div>
+            <div class="caja-num">
+                <label for="n3">3</label>
+                <input type="number" id="n3">
+            </div>
+            <div class="caja-num">
+                <label for="n4">4</label>
+            <input type="number" id="n4" >
+            </div>
+            <div class="caja-num">
+                <label for="n5">5</label>
+                <input type="number" id="n5" >
+            </div>
+            <div class="caja-num">
+                <label for="n6">6</label>
+            <input type="number" id="n6" >
+            </div>
+            <div class="caja-num">
+                <label for="n7">7</label>
+            <input type="number" id="n7" >
+            </div>
+            <div class="caja-num">
+                <label for="n8">8</label>
+            <input type="number" id="n8" >
+            </div>
+            <div class="caja-num">
+                <label for="n9">9</label>
+                <input type="number" id="n9" >
+            </div>
+            <div class="caja-num">
+                <label for="n10">10</label>
+            <input type="number" id="n10" >
+            </div>
+            <div class="caja-num">
+                <label for="n11">11</label>
+            <input type="number" id="n11" >
+            </div>
+            <div class="caja-num">
+                <label for="n12">12</label>
+                <input type="number" id="n12" >
+            </div>
+        </div>
+
+        <button onclick="getNumbers()">Calculate</button>
+        <div>trapped water:<span class="result"></span></div>
+
+    </body>
+</html>

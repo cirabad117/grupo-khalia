@@ -13,8 +13,6 @@ import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils
 import { NavigationMixin } from "./mixins/navigation-mixin.js";
 import { AuthMixin } from "./mixins/auth-mixin.js";
 
-
-
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -312,6 +310,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<dom-access name="app-clientes" path="app-clientes">
 							<my-app-clientes name="app-clientes" lista-usuarios="[[listaUsuarios]]"></my-app-clientes>
 						</dom-access>
+
+						<my-sistemas-main name="sistemas"></my-sistemas-main>
+						<my-sistemas-proyecto name="proyecto"></my-sistemas-proyecto>
 					
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
@@ -334,10 +335,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				observer: '_pageChanged'
 			},
 			paginas:{type:Array, notify:true, value:[
-				'inicio',
-				'prospecto','prospectos','clientes','cliente',
+				'inicio','prospecto','prospectos','clientes','cliente',
 				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
-				'app-clientes','cotizacion']
+				'app-clientes','cotizacion','sistemas','proyecto']
 			},
 			nombrePagina:{type:String, notify:true, value:"Grupo Khalia"},
 			muestraBack:{type:Boolean, notify:true, value:false},
@@ -357,6 +357,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				{"nombre":"Emisiones","link":""},
 				{"nombre":"Seguridad","link":""},
 				{"nombre":"Administración","link":""},
+				{"nombre":"Sistemas","link":"sistemas","icono":"polymer","permiso":"areas/sistemas"}
 			]},
 
 			listaUsuarios:{type:Array, notify:true, value:[]},
@@ -531,6 +532,14 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			case 'app-clientes':
 				import ('./my-app-clientes.js');
 				this.set("nombrePagina","App Clientes");
+			break;
+			case 'sistemas':
+				import('./sistemas/my-sistemas-main.js');
+				this.set("nombrePagina","Departamento Sistemas");
+			break;
+			case 'proyecto':
+				import('./sistemas/my-sistemas-proyecto.js');
+				this.set("nombrePagina","Departamento Sistemas");
 			break;
 			case 'view404':
 				import('./my-view404.js');

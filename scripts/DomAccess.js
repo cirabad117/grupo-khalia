@@ -42,6 +42,9 @@ var StaticDomAccess={
                 },
                 "seguridad":{
                     "name":"Seguridad"
+                },
+                "sistemas":{
+                    "name":"Sistemas"
                 }
             }
         },
