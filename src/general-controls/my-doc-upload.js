@@ -116,7 +116,7 @@ class MyDocUpload extends UtilsMixin(PolymerElement) {
         var t=this;
         var carpeta=this.carpetaGuardar;
         var options={
-            "path": "_clientes/" + HELPER_OMNIPOTENT_KEY+"/"+carpeta,
+            "path":carpeta,
             "name": guardar.nombre,
             "success": function(downloadUrl) {
                 t.disparaArchivoGuardado(downloadUrl,guardar.nombre);

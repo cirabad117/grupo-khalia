@@ -4,6 +4,7 @@ import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-item/paper-item-body.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '@vaadin/vaadin-select/vaadin-select.js';
 
 import '../general-controls/my-text-editor.js';
 import '../general-controls/my-doc-upload.js';
@@ -25,8 +26,38 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                     align-items:center;
                 }
             </style>
+
+            <div class="d-flex align-items-center">
+                
+                <h4>
+                    [[tarea.nombreTarea]]
+                    <template is="dom-if" if="{{!esNuevoEstatus}}">
+                        <span class="badge badge-primary" on-click="toggleEstatus">
+                            [[muestraEstatus(tarea.estatus)]]
+                        </span>
+                    </template>
+                </h4>
+                
+                <template is="dom-if" if="{{esNuevoEstatus}}">
+                    <div class="ml-4">
+                        <vaadin-select id="comboPeriodoNom" label="Estado de la tarea"
+                        value="{{nuevoEstatus}}" error-message="seleccione una opción">
+                            <template>
+                                <vaadin-list-box>
+                                    <vaadin-item value="backlog">Pendiente</vaadin-item>
+                                    <vaadin-item value="progress">En progreso</vaadin-item>
+                                    <vaadin-item value="validate">Validación</vaadin-item>
+                                    <vaadin-item value="complete">Completada</vaadin-item>
+                                </vaadin-list-box>
+                            </template>
+                        </vaadin-select>
+                        
+                        <paper-button raised on-click="modificaTarea">Aplicar estatus</paper-button>
+                        <paper-button raised on-click="toggleEstatus">Cancelar</paper-button>
+                    </div>
+                </template>
             
-            <h4>[[tarea.nombreTarea]] <span class="badge badge-secondary">[[muestraEstatus(tarea.estatus)]]</span></h4>
+            </div>
             
             <div class="row">
                 <div class="col-md-8" style="background-color:var(--paper-grey-100);">
@@ -129,6 +160,7 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
             esEditaDesc:{type:Boolean, notify:true, value:false},
             esNuevaNota:{type:Boolean, notify:true, value:false},
             esSubirArchivo:{type:Boolean, notify:true, value:false},
+            esNuevoEstatus:{type:Boolean, notify:true, value:false},
             notas:{type:Array, notify:true, value:[]}
         }
     }
@@ -163,20 +195,13 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
 
     carga(){
 
-        if(this.objActivo && this.objActivo!=null && this.objActivo.nombreArchivo.trim()!=""){
+        if(this.tarea.nombreArchivo && this.tarea.nombreArchivo.trim()!=""){
             var storage = firebase.storage();
             var storageRef = storage.ref();
 
-            var cli=this._cliente._key;
+            
             var doc=this.objActivo.nombreArchivo;
-
-            if(this.tipoFormato && this.tipoFormato!=null && this.tipoFormato.trim()!=""){
-                var ubica="/procedimientos/"+this.tipoFormato;
-            }else{
-                var ubica="/procedimientos"
-            }
-
-            var ubicacion="_clientes/"+cli+ubica+"/"+doc;
+            var ubicacion="_gkhalia/sistemas/"+doc;
 
             var desertRef = storageRef.child(ubicacion);
             desertRef.delete().then(function() {
@@ -287,13 +312,32 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
             nombreArchivo:texto
         };
 
-        
+        var t=this;
         var fun=function() {
             dia.close();
             t.toggleUpload();
         }
 
         this.updateTarea(doc,fun);
+
+
+    }
+
+    modificaTarea(){
+        if(!this.nuevoEstatus || this.nuevoEstatus==null || this.nuevoEstatus.trim()==""){
+            return PolymerUtils.Toast.show("selecciona una opción válida");
+        }
+
+        var obj={
+            estatus:this.nuevoEstatus
+        };
+
+        var t=this;
+        var fun=function() {
+            t.toggleEstatus();
+        }
+
+        this.updateTarea(obj,fun);
 
 
     }
@@ -340,6 +384,10 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
     }
     toggleUpload(){
         this.set("esSubirArchivo",!this.esSubirArchivo);        
+    }
+
+    toggleEstatus(){
+        this.set("esNuevoEstatus",!this.esNuevoEstatus);        
     }
 
     _cambiaCampos(obj){
