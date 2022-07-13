@@ -59,24 +59,16 @@ class MySistemasMain extends PolymerElement {
                         <iron-collapse id="collapse" opened="{{abierto}}">
                             <div class="d-flex align-items-center">
                                 <div class="d-flex">
-                                <paper-input class="m-2" style="width:300px;"label="nombre del proyecto" value="{{nombre}}"></paper-input>
-                                <vaadin-select id="selectCotiza" class="m-3" label="filtrar registros" value="{{filtroEstatus}}" error-message="selecciona una opcion">
-                    <template>
-                        <vaadin-list-box>
-                            <vaadin-item value="todos">todos los registros</vaadin-item>
-                            
-                                <vaadin-item value="Web">web</vaadin-item>
-                                <vaadin-item value="Movil">movil</vaadin-item>
-                                <vaadin-item value="PC">PC</vaadin-item>
-                           
-                        </vaadin-list-box>
-                    </template>
-                </vaadin-select>
-                                <!-- <vaadin-select class="m-2" id="selectCotiza"  label="plataforma inicial" 
-                                value="{{plataforma}}" error-message="selecciona una opcion" items="{{items}}">
-                                  
-                      
-                                </vaadin-select> -->
+                                    <paper-input class="m-2" style="width:300px;"label="nombre del proyecto" value="{{nombre}}"></paper-input>
+                                    <vaadin-select id="selectCotiza" class="m-3" label="plataforma" value="{{plataforma}}" error-message="selecciona una opcion">
+                                        <template>
+                                            <vaadin-list-box>
+                                                <vaadin-item value="Web">Web</vaadin-item>
+                                                <vaadin-item value="Movil">Móvil</vaadin-item>
+                                                <vaadin-item value="PC">PC</vaadin-item>
+                                            </vaadin-list-box>
+                                        </template>
+                                    </vaadin-select>
                                 </div>
                                 
                                 <paper-button class="m-2" raised on-click="guardaProyecto">guardar</paper-button>

@@ -126,7 +126,7 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                 text: "guardar tarea",
                 style:"background-color:var(--paper-blue-500);color:white",
                 action: function(dialog, element) {
-                    element.guardaCliente();
+                    element.guardaTarea();
                 }
             },
             negativeButton: {
@@ -150,7 +150,7 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                 text: "guardar modulo",
                 style:"background-color:var(--paper-blue-500);color:white",
                 action: function(dialog, element) {
-                    element.guardaCliente();
+                    element.guardaModulo();
                 }
             },
             negativeButton: {
