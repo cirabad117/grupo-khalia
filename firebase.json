@@ -3,12 +3,12 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "build/es6-bundled",
-    "site": "khalia-beta",
+    "public": "build/es6-bundled/",
+    "site": "admin-gkhalia",
     "ignore": [
       "firebase.json",
-      "**/.*"
-      
+      "**/.*",
+      "**/node_modules/**"
     ],
     "rewrites": [
       {
