@@ -1,6 +1,6 @@
 var dataFirebase=null;
 var configServidor={
-    entorno:"beta",
+    entorno:"produccion",
 };
 
 
