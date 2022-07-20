@@ -37,7 +37,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 }
             </style>
             
-            <template is="dom-if" if="[[esOtros(tituloPagina)]]">
+            <!-- <template is="dom-if" if="[[esOtros(tituloPagina)]]">
                 <nav class="navbar navbar-light" style$="[[estiloNavega]]">
                     <a class="navbar-brand">
                         
@@ -46,7 +46,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                         [[tituloPagina]]
                     </a>
                 </nav>
-            </template>
+            </template> -->
             
             <div class="card d-flex flex-row bd-highlight mb-3 align-items-center">
                 <vaadin-select id="selectCotiza" class="m-3" label="filtrar registros" value="{{filtroEstatus}}" error-message="selecciona una opcion">
@@ -72,6 +72,17 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     <paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'limpiar')" slot="suffix" on-click="limpia" icon="clear"S>
                     </paper-icon-button>
                 </paper-input>
+
+                <template is="dom-if" if="{{!esPrincipal}}">
+                    <paper-button style="color:white;background-color:var(--paper-green-500);"
+                    on-click="disparaAccionPrincipal">
+                        <span>
+                            <iron-icon icon="add"></iron-icon>
+                        </span>
+                        agregar registro
+                    </paper-button>
+                    
+                </template>
             </div>
             
             <div class="card table-responsive">
@@ -86,7 +97,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     <tbody>
                         <template is="dom-repeat" items="{{arregloItems}}" sort="{{_funcionGeneralOrdena(modoOrdena)}}"
                         filter="{{_funcionGeneralBusqueda(busqueda,filtroEstatus)}}" as="info">
-                            <tr>
+                            <tr style$="{{aplicaEstilo(info)}}">
                                 <template is="dom-repeat" items="[[listaCols]]" as="tit">
                                     <td>
                                         <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
@@ -99,7 +110,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                                             <div class="d-flex">
                                             <template is="dom-repeat" items="[[tit.listaAcciones]]" as="ac">
 
-                                                <my-botones-lista icono="[[ac.icono]]" accion="[[ac.accion]]"
+                                                <my-botones-lista obj="[[info]]" icono="[[ac.icono]]" accion="[[ac.accion]]"
                                                 obj="[[info]]" texto="[[ac.texto]]" on-lanza-accion="activaAccionBoton">
                                                 </my-botones-lista>
 
@@ -113,17 +124,21 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     </tbody>
                 </table>
             </div>
-            <div style="position: fixed; bottom: 24px; right: 24px;">
-				<div style="position: relative; cursor:pointer;" on-clicK="disparaAccionPrincipal">
-					<paper-fab icon="add" style$="color:white;background-color:[[colorBoton]];"></paper-fab>
-				</div>
-			</div>
+            
+            <template is="dom-if" if="{{esPrincipal}}">
+                <div style="position: fixed; bottom: 24px; right: 24px;">
+                    <div style="position: relative; cursor:pointer;" on-clicK="disparaAccionPrincipal">
+                        <paper-fab icon="add" style$="color:white;background-color:[[colorBoton]];"></paper-fab>
+                    </div>
+                </div>
+            </template>
 
         `;
     }
 
     static get properties() {
         return {
+            esPrincipal:{type:Boolean, notify:true,value:true},
             tituloPagina:{type:String, notify:true,},
             vista:{type:String, notify:true},
             icono:{type:String, notify:true},
@@ -150,6 +165,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         }
     }
 
+    limpia(){
+        this.set("busqueda","");
+    }
+
  
     esSeguimiento(str){
         return str=="listaSeguimiento";
@@ -162,7 +181,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
     muestraInfo(obj,dato,valorInterno){
         if(obj!=null && dato!=null){
-            console.log("muestraINfo",obj,dato,valorInterno);
         if(valorInterno){
             
             var datoInterno=obj[dato];
@@ -231,6 +249,12 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         // this.set("filtroEstatus","todos");
     }
 
+    aplicaEstilo(obj){
+        if(obj.estatus && obj.estatus=="declinada"){
+            return "text-decoration:line-through;"
+        }
+    }
+
     showEstatus(obj){
         if(obj._cancelada && obj._cancelada==true){
             return "cancelada";
@@ -249,10 +273,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
 
         }
-    }
-
-    ejecutaAccion(texto,info){
-        console.log("ejecuta accion",texto,info);
     }
 
     muestraSeparador(item){
@@ -278,39 +298,13 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
     activaAccionBoton(e){
         var info=e.detail;
-        var ac=info.texto;
 
-        switch (ac) {
-            case "disparaAccionItem":
-                this.disparaAccionItem(info.dato);
-                
-            break;
-            case "disparaAccionEliminar":
-                this.disparaAccionEliminar(info.dato);
-                
-            break;
-        
-            default:
-            break;
-        }
-    }
-
-    disparaAccionItem(e){
-        var elegido=e;
         this.dispatchEvent(new CustomEvent('ejecuta-item', {
             detail: {
-                valor:elegido
+                objeto:info
             }
         }));
-    }
 
-    disparaAccionEliminar(e){
-        var elegido=e;
-        this.dispatchEvent(new CustomEvent('elimina-item', {
-            detail: {
-                valor:elegido
-            }
-        }));
     }
 
     disparaAccionPrincipal(){

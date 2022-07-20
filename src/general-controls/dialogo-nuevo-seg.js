@@ -18,11 +18,15 @@ class DialogoNuevoSeg extends DialogLayoutMixin(DiccionarioMixin(PolymerElement)
                 </template>
             </vaadin-combo-box>
 
-            <vaadin-combo-box id="txtActividad"  items="[[listaActividades]]" label="actividad a realizar"
+            <!-- <vaadin-combo-box id="txtActividad"  items="[[listaActividades]]" label="actividad a realizar"
             selected-item="{{actividad}}" error-message="selecciona una opcion">
-            </vaadin-combo-box>
-            
+            </vaadin-combo-box> -->
+
+            <template is="dom-if" if="{{esComentario(estatusElegido)}}">
             <paper-textarea style="max-width:400px;"id="txtComentario" label="comentario" value="{{comentario}}"></paper-textarea>
+
+            </template>
+            
         `;
     }
 
@@ -48,6 +52,18 @@ class DialogoNuevoSeg extends DialogLayoutMixin(DiccionarioMixin(PolymerElement)
         super.ready();
     }
 
+    esComentario(obj){
+        if(obj && obj.esComentario && obj.esComentario){
+            this.DialogLayout_notifyResize();
+            return true;
+
+        }else{
+            this.DialogLayout_notifyResize();
+            return false;
+
+        }
+    }
+
     agregaEstatus(){
         var arreglo=this.arregloSeguimiento;
         if(!arreglo){
@@ -66,19 +82,23 @@ class DialogoNuevoSeg extends DialogLayoutMixin(DiccionarioMixin(PolymerElement)
             nuevo["estatus"]=this.estatusElegido;
         }
         
-        if(!this.actividad || this.actividad==null || this.actividad.trim()==""){
-            return this.shadowRoot.querySelector("#txtActividad").invalid=true;
-        }else{
-            this.shadowRoot.querySelector("#txtActividad").invalid=false;
-            nuevo["actividad"]=this.actividad;
+        // if(!this.actividad || this.actividad==null || this.actividad.trim()==""){
+        //     return this.shadowRoot.querySelector("#txtActividad").invalid=true;
+        // }else{
+        //     this.shadowRoot.querySelector("#txtActividad").invalid=false;
+        //     nuevo["actividad"]=this.actividad;
+        // }
+
+        if(this.estatusElegido.esComentario && this.estatusElegido.esComentario==true){
+            if(!this.comentario || this.comentario==null || this.comentario.trim()==""){
+                return this.shadowRoot.querySelector("#txtComentario").invalid=true;
+            }else{
+                this.shadowRoot.querySelector("#txtComentario").invalid=false;
+                nuevo["comentario"]=this.comentario;
+            }
         }
 
-        if(!this.comentario || this.comentario==null || this.comentario.trim()==""){
-            return this.shadowRoot.querySelector("#txtComentario").invalid=true;
-        }else{
-            this.shadowRoot.querySelector("#txtComentario").invalid=false;
-            nuevo["comentario"]=this.comentario;
-        }
+        
         
         console.log("nuevo seguimiento",nuevo);
 

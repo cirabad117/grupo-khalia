@@ -11,16 +11,21 @@ let internalMixinDiccionario = function(superClass) {
         static get properties() {
             return {
                 listaEstatus:{type:Array, notify:true, value:[
-                    {color:"#FFEB3B",base:"black",texto:"SIN RESPUESTA"},
-                    {color:"#BA68C8",base:"black",texto:"PENDIENTE POR CONTACTAR"},
-                    {color:"#1A237E",base:"white",texto:"ENVIADO"},
-                    {color:"#F44336",base:"black",texto:"NO INTERESADO"},
-                    {color:"#000000",base:"white",texto:"NO CONTACTAR"},
-                    {color:"#18FFFF",base:"black",texto:"ENVIAR CORREO"},
-                    {color:"#0277BD",base:"white",texto:"PENDIENTE POR COTIZAR"},
-                    {color:"#FFA726",base:"white",texto:"ESPERANDO LLAMADA"},
-                    {color:"#FF4081",base:"black",texto:"EN PROCESO DE VENTA"},
-                    {color:"#4CAF50",base:"black",texto:"VENTA REALIZADA"},
+                    {color:"#FF9800",base:"black",texto:"SIN RESPUESTA"},
+                    {color:"#B3E5FC",base:"black",texto:"DATOS INCORRECTOS"},
+                    {color:"#D32F2F",base:"white",texto:"VOLVER A CONTACTAR", esComentario:true},
+                    {color:"#BDBDBD",base:"black",texto:"NO INTERESADO", esComentario:true},
+                    {color:"#000000",base:"white",texto:"NO CONTACTAR",esComentario:true},
+                    {color:"#2E7D32",base:"white",texto:"COTIZACIÓN"},
+
+                    // {color:"#1A237E",base:"white",texto:"ENVIADO"},
+                    // {color:"#F44336",base:"black",texto:"NO INTERESADO"},
+                    // {color:"#000000",base:"white",texto:"NO CONTACTAR"},
+                    // {color:"#18FFFF",base:"black",texto:"ENVIAR CORREO"},
+                    // {color:"#0277BD",base:"white",texto:"PENDIENTE POR COTIZAR"},
+                    // {color:"#FFA726",base:"white",texto:"ESPERANDO LLAMADA"},
+                    // {color:"#FF4081",base:"black",texto:"EN PROCESO DE VENTA"},
+                    // {color:"#4CAF50",base:"black",texto:"VENTA REALIZADA"},
                 ]},
 
                 listaActividades:{type:Array, notify:true, value:[

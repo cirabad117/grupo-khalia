@@ -18,6 +18,7 @@ import '../general-controls/my-datos-contacto.js';
 import '../general-controls/data-simple.js';
 import '../controles-extra/selector-usuarios.js';
 import '../prospectos/my-seguimiento-item.js';
+import '../my-cotizaciones-main.js';
 
 import '../bootstrap.js';
 
@@ -150,32 +151,59 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                     </template>
                 </div>
             </div>
-            
+
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <div class="card mt-2">
+                        <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleConta">
+                            Información de contacto
+                            <span><iron-icon icon="[[muestraIcono(bolConta)]]"></iron-icon></span>
+                        </h5>
+                        <div class="card-body">
+                            <iron-collapse opened="{{bolConta}}">
+                                <my-datos-contacto style="padding:10px;" id-prospecto="[[prospecto.id]]"
+                                arreglo-contactos="[[listaContactos]]"></my-datos-contacto>
+                            </iron-collapse>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 col-sm-12">
+                    <div class="card mt-2">
+                        <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleExtra">
+                            Seguimiento
+                            <span class="btn-label"><iron-icon icon="[[muestraIcono(bolExtra)]]"></iron-icon></span>
+                        </h5>
+                        <div class="card-body">
+                            <iron-collapse  opened="{{bolExtra}}">
+                                <my-datos-seguimiento style="padding:10px;" id-prospecto="[[prospecto.id]]"
+                                arreglo-seguimiento="[[prospecto.listaSeguimiento]]"></my-datos-seguimiento>
+                            </iron-collapse>
+                        </div>
+                    </div>
+                </div>
+               
+
+            </div>
+
             <div class="card mt-2">
-                <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleConta">
-                    Información de contacto
-                    <span><iron-icon icon="[[muestraIcono(bolConta)]]"></iron-icon></span>
+                <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleCoti">
+                    Cotizaciones
+                    <span class="btn-label"><iron-icon icon="[[muestraIcono(bolCoti)]]"></iron-icon></span>
                 </h5>
                 <div class="card-body">
-                    <iron-collapse opened="{{bolConta}}">
-                        <my-datos-contacto style="padding:10px;" id-prospecto="[[prospecto.id]]"
-                        arreglo-contactos="[[listaContactos]]"></my-datos-contacto>
+                    <iron-collapse  opened="{{bolCoti}}">
+                        <my-cotizaciones-main es-vista-principal="{{noMain}}" lista-cotizaciones="[[cotiFiltradas]]"
+                        cliente-activo="{{prospecto.id}}"></my-cotizaciones-main>
                     </iron-collapse>
                 </div>
             </div>
+
+
             
-            <div class="card mt-2">
-                <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleExtra">
-                    Seguimiento
-                    <span class="btn-label"><iron-icon icon="[[muestraIcono(bolExtra)]]"></iron-icon></span>
-                </h5>
-                <div class="card-body">
-                    <iron-collapse  opened="{{bolExtra}}">
-                        <my-datos-seguimiento style="padding:10px;" id-prospecto="[[prospecto.id]]"
-                        arreglo-seguimiento="[[prospecto.listaSeguimiento]]"></my-datos-seguimiento>
-                    </iron-collapse>
-                </div>
-            </div>
+            
+            
+            
             
         `;
     }
@@ -194,7 +222,11 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
 
             bolInfo:{type:Boolean, notify:true, value:false},
             bolConta:{type:Boolean, notify:true, value:false},
-            bolExtra:{type:Boolean, notify:true, value:false}
+            bolExtra:{type:Boolean, notify:true, value:false},
+            bolCoti:{type:Boolean, notify:true, value:false},
+            noMain:{type:Boolean, notify:true, value:false},
+            cotizaciones:{type:Array, notify:true, value:[]},
+            cotiFiltradas:{type:Array, notify:true, value:[]}
 
         }
     }
@@ -205,6 +237,33 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
 
     ready() {
         super.ready();
+    }
+
+    static get observers() {
+        return [
+            '_filtraCotizaciones(prospecto,cotizaciones,cotizaciones.*)'
+        ];
+    }
+
+    _filtraCotizaciones(pro,arr){
+
+        if(pro && pro!=null && arr && arr.length>0){
+            // var arreglo=PolymerUtils.cloneObject(arr);
+
+            var filtrado=[];
+    
+            for(var i=0; i<arr.length;i++){
+                console.log("revisamos coti",pro);
+                if(pro.id==arr[i].cliente.id){
+                    filtrado.push(arr[i]);
+                }
+            }
+
+            this.set("cotiFiltradas",filtrado);
+
+
+        }
+        
     }
 
     toggleEditar(){
@@ -410,6 +469,9 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
     }
     toggleExtra(){
         this.set("bolExtra",!this.bolExtra);
+    }
+    toggleCoti(){
+        this.set("bolCoti",!this.bolCoti);
     }
     
     spliceContactos(e){

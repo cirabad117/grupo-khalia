@@ -1,31 +1,37 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { DiccionarioMixin } from './mixins/diccionario-mixin.js';
 
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-fab/paper-fab.js';
 
-
 import './clientes/my-nuevo-cliente.js';
 import './general-controls/my-lista-general.js';
-import { DiccionarioMixin } from './mixins/diccionario-mixin.js';
 
-
+import './bootstrap.js';
 class MyClientesMain extends DiccionarioMixin(PolymerElement) {
     static get template() {
         return html`
-            <style >
+            <style include="bootstrap">
                 :host{
                     display:block;
                 }
             </style>
             
-            <my-lista-general titulo-pagina="Clientes" vista="clientes" arreglo-items="[[listaClientes]]"
-            estilo-navega="background-color:var(--paper-green-200);color:#000000;" icono="icons:assignment-ind"
+            <nav class="navbar navbar-light" style="background-color:var(--paper-green-200);color:#000000;">
+                <a class="navbar-brand">
+                    <iron-icon icon="icons:assignment-ind"></iron-icon>
+                    Clientes
+                </a>
+            </nav>
+            
+            <my-lista-general titulo-pagina="" vista="clientes" arreglo-items="[[listaClientes]]"
+            estilo-navega="" icono=""
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
             funcion-buscar="[[funcionCliente]]" funcion-ordenar="[[funcionOrdena]]"
 
             lista-cols="[[datosCliente]]"
 
-            on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="abreDetalleCliente" on-elimina-item="eliminaCliente"
+            on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="ejecutaAccionItem"
             color-boton="var(--paper-blue-800)">
             </my-lista-general>
 
@@ -36,11 +42,10 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
         return {
             listaClientes:{type:Array, notify:true, value:[]},
             opcionesOrdena:{type:Array, notify:true, value:[
-               
-                {"opcion":"razonAs","texto":"Razón social (ascendente)"},
-                {"opcion":"razonDe","texto":"Razón social (descendente)"},
-                {"opcion":"fechaAs","texto":"Fecha de creación (ascendente)"},
-                {"opcion":"fechaDe","texto":"Fecha de creación (descendente)"},
+                {"opcion":"razonAs","texto":"Razón social (A -Z)"},
+                {"opcion":"razonDe","texto":"Razón social (Z - A)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (más antiguo)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (más reciente)"}
                 
             ]},
 
@@ -51,8 +56,8 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
                 {"titulo":"Estatus","dato":"listaSeguimiento"},
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Abrir cliente"},
-                    {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Abrir cliente"},
+                    {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},
 
@@ -199,9 +204,19 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
 
     }
 
-    abreDetalleCliente(e){
-        var elegido=e.detail.valor;
-        NavigationUtils.navigate("cliente",{"id":elegido.id});
+    ejecutaAccionItem(e){
+        var elegido=e.detail.objeto;
+
+        if(elegido.texto=="eliminar"){
+            this.eliminaCliente(elegido.dato);
+        }else{
+            this.abreDetalleCliente(elegido.dato);
+        }
+    }
+
+    abreDetalleCliente(cliente){
+        
+        NavigationUtils.navigate("cliente",{"id":cliente.id});
     }
 
     abreNuevoCliente(){
@@ -227,14 +242,13 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
 		});
     }
 
-    eliminaCliente(e){
-        var elegido=e.detail.valor;
-        var id=elegido.id;
+    eliminaCliente(cliente){
+        var id=cliente.id;
 
         PolymerUtils.Dialog.createAndShow({
 			type: "modal",
             title:"Eliminar cliente",
-            message:"El cliente <strong>"+elegido.razon+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
+            message:"El cliente <strong>"+cliente.razon+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
 			saveSpinner:{
 				message:"Eliminando cliente"
 			  },

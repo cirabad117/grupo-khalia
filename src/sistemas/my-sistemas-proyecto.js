@@ -44,6 +44,13 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                             </div>
                         </div>
 
+                        <h5>Módulos</h5>
+                        <div class="d-flex flex-wrap">
+                            <template is="dom-repeat" items="[[modulos]]">
+                                <h4><span class="badge" style$="[[muestraEstilo(item)]]">[[item.nombre]]</span></h4>
+                            </template>
+                        </div>
+
                         
                         
                         <iron-pages selected="{{selected}}" attr-for-selected="name">
@@ -93,6 +100,10 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
     ready() {
         super.ready();
     
+    }
+
+    muestraEstilo(obj){
+        return "background-color:"+obj.fondo+";color:"+obj.txtColor+";"
     }
 
     eligeVista(){

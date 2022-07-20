@@ -13,10 +13,15 @@ class MyBotonesLista extends PolymerElement {
                 }
             </style>
             
+            
+            <template is="dom-if" if="{{esActiva(obj,accion)}}">
+            
             <paper-icon-button style="color:var(--paper-grey-700);" icon="[[icono]]"
             on-click="ejecutaAccion" ></paper-icon-button>
+           
 
             <paper-tooltip position="top" animation-delay="0">[[texto]]</paper-tooltip>
+            </template>
                                          
 
         `;
@@ -24,6 +29,7 @@ class MyBotonesLista extends PolymerElement {
 
     static get properties() {
         return {
+            obj:{type:Object, notify:true},
             icono:{type:String, notify:true},
             accion:{type:String, notify:true},
             texto:{type:String, notify:true},
@@ -38,6 +44,16 @@ class MyBotonesLista extends PolymerElement {
 
     ready() {
         super.ready();
+    }
+
+    esActiva(obj,accion){
+
+        if(obj.estatus && (accion=="aceptar" || accion=="declinar")){
+            return false;
+        }else{
+            return true
+        }
+
     }
 
     ejecutaAccion(){

@@ -16,6 +16,8 @@ import '../general-controls/my-datos-contacto.js';
 import '../general-controls/my-datos-seguimiento.js';
 import '../general-controls/data-simple.js';
 import '../controles-extra/selector-usuarios.js';
+import '../my-prospectos-main.js';
+import '../my-cotizaciones-main.js';
 
 import './my-seguimiento-item.js';
 
@@ -41,8 +43,7 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                 }
 
                 .btn-accion{
-                    width:50px; height:50px;
-                    margin:5px;
+                   
                     border-radius:50%;
                     color:var(--paper-grey-600);
                     background-color:var(--paper-grey-100);
@@ -69,6 +70,13 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                         <paper-tab name="info" onmouseover="PolymerUtils.Tooltip.show(event,'Información')"><iron-icon icon="icons:assignment"></iron-icon></paper-tab>
                         <paper-tab name="contacto" onmouseover="PolymerUtils.Tooltip.show(event,'Contactos')"><iron-icon icon="icons:folder-shared"></iron-icon></paper-tab>
                         <paper-tab name="seg" onmouseover="PolymerUtils.Tooltip.show(event,'Seguimiento')"><iron-icon icon="icons:timeline"></iron-icon></paper-tab>
+                        
+                        <paper-tab name="coti" onmouseover="PolymerUtils.Tooltip.show(event,'Cotizaciones')">
+                            <iron-icon icon="icons:description"></iron-icon>
+                        </paper-tab>
+
+                        </template>
+
                     </paper-tabs>
                     
                 </div>
@@ -82,12 +90,34 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                                 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="d-flex">
-                                            <iron-icon style="margin:5px;" icon="icons:assignment"></iron-icon>
-                                            <h5  style="margin:5px;">Información del prospecto</h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex">
+                                                <iron-icon style="margin:5px;" icon="icons:assignment"></iron-icon>
+                                                <h5  style="margin:5px;">Información del prospecto</h5>
+                                            </div>
+
+                                            <div class="ml-auto">
+                                            <paper-icon-button class="btn-accion"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Editar')"
+                                        icon="icons:create" on-click="cambiaEdita">
+                                        </paper-icon-button>
+                                        
+                                        <!-- <paper-icon-button class="btn-accion"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Eliminar')"
+                                        icon="icons:delete" on-click="eliminaProspecto">
+                                        </paper-icon-button> -->
+                                        
+                                        <!-- <template is="dom-if" if="{{!esCotizacion}}">
+                                        <paper-icon-button class="btn-accion"
+                                        onmouseover="PolymerUtils.Tooltip.show(event,'Habilitar cotización')"
+                                        icon="icons:note-add" on-click="cambiaCliente"></paper-icon-button>
+                                        </template> -->
+                                        
+                                            </div>
+                                            
                                         </div>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-12">
                                         <div class="d-flex justify-content-between flex-wrap">
                                             <data-simple dato="{{razon}}" titulo="Nombre o razón social" font-size="20px"></data-simple>
                                             <data-simple dato="{{alias}}" titulo="alias" font-size="20px"></data-simple>
@@ -97,22 +127,7 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-3 d-flex flex-wrap">
-                                        
-                                        <paper-icon-button class="btn-accion"
-                                        onmouseover="PolymerUtils.Tooltip.show(event,'Editar')"
-                                        icon="icons:create" on-click="cambiaEdita">
-                                        </paper-icon-button>
-                                        
-                                        <paper-icon-button class="btn-accion"
-                                        onmouseover="PolymerUtils.Tooltip.show(event,'Eliminar')"
-                                        icon="icons:delete" on-click="eliminaProspecto">
-                                        </paper-icon-button>
-                                        
-                                        <paper-icon-button class="btn-accion"
-                                        onmouseover="PolymerUtils.Tooltip.show(event,'Agregar a Clientes')"
-                                        icon="social:group-add" on-click="cambiaCliente"></paper-icon-button>
-                                    </div>
+                                    
                                 </div>
                             
                             </template>
@@ -180,6 +195,11 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                             id-prospecto="[[prospecto.id]]" arreglo-seguimiento="[[listaSeguimiento]]">
                             </my-datos-seguimiento>
                         </div><!--seg-->
+
+                        <div name="coti">
+                            <my-cotizaciones-main es-vista-principal="{{noMain}}" lista-cotizaciones="[[cotiFiltradas]]"
+                            cliente-activo="{{prospecto.id}}"></my-cotizaciones-main>
+                        </div>
                     </iron-pages>
                 
                 </div><!--card-body-->
@@ -208,11 +228,42 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
 
             _routeParams:{observer: "_routeChanged"},
 
+            cotizaciones:{type:Array, notify:true, value:[]},
+            cotiFiltradas:{type:Array, notify:true, value:[]},
+            noMain:{type:Boolean, notify:true, value:false}
+
         }
     }
     
     constructor() {
         super();
+    }
+    
+    static get observers() {
+        return [
+            '_filtraCotizaciones(prospecto,cotizaciones,cotizaciones.*)'
+        ];
+    }
+
+    _filtraCotizaciones(pro,arr){
+
+        if(pro && pro!=null && arr && arr.length>0){
+            // var arreglo=PolymerUtils.cloneObject(arr);
+
+            var filtrado=[];
+    
+            for(var i=0; i<arr.length;i++){
+                console.log("revisamos coti",pro);
+                if(pro.id==arr[i].cliente.id){
+                    filtrado.push(arr[i]);
+                }
+            }
+
+            this.set("cotiFiltradas",filtrado);
+
+
+        }
+        
     }
 
     esInfo(str){
@@ -319,6 +370,12 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
             }else{
                 this.set("listaSeguimiento",[]);
             }
+
+            // if(obj.esCotizacion && obj.esCotizacion){
+            //     this.set("esCotizacion",true);
+            // }else{
+            //     this.set("esCotizacion",false);
+            // }
          
         }
 

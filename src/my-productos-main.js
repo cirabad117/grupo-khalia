@@ -4,21 +4,31 @@ import './productos/dialogo-nuevo-producto.js';
 import './general-controls/my-lista-general.js';
 import './productos/dialogo-nuevo-producto.js';
 
+import './bootstrap.js';
+
 class MyProductosMain extends PolymerElement {
     static get template() {
         return html`
-            <style>
+            <style include="bootstrap">
                 :host{
                     display:block;
                 }
             </style>
             
-            <my-lista-general titulo-pagina="Control de productos" vista="productos" arreglo-items="[[listaProductos]]"
-            estilo-navega="background-color:var(--paper-yellow-200);color:#000000;" icono="icons:class"
+            <nav class="navbar navbar-light" style="background-color:var(--paper-yellow-200);color:#000000;">
+                <a class="navbar-brand">
+                    <iron-icon icon="icons:class"></iron-icon>
+                    Control de productos
+                </a>
+            </nav>
+
+            
+            <my-lista-general titulo-pagina="" vista="productos" arreglo-items="[[listaProductos]]"
+            estilo-navega="" icono=""
             lista-filtro="[[listaSeccion]]" lista-ordena="[[opcionesOrdena]]"
             lista-cols="[[datosProd]]"
             funcion-ordenar="[[funcionOrdenaProd]]" funcion-buscar="[[funcionFiltraProd]]"
-            on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="abreInfo" on-elimina-item="eliminaProd"></my-lista-general>
+            on-ejecuta-accion="abreNuevoProd" on-ejecuta-item="ejecutaAccionItem"></my-lista-general>
 
 
         `;
@@ -46,16 +56,16 @@ class MyProductosMain extends PolymerElement {
                 {"titulo":"Departamento","dato":"departamento"},
                 {"titulo":"Dependencia","dato":"dependencia"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Mostrar producto"},
-                    {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Mostrar producto"},
+                    {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"codAs","texto":"Código (ascendente)"},
-                {"opcion":"codDe","texto":"Código (descendente)"},
-                {"opcion":"razonAs","texto":"Nombre del producto (ascendente)"},
-                {"opcion":"razonDe","texto":"Nombre del producto (descendente)"},
+                {"opcion":"codAs","texto":"Código (A - Z)"},
+                {"opcion":"codDe","texto":"Código (Z - A)"},
+                {"opcion":"razonAs","texto":"Nombre del producto (A - Z)"},
+                {"opcion":"razonDe","texto":"Nombre del producto (Z - A)"},
                 
             ]},
             funcionFiltraProd:{
@@ -172,20 +182,30 @@ class MyProductosMain extends PolymerElement {
 		});
     }
 
-    abreInfo(e){
-        var elegido=e.detail.valor;
-        NavigationUtils.navigate("producto",{id:elegido.id});
+    ejecutaAccionItem(e){
+        var elegido=e.detail.objeto;
+
+        if(elegido.texto=="eliminar"){
+            this.eliminaProd(elegido.dato);
+        }else{
+            this.abreInfo(elegido.dato);
+        }
+    }
+
+    abreInfo(prod){
+        
+        NavigationUtils.navigate("producto",{id:prod.id});
 
     }
 
-    eliminaProd(e){
-        var elegido=e.detail.valor;
-        var id=elegido.id;
+    eliminaProd(prod){
+        
+        var id=prod.id;
 
         PolymerUtils.Dialog.createAndShow({
 			type: "modal",
             title:"Eliminar producto",
-            message:"El producto <strong>"+elegido.codigo+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
+            message:"El producto <strong>"+prod.codigo+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
 			saveSpinner:{
 				message:"Eliminando producto"
 			  },

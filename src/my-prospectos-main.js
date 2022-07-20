@@ -13,18 +13,25 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
     
     static get template() {
         return html`
-            <style>
+            <style include="bootstrap">
                 :host{
                     display:block;
                 }
             </style>
+            
+            <nav class="navbar navbar-light" style="background-color:var(--paper-blue-50);color:#000000;">
+                <a class="navbar-brand">
+                    <iron-icon icon="communication:contact-phone"></iron-icon>
+                    Prospectos
+                </a>
+            </nav>
 
-            <my-lista-general titulo-pagina="Prospectos" vista="prospectos" icono="communication:contact-phone"
-            estilo-navega="background-color:var(--paper-blue-50);color:#000000;" arreglo-items="[[listaProspectos]]"
+            <my-lista-general titulo-pagina="" vista="prospectos" icono=""
+            estilo-navega="" arreglo-items="[[listaProspectos]]"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]" lista-cols="[[datosProspecto]]"
             funcion-buscar="[[funcionProspecto]]" funcion-ordenar="[[funcionOrdena]]"
-            on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="abreProspecto"
-            on-elimina-item="eliminaProspecto"
+            on-ejecuta-accion="abreNuevoCliente" on-ejecuta-item="ejecutaAccionItem"
+            
             color-boton="var(--paper-green-600)"></my-lista-general>
 
 
@@ -44,16 +51,16 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
                 {"titulo":"Estatus de prospecto","dato":"listaSeguimiento"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Abrir prospecto"},
-                    {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Abrir prospecto"},
+                    {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"razonAs","texto":"Razón social (ascendente)"},
-                {"opcion":"razonDe","texto":"Razón social (descendente)"},
-                {"opcion":"fechaAs","texto":"Fecha de creación (ascendente)"},
-                {"opcion":"fechaDe","texto":"Fecha de creación (descendente)"}
+                {"opcion":"razonAs","texto":"Razón social (A -Z)"},
+                {"opcion":"razonDe","texto":"Razón social (Z - A)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (más antiguo)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (más reciente)"}
                 
             ]},
 
@@ -175,12 +182,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
 
     }
 
-    abreProspecto(e){
-        var elegido=e.detail.valor;
-
-        NavigationUtils.navigate("prospecto",{id:elegido.id})
-        
-    }
+    
 
     abreNuevoCliente(){
         var arrUsers=PolymerUtils.cloneObject(this.listaUsuarios);
@@ -207,14 +209,29 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
 		});
     }
 
-    eliminaProspecto(e){
-        var elegido=e.detail.valor;
-        var id=elegido.id;
+    ejecutaAccionItem(e){
+        var elegido=e.detail.objeto;
+
+        if(elegido.texto=="eliminar"){
+            this.eliminaProspecto(elegido.dato);
+        }else{
+            this.abreProspecto(elegido.dato);
+        }
+    }
+
+    abreProspecto(pros){
+        console.l
+        NavigationUtils.navigate("prospecto",{id:pros.id})
+        
+    }
+
+    eliminaProspecto(pros){
+        var id=pros.id;
 
         PolymerUtils.Dialog.createAndShow({
 			type: "modal",
             title:"Eliminar prospecto",
-            message:"El prospecto <strong>"+elegido.razon+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
+            message:"El prospecto <strong>"+pros.razon+"</strong> y toda su información relacionada no podrá recuperarse. ¿Desea continuar?",
 			saveSpinner:{
 				message:"Eliminando prospecto"
 			  },

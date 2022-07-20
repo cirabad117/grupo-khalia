@@ -281,13 +281,13 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]" lista-usuarios="[[listaUsuarios]]"></my-prospectos-main>
 						</dom-access>
 						
-						<my-datos-prospecto  name="prospecto" lista-usuarios="[[listaUsuarios]]"></my-datos-prospecto>
+						<my-datos-prospecto  name="prospecto" lista-usuarios="[[listaUsuarios]]" cotizaciones="[[mainCotizaciones]]"></my-datos-prospecto>
 						
 						<dom-access name="clientes" path="admin/clientes">
 							<my-clientes-main name="clientes" lista-clientes="[[listaClientes]]"></my-clientes-main>
 						</dom-access>
 
-						<my-cliente name="cliente" lista-usuarios="[[listaUsuarios]]"></my-cliente>
+						<my-cliente name="cliente" lista-usuarios="[[listaUsuarios]]" cotizaciones="[[mainCotizaciones]]"></my-cliente>
 
 						<dom-access name="productos" path="admin/productos">
 							<my-productos-main name="productos" lista-productos="[[arregloProductos]]"></my-productos-main>
@@ -296,12 +296,13 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<my-vista-producto  name="producto"></my-vista-producto>
 
 						<dom-access name="cotizaciones" path="admin/cotizaciones">
-							<my-cotizaciones-main name="cotizaciones"></my-cotizaciones-main>
+							<my-cotizaciones-main name="cotizaciones" lista-cotizaciones="{{mainCotizaciones}}"></my-cotizaciones-main>
 						</dom-access>
 
 						<my-vista-cotiza name="cotizacion"></my-vista-cotiza>
 
-						<my-nueva-cotizacion name="nueva-cotizacion" lista-clientes="[[arregloClientes]]" lista-productos="[[arregloProductos]]"></my-nueva-cotizacion>
+						<my-nueva-cotizacion name="nueva-cotizacion" lista-clientes="[[arregloClientes]]"
+						lista-productos="[[arregloProductos]]" lista-usuarios="[[listaUsuarios]]"></my-nueva-cotizacion>
 
 						<dom-access name="usuarios" path="usuarios">
 							<my-usuarios name="usuarios" lista-usuarios="[[listaUsuarios]]"></my-usuarios>
@@ -365,7 +366,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			arregloProductos:{type:Array, notify:true, value:[]},
 
 			listaProspectos:{type:Array, notify:true, value:[]},
-			listaClientes:{type:Array, notify:true, value:[]}
+			listaClientes:{type:Array, notify:true, value:[]},
+			mainCotizaciones:{type:Array, notify:true, value:[]}
 
 		};
 	}
@@ -392,6 +394,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 		var binder2=new QueryBinder("_productos-khalia");
         
         binder2.bindArray(this,this.arregloProductos,"arregloProductos");
+
+		var binder3=new QueryBinder("_cotizaciones-khalia");
+        
+        binder3.bindArray(this,this.mainCotizaciones,"mainCotizaciones");
 
 	}
 

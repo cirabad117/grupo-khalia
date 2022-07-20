@@ -110,12 +110,12 @@ class MyAppClientes extends PolymerElement {
             ]},
 
             opcionesOrdena:{type:Array, notify:true, value:[
-                {"opcion":"claveAs","texto":"Clave de producto (ascendente)"},
-                {"opcion":"claveDe","texto":"Clave de producto (descendente)"},
-                {"opcion":"razonAs","texto":"Razón social (ascendente)"},
-                {"opcion":"razonDe","texto":"Razón social (descendente)"},
-                {"opcion":"fechaAs","texto":"Fecha de creación (ascendente)"},
-                {"opcion":"fechaDe","texto":"Fecha de creación (descendente)"}
+                {"opcion":"claveAs","texto":"Clave de producto (A -Z)"},
+                {"opcion":"claveDe","texto":"Clave de producto (Z - A)"},
+                {"opcion":"razonAs","texto":"Razón social (A -Z)"},
+                {"opcion":"razonDe","texto":"Razón social (Z - A)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (más antiguo)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (más reciente)"}
                 
             ]},
 
@@ -331,8 +331,9 @@ class MyAppClientes extends PolymerElement {
     }
 
     abreClienteApp(e){
-        var elegido=e.detail.valor;
-        console.log("abreClienteApp",elegido);
+        console.log("abreClienteApp",e);
+        var elegido=e.detail.objeto.dato;
+        
 
         this.set("selected","elegido");
         this.set("datosCliente",elegido);
