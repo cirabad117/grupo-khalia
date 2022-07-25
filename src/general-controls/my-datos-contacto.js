@@ -1,5 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
+import { ScreenMixin } from "../mixins/screen-mixin.js";
 
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/communication-icons.js';
@@ -12,7 +13,7 @@ import '../general-controls/item-contacto.js';
 
 import '../bootstrap.js';
 
-class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
+class MyDatosContacto extends ScreenMixin(DialogLayoutMixin(PolymerElement)) {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -38,12 +39,30 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                 }
 
                 .btn-secundario{
-                    color:var(--paper-yellow-700);
+                    color:var(--paper-green-500);
+                    border-radius:50%;
                 }
 
                .btn-secundario:hover{
-                   background-color:var(--paper-yellow-700);
+                   background-color:var(--paper-green-500);
                    color:white;
+                }
+
+                ::-webkit-scrollbar {
+                    width: 10px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: #f1f1f1; 
+                }
+                ::-webkit-scrollbar-thumb {
+                    background: #888; 
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                    background: #555; 
+                }
+
+                .es-scroll{
+                    max-height:200px;overflow-y:scroll;
                 }
               
             
@@ -53,6 +72,7 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
                 <div class="d-flex">
                     <iron-icon style="margin:5px;" icon="icons:folder-shared"></iron-icon>
                     <h5  style="margin:5px;">Lista de contactos</h5>
+                   
                 </div>
                 
                 <paper-icon-button class="btn-accion"
@@ -71,9 +91,9 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
             <iron-pages selected="{{selected}}" attr-for-selected="name">
                 
                 <div name="lista">
-                    <div class="row row-cols-1 row-cols-md-3">
+                    <div class$="row [[getClassScroll(esVistaPrincipal)]]">
                         <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]" index-as="numero">
-                            <div class="col mb-4">
+                            <div class$="[[getClassView(esVistaPrincipal)]]">
                                 <div class="card">
                                     <paper-icon-item style="cursor:pointer;">
                                         <iron-icon style="color:var(--paper-blue-700);" icon="icons:account-circle" slot="item-icon"></iron-icon>
@@ -145,6 +165,7 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
 
     static get properties() {
         return {
+            esVistaPrincipal:{type:String,notify:true, value:true},
             selected:{type:String, notify:true, value:"lista"},
             infoCliente:{type:Object, notify:true},
             idProspecto:{type:String, notify:true},
@@ -175,6 +196,13 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
         return [
             '_revisaArreglo(arregloContactos,arregloContactos.*)'
         ];
+    }
+
+    getClassView(bol){
+        return bol == true ? "col-md-4" : "col-md-12";
+    }
+    getClassScroll(bol){
+        return bol == false ? "es-scroll" : "";
     }
 
     _revisaArreglo(arr){
@@ -250,7 +278,7 @@ class MyDatosContacto extends DialogLayoutMixin(PolymerElement) {
             title:"Agregar nuevo contacto",
 			element:"dialogo-nuevo-conta",
             params:[id,arr],
-			style:"width:70%;",
+			style:"width:400px;max-width:95%;",
 			positiveButton: {
                 text: "Crear",
                 action: function(dialog, element) {

@@ -33,38 +33,35 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                     <div class="col-md-3">
                         <paper-listbox selected="{{vista}}">
                             <paper-item>Información general</paper-item>
-                            <paper-item>Actualizar membresia</paper-item>
-                            <paper-item>Cancelar membresia</paper-item>
+                            <paper-item>Actualizar membresía</paper-item>
+                            <paper-item>Cancelar membresía</paper-item>
                         </paper-listbox>
                     </div>
                     <div class="col-md-9">
                         <iron-pages selected="{{vista}}">
                             <div>
                                 <div class="d-flex flex-wrap align-items-center">
-                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.id]]" titulo="clave de producto"></data-simple>
-                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.tipoMembresia.tipo]]" titulo="tipo de vigencia"></data-simple>
-                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[showEstatus(cliente)]]" titulo="estatus de membresia"></data-simple>
-                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[PolymerUtils_getDateString(cliente._fechaLimite)]]" titulo="vigencia de membresia"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.id]]" titulo="Clave de producto"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.tipoMembresia.tipo]]" titulo="Tipo de vigencia"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[showEstatus(cliente)]]" titulo="Estatus de membresía"></data-simple>
+                                    <data-simple  style="padding:5px;"font-size="25px"dato="[[PolymerUtils_getDateString(cliente._fechaLimite)]]" titulo="Fecha límite de uso"></data-simple>
                                 </div>
                                 <div class="m-3">
                                     <h5>Usuarios registrados</h5>
                                     <div class="d-flex flex-wrap align-items-center">
                                         <template is="dom-repeat" items="[[listaUsuarios]]">
                                             <div class="alert alert-primary" role="alert">
-                                                usuario: [[item.displayName]]<br>
+                                                usuario: [[item.email]]<br>
                                                 contraseña: [[item.password]]
-
                                             </div>
-                                            
                                         </template>
-
                                     </div>
                                 </div>
                             </div>
                             
                             <div>
                                 <div class="d-flex flex-wrap align-items-center">
-                                    <vaadin-combo-box  id="combo-vigencia" label="Tipo de membresia" selected-item="{{nuevaVigencia}}"
+                                    <vaadin-combo-box  id="combo-vigencia" label="Tipo de membresía" selected-item="{{nuevaVigencia}}"
                                     items="[[listaOpciones]]" item-label-path="tipo" item-id-path="cantidad">
                                         <template>
                                             <b>[[item.tipo]]</b>
@@ -84,7 +81,7 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                                 </p>
                                 <paper-button style="background-color:white;color:var(--paper-red-500);margin:5px;border:solid 1px var(--paper-red-500);border-radius:5px;"
                                 on-click="cancela">
-                                    Cancelar membresia
+                                    Cancelar membresía
                                 </paper-button>
 
                             </div>

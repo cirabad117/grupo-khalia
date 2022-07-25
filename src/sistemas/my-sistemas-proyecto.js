@@ -22,6 +22,12 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                     display:block;
                 }
 
+                .item{
+                    border-radius:10px;
+                    border:solid 1px var(--paper-blue-500);
+                    min-height:300px;
+                }
+
             </style>
 
             <div class="container-fluid">
@@ -29,44 +35,43 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                     <div class="card-body">
                         <div class="card-title d-flex align-items-center">
                             <span>
-                                <paper-icon-button icon="arrow-back" on-click="backSistemas"></paper-icon-button>
+                                <paper-icon-button icon$="{{muestraIcono(selected)}}" on-click="backSistemas"></paper-icon-button>
                             </span>
                             <h3>[[proyecto.nombre]] - [[proyecto.plataforma]]</h3>
                             
-                            <div class="ml-auto">
-                                <template is="dom-if" if="[[esVista(selected)]]" restamp>
-                                    <paper-button  on-click="abreNuevoModulo" style="background-color:var(--paper-blue-500);color:white">Agregar modulo</paper-button>
-                                    <paper-button  on-click="abreNuevaTarea" style="background-color:var(--paper-blue-500);color:white">Agregar tarea</paper-button>
-                                </template>
-                                <template is="dom-if" if="[[!esVista(selected)]]" restamp>
-                                    <paper-button on-click="eligeVista" class="btn btn-warning">mostrar tareas</paper-button>
-                                </template>
-                            </div>
+                          
                         </div>
-
-                        <h5>Módulos</h5>
-                        <div class="d-flex flex-wrap">
-                            <template is="dom-repeat" items="[[modulos]]">
-                                <h4><span class="badge" style$="[[muestraEstilo(item)]]">[[item.nombre]]</span></h4>
-                            </template>
-                        </div>
-
-                        
                         
                         <iron-pages selected="{{selected}}" attr-for-selected="name">
                             <div name="vista">
+                                
+                                <h5>Módulos</h5>
+
+                                <div class="d-flex">
+                                <div class="d-flex flex-wrap">
+                                    <template is="dom-repeat" items="[[modulos]]">
+                                        <h4 style="margin:5px;"><span class="badge" style$="[[muestraEstilo(item)]]">[[item.nombre]]</span></h4>
+                                    </template>
+                                </div>
+                                <div class="ml-auto">
+                                <button type="button" class="btn btn-sm btn-primary m-1" on-click="abreNuevoModulo">Agregar modulo</paper-button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1" on-click="abreNuevaTarea">Agregar tarea</paper-button>
+                                </div>
+                                </div>
+
+                                
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <my-proyecto-item tipo="backlog" on-elige-tarea="selectTarea" titulo="Pendientes" tareas="[[listaTareas]]"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="backlog" on-elige-tarea="selectTarea" titulo="Pendientes" tareas="{{listaTareas}}"></my-proyecto-item>
                                     </div>
                                     <div class="col-md-3">
-                                        <my-proyecto-item tipo="progress" on-elige-tarea="selectTarea" titulo="En progreso" tareas="[[listaTareas]]"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="progress" on-elige-tarea="selectTarea" titulo="En progreso" tareas="{{listaTareas}}"></my-proyecto-item>
                                     </div>
                                     <div class="col-md-3">
-                                        <my-proyecto-item tipo="validate" on-elige-tarea="selectTarea" titulo="Validación" tareas="[[listaTareas]]"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="validate" on-elige-tarea="selectTarea" titulo="Validación" tareas="{{listaTareas}}"></my-proyecto-item>
                                     </div>
                                     <div class="col-md-3">
-                                        <my-proyecto-item tipo="complete" on-elige-tarea="selectTarea" titulo="Completadas" tareas="[[listaTareas]]"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="complete" on-elige-tarea="selectTarea" titulo="Completadas" tareas="{{listaTareas}}"></my-proyecto-item>
                                     </div>
                                 </div>
                             </div>
@@ -105,15 +110,16 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
     muestraEstilo(obj){
         return "background-color:"+obj.fondo+";color:"+obj.txtColor+";"
     }
+    muestraIcono(str){
+        return str=="vista" ? "arrow-back" : "chevron-left";
+    }
 
     eligeVista(){
         this.set("selected","vista");
         this.set("tareaElegida",null);
     }
 
-    esVista(txt){
-        return txt=="vista"
-    }
+   
 
     selectTarea(e){
         console.log("selectTarea",e.detail.tarea);
@@ -221,7 +227,12 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
    
 
     backSistemas(){
-        NavigationUtils.navigate("sistemas");
+        if(this.selected=="tarea"){
+            this.set("selected","vista");
+        }else{
+            NavigationUtils.navigate("sistemas");
+        }
+        
     }
 }
 

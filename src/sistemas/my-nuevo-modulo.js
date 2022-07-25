@@ -12,16 +12,20 @@ class MyNuevoModulo extends DialogLayoutMixin(PolymerElement) {
             <style>
                 :host{
                     display:block;
+                    min-height:180px;
                 }
             </style>
             
-            <paper-input style="width:250px;"label="nombre" value="{{nombreMod}}" ></paper-input>
             
-            <div>
-                <label id="label1">Color</label>
+
+            <div style="display:flex;align-items:flex-end;">
+                <paper-input label="nombre" value="{{nombreMod}}" ></paper-input>
                 <paper-swatch-picker color="{{color}}" aria-labelledby="label1"></paper-swatch-picker>
             </div>
-            <paper-checkbox checked="{{esOscuro}}">texto oscuro</paper-checkbox>
+            
+            <paper-checkbox style="margin-top:19px;" checked="{{esOscuro}}">texto oscuro</paper-checkbox>
+
+            <div style="margin-top:19px; font-size:16px;">Vista previa <span style$="{{estilo}} padding:2px; border-radius:10px;">{{nombreMod}}</span></div>
 
         `;
     }
@@ -29,8 +33,19 @@ class MyNuevoModulo extends DialogLayoutMixin(PolymerElement) {
     static get properties() {
         return {
             idProyecto:{type:String,notify:true},
-            modulos:{type:Array, notify:true, value:[]}
+            modulos:{type:Array, notify:true, value:[]},
+            estilo:{type:String, notify:true}
         }
+    }
+
+    /**
+      * Array of strings describing multi-property observer methods and their
+      * dependant properties
+      */
+    static get observers() {
+        return [
+            '_muestraEstilo(color,esOscuro)'
+        ];
     }
 
     constructor(id,arr) {
@@ -47,6 +62,17 @@ class MyNuevoModulo extends DialogLayoutMixin(PolymerElement) {
 
     ready() {
         super.ready();
+    }
+
+    _muestraEstilo(txt,bol){
+        var estilo="background-color:"+txt+";";
+        if(bol==true){
+            estilo=estilo+"color:black;"
+        }else{
+            estilo=estilo+"color:white;"
+        }
+
+        this.set("estilo",estilo);
     }
 
     guardaModulo(){

@@ -162,7 +162,7 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                         <div class="card-body">
                             <iron-collapse opened="{{bolConta}}">
                                 <my-datos-contacto style="padding:10px;" id-prospecto="[[prospecto.id]]"
-                                arreglo-contactos="[[listaContactos]]"></my-datos-contacto>
+                                arreglo-contactos="[[listaContactos]]" es-vista-principal="[[esFalso]]"></my-datos-contacto>
                             </iron-collapse>
                         </div>
                     </div>
@@ -226,7 +226,9 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             bolCoti:{type:Boolean, notify:true, value:false},
             noMain:{type:Boolean, notify:true, value:false},
             cotizaciones:{type:Array, notify:true, value:[]},
-            cotiFiltradas:{type:Array, notify:true, value:[]}
+            cotiFiltradas:{type:Array, notify:true, value:[]},
+
+            esFalso:{type:Boolean, notify:true, value:false}
 
         }
     }

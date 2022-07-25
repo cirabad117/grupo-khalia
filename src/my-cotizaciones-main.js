@@ -9,6 +9,7 @@ import '@polymer/paper-input/paper-input.js';
 
 import './general-controls/my-lista-general.js';
 import './cotizaciones/my-cotiza-dialog.js';
+import './cotizaciones/my-autoriza-coti.js';
 
 import './bootstrap.js';
 
@@ -53,7 +54,7 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
 				{"titulo":"Razón social","dato":"cliente","valorInterno":"razon"},
                 {"titulo":"Estatus","dato":"estatus"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Abrir cotización"},
+                    {"accion":"accionItem","icono":"icons:input","texto":"Abrir cotización"},
                     {"accion":"aceptar","icono":"icons:check","texto":"Aceptar cotización"},
                     {"accion":"declinar","icono":"icons:clear","texto":"Declinar cotizacion"},
                    
@@ -187,14 +188,15 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
             case "aceptar":
                 PolymerUtils.Dialog.createAndShow({
                     type: "modal",
-                    title:"Aceptar cotización <br>"+folio+" - "+elegido.dato.cliente.razon,
-                    message:"Si la cotización pertenece a un prospecto, será agregado a la lista de clientes activos. ¿Desea continuar?",
+                    title:"Aceptar cotización",
+                    element:"my-autoriza-coti",
+                    // message:"Si la cotización pertenece a un prospecto, será agregado a la lista de clientes activos. ¿Desea continuar?",
                     style:"width:350px;max-width:95%;",
-                   
+                   params:[elegido.dato],
                     positiveButton: {
                         text: "aceptar",
                         action: function(dialog, element) {
-                            this.modificaCoti(elegido.dato.id,"aceptada",elegido.dato.cliente);
+                            t.modificaCoti(elegido.dato.id,"aceptada",elegido.dato.cliente);
                         }
                     },
                     negativeButton: {

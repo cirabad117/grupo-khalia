@@ -66,7 +66,7 @@ class MySeguimientoItem extends  PolymerElement {
             this.set("objEstatus",objEs.estatus);
             this.set("fechaUltimoSeg",objEs.fechaGuardado);
         }else{
-            this.set("objEstatus",{texto:"no hay datos de seguimiento",base:"white",color:"black"});
+            this.set("objEstatus",{texto:"no hay datos de seguimiento",base:"black",color:"white"});
         }
 
         

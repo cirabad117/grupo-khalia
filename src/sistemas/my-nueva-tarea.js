@@ -15,7 +15,11 @@ class MyNuevaTarea extends DialogLayoutMixin(PolymerElement) {
             </style>
             
             <vaadin-combo-box id="comboAgente" label="Módulo" selected-item="{{moduloElegido}}" items="[[modulos]]"
-            item-value-path="id" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+            item-value-path="id" item-label-path="nombre" error-message="seleccione una opción">
+                <template>
+                    <b style$="background-color:[[item.fondo]];color:[[item.txtColor]];">[[item.nombre]]</b>
+                </template>
+            </vaadin-combo-box>
 
             <paper-input style="width:250px;"label="nombre de la tarea" value="{{nombreTarea}}" ></paper-input>
             

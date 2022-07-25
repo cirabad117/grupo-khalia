@@ -74,13 +74,13 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 </paper-input>
 
                 <template is="dom-if" if="{{!esPrincipal}}">
-                    <paper-button style="color:white;background-color:var(--paper-green-500);"
+                    <button type="button" class="btn btn-primary btn-sm"
                     on-click="disparaAccionPrincipal">
                         <span>
-                            <iron-icon icon="add"></iron-icon>
+                            <iron-icon icon="create"></iron-icon>
                         </span>
-                        agregar registro
-                    </paper-button>
+                        Agregar cotización
+                    </button>
                     
                 </template>
             </div>

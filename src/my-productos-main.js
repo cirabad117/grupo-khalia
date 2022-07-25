@@ -56,7 +56,7 @@ class MyProductosMain extends PolymerElement {
                 {"titulo":"Departamento","dato":"departamento"},
                 {"titulo":"Dependencia","dato":"dependencia"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Mostrar producto"},
+                    {"accion":"accionItem","icono":"icons:input","texto":"Mostrar producto"},
                     {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},

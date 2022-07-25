@@ -4,7 +4,7 @@ import { DiccionarioMixin } from './mixins/diccionario-mixin.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-fab/paper-fab.js';
 
-import './clientes/my-nuevo-cliente.js';
+import './prospectos/dialogo-nuevo-prospecto';
 import './general-controls/my-lista-general.js';
 
 import './bootstrap.js';
@@ -40,6 +40,7 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
 
     static get properties() {
         return {
+            listaUsuarios:{type:Array, notify:true,value:[]},
             listaClientes:{type:Array, notify:true, value:[]},
             opcionesOrdena:{type:Array, notify:true, value:[
                 {"opcion":"razonAs","texto":"Razón social (A -Z)"},
@@ -56,7 +57,7 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
                 {"titulo":"Estatus","dato":"listaSeguimiento"},
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Abrir cliente"},
+                    {"accion":"accionItem","icono":"icons:input","texto":"Abrir cliente"},
                     {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},
@@ -221,9 +222,12 @@ class MyClientesMain extends DiccionarioMixin(PolymerElement) {
 
     abreNuevoCliente(){
         //NavigationUtils.navigate("cliente");
+        var users=PolymerUtils.cloneObject(this.listaUsuarios);
+        var esCliente=true;
         PolymerUtils.Dialog.createAndShow({
 			type: "modal",
-			element:"my-nuevo-cliente",
+			element:"dialogo-nuevo-prospecto",
+            params:[users,true],
 			title:"Agregar cliente",
 			style:"width:500px;max-width:95%;",
 			positiveButton: {

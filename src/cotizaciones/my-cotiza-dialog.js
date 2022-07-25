@@ -26,7 +26,7 @@ class MyCotizaDialog extends PolymerElement {
             <paper-item>
                 <paper-item-body two-line>
                     <div>Productos solicitados</div>
-                    <div class="d-flex flex-wrap" style="max-height:100px;overflow-y:scroll;">
+                    <div class="d-flex flex-column" style="max-height:100px;overflow-y:scroll;">
                         <template is="dom-repeat" items="[[coti.listaProds]]">
                             <h4><span class="badge badge-pill badge-info">[[item.codigo]]</span></h4>
                         </template>

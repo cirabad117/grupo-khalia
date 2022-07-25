@@ -24,8 +24,7 @@ let internalMixinScreen = function(superClass) {
 				_smallScreen:{
 					type:Boolean,
 					notify:true,
-					reflectToAttribute: true,
-					observer: "_smallScreenChanged"
+					reflectToAttribute: true
 				}
 			};
 		}

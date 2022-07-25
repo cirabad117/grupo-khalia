@@ -91,7 +91,7 @@ class MyAppClientes extends PolymerElement {
                 {"titulo":"Tipo de membresia","dato":"tipoMembresia","valorInterno":"tipo"},
                 {"titulo":"Estado","dato":"objCliente"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"disparaAccionItem","icono":"icons:find-in-page","texto":"Ver detalles"},
+                    {"accion":"disparaAccionItem","icono":"icons:input","texto":"Ver detalles"},
                     // {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
                 

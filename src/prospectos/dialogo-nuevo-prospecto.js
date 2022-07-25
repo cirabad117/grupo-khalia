@@ -92,11 +92,14 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 		}
 	}
 
-	constructor(users) {
+	constructor(users,esCliente) {
 		super();
 
 		if(users){
 			this.set("listaUsuarios",users);
+		}
+		if(esCliente){
+			this.set("esForzarCliente",esCliente);
 		}
 	}
 

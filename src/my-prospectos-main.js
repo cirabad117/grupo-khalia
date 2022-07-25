@@ -51,7 +51,7 @@ class MyProspectosMain extends DiccionarioMixin(PolymerElement) {
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
                 {"titulo":"Estatus de prospecto","dato":"listaSeguimiento"},
                 {"titulo":"Acciones","listaAcciones":[
-                    {"accion":"accionItem","icono":"icons:find-in-page","texto":"Abrir prospecto"},
+                    {"accion":"accionItem","icono":"icons:input","texto":"Abrir prospecto"},
                     {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},

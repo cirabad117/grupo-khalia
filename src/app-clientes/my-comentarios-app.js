@@ -18,33 +18,27 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
                     margin:5px;
                 }
             </style>
-
+            
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                        <ul class="list-unstyled">
-                            <template is="dom-repeat" items="[[listaComentarios]]">
-                                <li class="media">
-                                    <!-- <img src="..." class="mr-3" alt="..."> -->
-                                    <div class="media-body">
-                                        <h5 class="mt-0 mb-1">[[item._idCliente]] - [[PolymerUtils_getDateString(item._timestamp)]]</h5>
-                                        <my-muestra-mensaje mensaje="[[item.coment]]"></my-muestra-mensaje>
-                                    </div>
-                                    <!-- <my-botones-mensaje id="[[item.id]]"></my-botones-mensaje> -->
-                                    
-                                    <paper-icon-button icon="create"></paper-icon-button>
-                                    <paper-icon-button icon="delete"></paper-icon-button>
-                                    
-                                </li>
-                                <hr>
-                            </template>
-                            
-                        </ul>
+                            <ul class="list-unstyled">
+                                <template is="dom-repeat" items="[[listaComentarios]]">
+                                    <li class="media">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-1">[[item._idCliente]] - [[PolymerUtils_getDateString(item._timestamp)]]</h5>
+                                            <my-muestra-mensaje mensaje="[[item.coment]]"></my-muestra-mensaje>
+                                        </div>
+                                        <paper-icon-button icon="create"></paper-icon-button>
+                                        <paper-icon-button icon="delete"></paper-icon-button>
+                                    </li>
+                                    <hr>
+                                </template>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                </div>
-                
             </div>
 
             

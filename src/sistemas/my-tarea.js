@@ -1,9 +1,10 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { DialogLayoutMixin } from "../mixins/dialog-layout-mixin.js";
 
-import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-item/paper-icon-item.js';
 import '@polymer/paper-item/paper-item-body.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@vaadin/vaadin-select/vaadin-select.js';
 
 import '../general-controls/my-text-editor.js';
@@ -25,22 +26,24 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                     display:flex;
                     align-items:center;
                 }
-            </style>
 
+          
+            </style>
+            
             <div class="d-flex align-items-center">
-                
                 <h4>
                     [[tarea.nombreTarea]]
-                    <template is="dom-if" if="{{!esNuevoEstatus}}">
-                        <span class="badge badge-primary" on-click="toggleEstatus">
-                            [[muestraEstatus(tarea.estatus)]]
+                    <template is="dom-if" if="{{!esNuevoEstatus}}" restamp>
+                        <span class="badge badge-primary" on-click="toggleEstatus" style="cursor:pointer;">
+                            {{textoEstatus}}
                         </span>
                     </template>
                 </h4>
                 
-                <template is="dom-if" if="{{esNuevoEstatus}}">
-                    <div class="ml-4">
-                        <vaadin-select id="comboPeriodoNom" label="Estado de la tarea"
+                <template is="dom-if" if="{{esNuevoEstatus}}" restamp>
+                    <div class="ml-4 p-2 d-flex align-items-baseline">
+                        
+                        <vaadin-select class="p-2"id="comboPeriodoNom" label="Estado de la tarea"
                         value="{{nuevoEstatus}}" error-message="seleccione una opción">
                             <template>
                                 <vaadin-list-box>
@@ -52,8 +55,8 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                             </template>
                         </vaadin-select>
                         
-                        <paper-button raised on-click="modificaTarea">Aplicar estatus</paper-button>
-                        <paper-button raised on-click="toggleEstatus">Cancelar</paper-button>
+                        <button type="button" class="btn btn-primary m-1 p-2" raised on-click="modificaTarea">Aplicar estatus</button>
+                        <button type="button" class="btn btn-secondary m-1 p-2" raised on-click="toggleEstatus">Cancelar</button>
                     </div>
                 </template>
             
@@ -63,13 +66,12 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                 <div class="col-md-8" style="background-color:var(--paper-grey-100);">
                     <div class="titulo">
                         <h5>Descripción</h5>
-
+                        
                         <div class="ml-auto">
                             <template is="dom-if" if="{{esEditaDesc}}">
                                 <paper-icon-button  icon="save" on-click="guardaDesc"></paper-icon-button>
                             </template>
                             <paper-icon-button  icon$="{{getIcono(esEditaDesc)}}" on-click="toggleDesc"></paper-icon-button>
-
                         </div>
                     </div>
                     
@@ -85,36 +87,20 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                     <div class="titulo">
                         <h5>Campos requeridos</h5>
                         <div class="ml-auto">
-                            <paper-icon-button icon="cloud-upload" on-click="toggleUpload"></paper-icon-button>
-
+                            
                             <template is="dom-if" if="{{esEditaCampo}}">
                                 <paper-icon-button  icon="save" on-click="guardaCampo"></paper-icon-button>
                             </template>
-                            
-                            
                             <paper-icon-button  icon$="{{getIcono(esEditaCampo)}}" on-click="toggleCampo"></paper-icon-button>
                         </div>
                     </div>
                     
                     <template is="dom-if" if="{{!esEditaCampo}}">
-                        <div class="carta" id="vista-campos">
-                            
-                        </div>
+                        <div class="carta" id="vista-campos"></div>
                     </template>
                     <template is="dom-if" if="{{esEditaCampo}}">
                         <my-text-editor id="text-campos" texto-incrustar="{{campos}}"></my-text-editor>
                     </template>
-
-                    <template is="dom-if" if="{{esSubirArchivo}}" restamp>
-                        <my-doc-upload id="carga-item" carpeta-guardar="_gkhalia/sistemas"
-                        on-archivo-guardado="guardaArchivoFirebase" style="margin:10px;"></my-doc-upload>
-                        <div class="d-flex flex-row-reverse">
-                            <button type="button" class="btn btn-outline-primary m-1" on-click="carga">Guardar archivo</button>
-                            <button type="button" class="btn btn-outline-secondary m-1" on-click="toggleUpload">Cancelar</button>
-                        </div>
-                    </template>
-
-
                 </div>
 
                 <div class="col-md-4">
@@ -133,12 +119,25 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
 
                     <paper-listbox>
                         <template is="dom-repeat" items="{{notas}}">
-                            <paper-item>
+                            <paper-icon-item>
+                                
+                                <template is="dom-if" if="[[item.finalizada]]">
+                                    <iron-icon slot="item-icon" icon="check-circle"></iron-icon>
+                                </template>
+                                
+                                
                                 <paper-item-body two-line>
-                                    <div>[[item.texto]]</div>
+                                    <div class="text-wrap">[[item.texto]]</div>
                                     <div secondary>[[item.fecha]]</div>
                                 </paper-item-body>
-                            </paper-item>
+                                
+                                <template is="dom-if" if="[[!item.finalizada]]">
+                                <paper-icon-button icon="check" on-click="updateNota"></paper-icon-button>
+
+                                </template>
+                                <paper-icon-button icon="clear" on-click="eliminaNota"></paper-icon-button>
+                                
+                            </paper-icon-item>
                         </template>
 
                     </paper-listbox>
@@ -153,6 +152,7 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
 
     static get properties() {
         return {
+            textoEstatus:{type:String, notify:true},
             idProyecto:{type:String, notify:true},
             tarea:{type:Object, notify:true, observer:"_consultaTarea"},
             tareaActiva:{type:Object, notify:true,observer:"_cambiaCampos"},
@@ -174,46 +174,6 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
        
     }
 
-    muestraEstatus(str){
-        switch (str) {
-            case "backlog":
-            return "Pendiente";
-
-            case "progress":
-            return "En progreso";
-
-            case "validate":
-            return "Validación";
-
-            case "complete":
-            return "Completada";
-        
-            default:
-            break;
-        }
-    }
-
-    carga(){
-
-        if(this.tarea.nombreArchivo && this.tarea.nombreArchivo.trim()!=""){
-            var storage = firebase.storage();
-            var storageRef = storage.ref();
-
-            
-            var doc=this.objActivo.nombreArchivo;
-            var ubicacion="_gkhalia/sistemas/"+doc;
-
-            var desertRef = storageRef.child(ubicacion);
-            desertRef.delete().then(function() {
-            }).catch(function(error) {
-                console.error("error al eliminar archivo",error);
-            });
-        }
-        this.shadowRoot.querySelector("#carga-item").guardaDocumento();
-
-        
-    }
-
     guardaDesc(){
         if(!this.descripcion || this.descripcion==null){
             return PolymerUtils.Toast.show("escribe una descripción válida");
@@ -228,6 +188,7 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
 
         this.updateTarea(objEditar,fnVista);
     }
+
     guardaCampo(){
         var texto=this.shadowRoot.querySelector("#text-campos").muestraTexto();
 
@@ -242,6 +203,36 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
         };
 
         this.updateTarea(objEditar,fnVista);
+    }
+
+    updateNota(e){
+        console.log("updateNota",e.model.index,e.model.item);
+        var arr=PolymerUtils.cloneObject(this.notas);
+        var elegido=arr[e.model.index];
+        elegido["finalizada"]=true;
+        arr[e.model.index]=elegido;
+
+        var objEditar={notas:arr};
+        var fnVista=function() {
+            PolymerUtils.Toast.show("nota actualizada");
+        };
+        this.updateTarea(objEditar,fnVista);
+
+
+    }
+
+    eliminaNota(e){
+        console.log("updateNota",e.model.index,e.model.item);
+        var arr=PolymerUtils.cloneObject(this.notas);
+        arr.splice(e.model.index,1);
+
+        var objEditar={notas:arr};
+        var fnVista=function() {
+            PolymerUtils.Toast.show("nota actualizada");
+        };
+        this.updateTarea(objEditar,fnVista);
+
+
     }
 
     guardaNota(){
@@ -286,39 +277,11 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
         var t=this;
         var fnVista=function() {
             t.toggleNota();
+            t.set("nota",null);
         };
 
         this.updateTarea(objEditar,fnVista);
-
-
-    }
-
-    guardaArchivoFirebase(e){
-        var dia=PolymerUtils.Dialog.createAndShow({
-            type: "modal",
-            saveSpinner:{
-                message: "Subiendo archivo",
-                saving: true
-            },
-            style:"width: 400px; height: 300px;",
-            smallStyle: "width: 95% !important;"
-		});
-        var url=e.detail.direccion;
-        var texto=e.detail.nombreArchivo;
-
-       
-        var doc={
-            ubicacionArchivo:url,
-            nombreArchivo:texto
-        };
-
-        var t=this;
-        var fun=function() {
-            dia.close();
-            t.toggleUpload();
-        }
-
-        this.updateTarea(doc,fun);
+        
 
 
     }
@@ -399,6 +362,28 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
             espacio.innerHTML = obj.campos;
 
             this.set("notas",obj.notas);
+
+            var str=obj.estatus;
+            switch (str) {
+                case "backlog":
+                this.set("textoEstatus","Pendiente");
+                break;
+    
+                case "progress":
+                this.set("textoEstatus","En progreso");
+                break;
+    
+                case "validate":
+                this.set("textoEstatus","Validación");
+                break;
+    
+                case "complete":
+                this.set("textoEstatus","Completada");
+                break;
+            
+                default:
+                break;
+            }
         }
     }
 
