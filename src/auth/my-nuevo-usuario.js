@@ -35,8 +35,9 @@ class MyNuevoUsuario extends AuthMixin(DialogLayoutMixin(UtilsMixin(PolymerEleme
                     </h5>
                     <paper-input id="txtUser" label="nombre de usuario" value="{{user}}" error-message="valor inválido" disabled="[[esEditar]]"></paper-input>
                     <paper-input id="txtNombre" value="{{nombre}}" label="Nombre completo" error-message="valor inválido"></paper-input>                  
-                    <div>
-                        <h4>Lista de permisos de acceso</h4>
+                    <h4>Lista de permisos de acceso</h4>
+                    <div style="max-height:300px; overflow-y:scroll;">
+                        
                         <checkbox-tree object-tree="[[mainTree]]" id="mainDomTree"></checkbox-tree>
                     </div>
                     

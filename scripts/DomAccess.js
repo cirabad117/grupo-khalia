@@ -10,19 +10,91 @@ var StaticDomAccess={
         "_main":true,
 
         "admin":{
-            "name":"Administración y ventas",
+            "name":"Ventas",
             "children":{
+
+                "seguimiento":{
+                    "name":"Seguimiento y comunicación a prospectos/clientes",
+                    "children":{
+                        "agregaContacto":{
+                            "name":"Agregar contacto"
+                        },
+                        "anulaContacto":{
+                            "name":"Anular contacto"
+                        },
+                        "eliminaContacto":{
+                            "name":"Eliminar contacto"
+                        },
+                        "editaContacto":{
+                            "name":"Editar contacto"
+                        },
+                        "actualizaSeg":{
+                            "name":"Actualizar seguimiento"
+                        }
+                    }
+                },
+             
                 "prospectos":{
                     "name":"Prospectos",
+                    "children":{
+                        "crear":{
+                            "name":"Agregar prospecto"
+                        },
+                        "editar":{
+                            "name":"Editar prospecto"
+                        },
+                        "eliminar":{
+                            "name":"Eliminar prospecto"
+                        }
+                       
+                    }
                 },
                 "clientes":{
                     "name":"Clientes",
+                    "children":{
+                        "crear":{
+                            "name":"Agregar cliente"
+                        },
+                        "editar":{
+                            "name":"Editar cliente"
+                        },
+                        "eliminar":{
+                            "name":"Eliminar cliente"
+                        }
+                    }
                 },
                 "productos":{
                     "name":"Control de productos",
+                    "children":{
+                        "crear":{
+                            "name":"Agregar producto"
+                        },
+                        "editar":{
+                            "name":"Editar producto"
+                        },
+                        "eliminar":{
+                            "name":"Eliminar producto"
+                        }
+                       
+                    }
                 },
                 "cotizaciones":{
                     "name":"Cotizaciones",
+                    "children":{
+                        "crear":{
+                            "name":"Agregar cotizacion"
+                        },
+                        "autorizar":{
+                            "name":"Aceptar cotización"
+                        },
+                        "declinar":{
+                            "name":"Declinar cotización"
+                        },
+                        "eliminar":{
+                            "name":"Eliminar cotización"
+                        }
+                       
+                    }
                 },
                
             }

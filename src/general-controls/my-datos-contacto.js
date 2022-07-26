@@ -64,6 +64,12 @@ class MyDatosContacto extends ScreenMixin(DialogLayoutMixin(PolymerElement)) {
                 .es-scroll{
                     max-height:200px;overflow-y:scroll;
                 }
+
+                .eliminado{
+                    background-color:var(--paper-grey-200);
+                    color:var(--paper-grey-700);
+                    text-decoration:line-through;
+                }
               
             
             </style>
@@ -95,20 +101,23 @@ class MyDatosContacto extends ScreenMixin(DialogLayoutMixin(PolymerElement)) {
                         <template id="repetidorItems" is="dom-repeat" items="[[arregloContactos]]" index-as="numero">
                             <div class$="[[getClassView(esVistaPrincipal)]]">
                                 <div class="card">
-                                    <paper-icon-item style="cursor:pointer;">
+                                    <paper-icon-item style="cursor:pointer;" class$="[[muestraEliminado(item._deleted)]]">
                                         <iron-icon style="color:var(--paper-blue-700);" icon="icons:account-circle" slot="item-icon"></iron-icon>
-                                        <paper-item-body two-line>
+                                        <paper-item-body two-line class$="[[muestraEliminado(item._deleted)]]">
                                             <div>[[item.nombreCliente]]</div>
                                             <div secondary>[[item.puesto]]</div>
                                         </paper-item-body>
+                                        <template is="dom-if" if="[[!item._deleted]]">
                                         <paper-icon-button icon="create" class="btn-secundario"
                                         on-click="muestraContacto" onmouseover="PolymerUtils.Tooltip.show(event,'Modificar')"></paper-icon-button>
                                         <paper-icon-button icon="delete" class="btn-secundario"
                                         on-click="eliminaContacto" onmouseover="PolymerUtils.Tooltip.show(event,'Quitar')"></paper-icon-button>
+                                        </template>
+        
                                     </paper-icon-item>
                                     <paper-listbox>
                                         <template is="dom-repeat" items="[[item.telefonos]]" as="tels">
-                                            <paper-item>
+                                            <paper-item class$="[[muestraEliminado(item._deleted)]]">
                                                 <span style="padding:10px;">
                                                     <iron-icon icon="communication:call"></iron-icon>
                                                 </span>
@@ -116,7 +125,7 @@ class MyDatosContacto extends ScreenMixin(DialogLayoutMixin(PolymerElement)) {
                                             </paper-item>
                                         </template>
                                         <template is="dom-repeat" items="[[item.correos]]" as="email">
-                                            <paper-item>
+                                            <paper-item class$="[[muestraEliminado(item._deleted)]]">
                                                 <span style="padding:10px;">
                                                     <iron-icon icon="communication:email"></iron-icon>
                                                 </span>
@@ -205,6 +214,12 @@ class MyDatosContacto extends ScreenMixin(DialogLayoutMixin(PolymerElement)) {
         return bol == false ? "es-scroll" : "";
     }
 
+    muestraEliminado(bol){
+        if(bol && bol==true){
+            return "eliminado"
+        }
+    }
+
     _revisaArreglo(arr){
         if(arr && arr.length>0){
             this.set("muestraError",false);
@@ -225,17 +240,20 @@ class MyDatosContacto extends ScreenMixin(DialogLayoutMixin(PolymerElement)) {
     eliminaContacto(e){
         var idPro=this.idProspecto;
         var idElegido=e.model.itemsIndex;
+        // idElegido["_deleted"]=true;
         var contactos=PolymerUtils.cloneObject(this.arregloContactos);
 
         PolymerUtils.Dialog.createAndShow({
 
-            message:"el contacto seleccionado sera retirado de la información del prospecto. ¿Desea continuar?",
+            message:"El contacto seleccionado ya no será válido en la <br>información del prospecto. ¿Desea continuar?",
 		
 			positiveButton: {
                 text: "Eliminar contacto",
                 action: function(dialog, element) {
+                    var eliminar=contactos[idElegido];
+                    eliminar["_deleted"]=true;
 
-                    contactos.splice(idElegido,1);
+                    contactos[idElegido]=eliminar;
 
                     var washingtonRef = firebase.firestore().collection("_clientes-khalia").doc(idPro);
                     return washingtonRef.update({

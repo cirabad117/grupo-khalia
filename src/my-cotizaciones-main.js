@@ -196,7 +196,10 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                     positiveButton: {
                         text: "aceptar",
                         action: function(dialog, element) {
-                            t.modificaCoti(elegido.dato.id,"aceptada",elegido.dato.cliente);
+                            var dato=element.retornaCoti();
+                            console.log("aceptar coti",dato);
+                            dato["estatus"]="aceptada";
+                            t.modificaCoti(elegido.dato.id,dato,elegido.dato.cliente);
                         }
                     },
                     negativeButton: {
@@ -220,7 +223,8 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                     positiveButton: {
                         text: "declinar",
                         action: function(dialog, element) {
-                            t.modificaCoti(elegido.dato.id,"declinada",elegido.dato.cliente);
+                            var obj={estatus:"declinada"};
+                            t.modificaCoti(elegido.dato.id,obj,elegido.dato.cliente);
                         }
                     },
                     negativeButton: {
@@ -240,12 +244,10 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
     }
 
 
-    modificaCoti(id,est,cliente){
+    modificaCoti(id,objEditar,cliente){
         var t=this;
         var idCoti=id;
-        var obj={
-            estatus:est
-        }
+        var obj=objEditar;
         var washingtonRef = firebase.firestore().collection("_cotizaciones-khalia").doc(idCoti);
         // Set the "capital" field of the city 'DC'
         return washingtonRef.update(obj).then(() => {

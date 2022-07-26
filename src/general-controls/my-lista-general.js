@@ -48,8 +48,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 </nav>
             </template> -->
             
-            <div class="card d-flex flex-row bd-highlight mb-3 align-items-center">
-                <vaadin-select id="selectCotiza" class="m-3" label="filtrar registros" value="{{filtroEstatus}}" error-message="selecciona una opcion">
+            <div class="card">
+                <div class="card-body" style="padding: 5px !important;">
+                    <div class="d-flex flex-wrap bd-highlight mb-3 align-items-center">
+                    <vaadin-select id="selectCotiza" class="p-1" label="filtrar registros" value="{{filtroEstatus}}" error-message="selecciona una opcion">
                     <template>
                         <vaadin-list-box>
                             <vaadin-item value="todos">todos los registros</vaadin-item>
@@ -59,7 +61,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                         </vaadin-list-box>
                     </template>
                 </vaadin-select>
-                <vaadin-select id="selectCotiza" class="m-3" label="Ordenar registros" value="{{modoOrdena}}" error-message="selecciona una opcion">
+                <vaadin-select id="selectCotiza" class="p-1" label="Ordenar registros" value="{{modoOrdena}}" error-message="selecciona una opcion">
                     <template>
                         <vaadin-list-box>
                             <template is="dom-repeat" items="[[listaOrdena]]" as="ordena">
@@ -68,13 +70,13 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                         </vaadin-list-box>
                     </template>
                 </vaadin-select>
-                <paper-input label="Buscar" class="m-3" id="inputWithButton" value="{{busqueda}}">
+                <paper-input label="Buscar" class="p-3" id="inputWithButton" value="{{busqueda}}">
                     <paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'limpiar')" slot="suffix" on-click="limpia" icon="clear"S>
                     </paper-icon-button>
                 </paper-input>
 
                 <template is="dom-if" if="{{!esPrincipal}}">
-                    <button type="button" class="btn btn-primary btn-sm"
+                    <button type="button" class="btn btn-primary btn-sm p-1"
                     on-click="disparaAccionPrincipal">
                         <span>
                             <iron-icon icon="create"></iron-icon>
@@ -83,6 +85,9 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     </button>
                     
                 </template>
+                    </div>
+                </div>
+                
             </div>
             
             <div class="card table-responsive">
