@@ -108,9 +108,20 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                                         <template is="dom-if" if="[[esSeguimiento(tit.dato)]]">
                                             <my-seguimiento-item obj-buscar="[[info.listaSeguimiento]]"></my-seguimiento-item>
                                         </template>
-                                        <template is="dom-if" if="[[!esSeguimiento(tit.dato)]]">
+                                        <template is="dom-if" if="[[esValorBase(tit.dato)]]">
                                             [[muestraInfo(info,tit.dato,tit.valorInterno)]]
                                         </template>
+
+                                        <template is="dom-if" if="[[esEstatusCoti(tit.dato)]]">
+                                            <div style="font-size: 16px; font-weight: 500;">
+                                                <span class$="badge [[getEstiloEstatus(info)]]" >
+
+                                                    [[getEstatus(info)]]
+                                                </span>
+                                            </div>
+                                        </template>
+
+
                                         <template is="dom-if" if="[[tit.listaAcciones]]">
                                             <div class="d-flex">
                                             <template is="dom-repeat" items="[[tit.listaAcciones]]" as="ac">
@@ -177,6 +188,13 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
  
     esSeguimiento(str){
         return str=="listaSeguimiento";
+    }
+    esValorBase(str){
+        return str!="listaSeguimiento" && str!="estatus";
+    }
+
+    esEstatusCoti(str){
+        return str=="estatus";
     }
 
     esOtros(str){
@@ -255,9 +273,38 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
     }
 
     aplicaEstilo(obj){
-        if(obj.estatus && obj.estatus=="declinada"){
+        if(obj.estatus && obj.estatus.nombreEstatus=="declinada"){
             return "text-decoration:line-through;"
         }
+    }
+
+    getEstiloEstatus(obj){
+        var cl="badge-secondary";
+        if(obj && obj.estatus && obj.estatus.nombreEstatus){
+            if(obj.estatus.nombreEstatus=="aceptada"){
+                cl="badge-primary";
+            }else{
+                cl="badge-danger";
+
+            }
+            
+        }
+        
+       return cl;
+
+    }
+
+    getEstatus(obj){
+        var est="pendiente";
+        var fe="";
+        if(obj && obj.estatus && obj.estatus.nombreEstatus && obj.estatus.fecha){
+            console.log("getEstatus",obj);
+            est=obj.estatus.nombreEstatus;
+            fe=this.PolymerUtils_getDateString(obj.estatus.fecha);
+            
+        }
+        
+       return est+" - "+ fe
     }
 
     showEstatus(obj){

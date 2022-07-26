@@ -55,7 +55,7 @@ class MyDatosSeguimiento extends DialogLayoutMixin(DiccionarioMixin(PolymerEleme
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center" >
                     <iron-icon icon="timeline" style="margin:5px;"></iron-icon>
-                    <h5>historial de seguimiento</h5>
+                    <h5>Historial de seguimiento</h5>
                 </div>
 
                 <paper-icon-button class="btn-accion"

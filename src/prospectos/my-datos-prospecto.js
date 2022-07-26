@@ -197,6 +197,10 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                         </div><!--seg-->
 
                         <div name="coti">
+                            <div class="d-flex align-items-center" >
+                                <iron-icon icon="icons:description" style="margin:5px;"></iron-icon>
+                                <h5>Historial de cotizaciones</h5>
+                            </div>
                             <my-cotizaciones-main es-vista-principal="{{noMain}}" lista-cotizaciones="[[cotiFiltradas]]"
                             cliente-activo="{{prospecto.id}}"></my-cotizaciones-main>
                         </div>

@@ -32,10 +32,10 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
             </template>
 			
 			
-			<my-lista-general vista="cotizacion" arreglo-items="[[listaCotizaciones]]" titulo="cliente.razon"
+			<my-lista-general vista="cotizacion" arreglo-items="[[listaCotizaciones]]"
             es-principal="{{esVistaPrincipal}}"
             lista-filtro="[[listaEstatus]]" lista-ordena="[[opcionesOrdena]]"
-			lista-cols="[[datosCotiza]]"
+			lista-cols="[[cols]]"
 			funcion-buscar="[[funcionCotizacion]]" funcion-ordenar="[[funcionOrdenaCoti]]"
             on-ejecuta-accion="abreNuevaCotizacion" on-ejecuta-item="ejecutaAccionItem"></my-lista-general>
 
@@ -46,8 +46,21 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
 		return {
             clienteActivo:{type:String, notify:true},
 
-            esVistaPrincipal:{type:Boolean, notify:true,value:true},
+            esVistaPrincipal:{type:Boolean, notify:true,value:true,observer:"_getDatos"},
 			listaCotizaciones:{type:Array, notify:true, value:[]},
+            cols:{type:Array, notify:true, value:[]},
+            datosSubCotiza:{type:Array, notify:true, value:[
+                {"titulo":"Folio","dato":"id"},
+                {"titulo":"Fecha de creación","dato":"_timestamp"},
+                {"titulo":"Estatus","dato":"estatus"},
+                {"titulo":"Acciones","listaAcciones":[
+                    {"accion":"accionItem","icono":"icons:input","texto":"Abrir cotización"},
+                    {"accion":"aceptar","icono":"icons:check","texto":"Aceptar cotización"},
+                    {"accion":"declinar","icono":"icons:clear","texto":"Declinar cotizacion"},
+                   
+                ]}
+				
+            ]},
 			datosCotiza:{type:Array, notify:true, value:[
                 {"titulo":"Folio","dato":"id"},
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
@@ -143,9 +156,17 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
 	
 	ready() {
 		super.ready();
-
 		
 	}
+
+    _getDatos(bol){
+        console.log("getDatos",bol);
+        if(bol==false){
+            this.set("cols",this.datosSubCotiza);
+        }else{
+            this.set("cols",this.datosCotiza);
+        }
+    }
 
 	abreNuevaCotizacion(){
         if(this.clienteActivo && this.clienteActivo!=null && this.clienteActivo.trim()!=""){
@@ -173,7 +194,7 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                     type: "modal",
                     element:"my-cotiza-dialog",
                     title:"Cotización",
-                    style:"width:350px;max-width:95%;",
+                    style:"width:400px;max-width:95%;",
                     params:[elegido.dato],
                 
                     negativeButton: {
@@ -191,15 +212,18 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                     title:"Aceptar cotización",
                     element:"my-autoriza-coti",
                     // message:"Si la cotización pertenece a un prospecto, será agregado a la lista de clientes activos. ¿Desea continuar?",
-                    style:"width:350px;max-width:95%;",
+                    style:"width:400px;max-width:95%;",
                    params:[elegido.dato],
                     positiveButton: {
                         text: "aceptar",
                         action: function(dialog, element) {
                             var dato=element.retornaCoti();
                             console.log("aceptar coti",dato);
-                            dato["estatus"]="aceptada";
-                            t.modificaCoti(elegido.dato.id,dato,elegido.dato.cliente);
+                            dato["estatus"]={
+                                nombreEstatus:"aceptada",
+                                fecha:firebase.firestore.FieldValue.serverTimestamp()
+                            };
+                            t.modificaCoti(elegido.dato.id,dato,elegido.dato.cliente,dialog);
                         }
                     },
                     negativeButton: {
@@ -223,8 +247,13 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                     positiveButton: {
                         text: "declinar",
                         action: function(dialog, element) {
-                            var obj={estatus:"declinada"};
-                            t.modificaCoti(elegido.dato.id,obj,elegido.dato.cliente);
+                            var obj={
+                                estatus:{
+                                    nombreEstatus:"declinada",
+                                    fecha:firebase.firestore.FieldValue.serverTimestamp()
+                                }
+                            };
+                            t.modificaCoti(elegido.dato.id,obj,elegido.dato.cliente,dialog);
                         }
                     },
                     negativeButton: {
@@ -244,7 +273,7 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
     }
 
 
-    modificaCoti(id,objEditar,cliente){
+    modificaCoti(id,objEditar,cliente,dialog){
         var t=this;
         var idCoti=id;
         var obj=objEditar;
@@ -252,9 +281,14 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
         // Set the "capital" field of the city 'DC'
         return washingtonRef.update(obj).then(() => {
             PolymerUtils.Toast.show("Cotización actualizada éxito");
-            t.actualizaCliente(cliente);
+            if(dialog){
+                dialog.close();
+            }else{
+                t.DialogLayout_closeDialog();
+            }
             
-            t.DialogLayout_closeDialog();
+            t.actualizaCliente(cliente);
+        
         }).catch((error) => {
             PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
             console.error("Error updating document: ", error);

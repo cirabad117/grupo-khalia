@@ -1,14 +1,19 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-item/paper-icon-item.js';
+import '@polymer/paper-item/paper-item-body.js';
 
 import '../general-controls/data-simple.js';
+
+import '../bootstrap.js';
+
 
 
 class MyAutorizaCoti extends PolymerElement {
     static get template() {
         return html`
-            <style>
+            <style include="bootstrap">
                 :host{
                     display:block;
                 }
@@ -24,8 +29,22 @@ class MyAutorizaCoti extends PolymerElement {
             <paper-input id="txt-acuerdo" label="Acuerdo de pago" value="{{acuerdoPago}}" error-message="texto inválido"></paper-input>
             <paper-input id="txt-factura" label="Folio de factura" value="{{folioFactura}}" error-message="texto inválido"></paper-input>
             <paper-input type="number" id="txt-costo" label="Costo total (sin I.V.A.)" value="{{costo}}" error-message="texto inválido">
-            <div slot="prefix">$</div>
+                <div slot="prefix">$</div>
             </paper-input>
+
+            <paper-icon-item >
+                <iron-icon icon="error" slot="item-icon" style="color:var(--paper-yellow-800);"></iron-icon>
+                <paper-item-body>
+                    <div style="font-size:12px;">
+                        <strong>Nota </strong>
+                        <span class="text-wrap" style="font-style: italic;">
+                            Si la cotización pertence a un prospecto,
+                            será agregado a la lista de clientes activos
+                        </span>
+                    </div>
+                </paper-item-body>
+                
+			</paper-icon-item>
 
             
 

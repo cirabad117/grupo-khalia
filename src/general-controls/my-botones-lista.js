@@ -48,10 +48,14 @@ class MyBotonesLista extends PolymerElement {
 
     esActiva(obj,accion){
 
-        if((obj.estatus=="aceptada" || obj.estatus=="declinada") && (accion=="aceptar" || accion=="declinar")){
-            return false;
+        if(obj.estatus){
+            if((obj.estatus.nombreEstatus=="aceptada" || obj.estatus.nombreEstatus=="declinada") && (accion=="aceptar" || accion=="declinar")){
+                return false;
+            }else{
+                return true
+            }
         }else{
-            return true
+            return true;
         }
 
     }

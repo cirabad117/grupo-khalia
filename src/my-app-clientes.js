@@ -88,11 +88,10 @@ class MyAppClientes extends PolymerElement {
             datosApp:{type:Array, notify:true, value:[
                 {"titulo":"Clave de producto","dato":"_key"},
                 {"titulo":"Razón social","dato":"razon"},
-                {"titulo":"Tipo de membresia","dato":"tipoMembresia","valorInterno":"tipo"},
+                {"titulo":"Fecha de creación","dato":"_timestamp"},
                 {"titulo":"Estado","dato":"objCliente"},
                 {"titulo":"Acciones","listaAcciones":[
                     {"accion":"disparaAccionItem","icono":"icons:input","texto":"Ver detalles"},
-                    // {"accion":"disparaAccionEliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
                 
             ]},
@@ -198,26 +197,6 @@ class MyAppClientes extends PolymerElement {
                                     return clienteApp;
                                 }
                             }
-
-                            
-                            
-
-
-                            // if(estatus!=null && estatus.texto==filtro){
-                            //     if((clienteApp.razon && clienteApp.razon.toLowerCase().indexOf(texto)!=-1) || (clienteApp.alias && clienteApp.alias.toLowerCase().indexOf(texto)!=-1)){
-                            //         return clienteApp;
-                            //     }else{
-                            //         var arreglo=clienteApp.listaContactos;
-                            //         if(arreglo){
-                            //             for(var i=0; i<arreglo.length;i++){
-                            //                 var item=arreglo[i];
-                            //                 if((item.nombreCliente && item.nombreCliente.toLowerCase().indexOf(texto)!=-1) || (item.puesto && item.puesto.toLowerCase().indexOf(texto)!=-1)){
-                            //                     return clienteApp;
-                            //                 }
-                            //             }
-                            //         }
-                            //     }
-                            // }
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { UtilsMixin } from '../mixins/utils-mixin.js';
 
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
@@ -7,7 +8,7 @@ import '@polymer/paper-item/paper-item-body.js';
 import '../general-controls/data-simple.js';
 
 import '../bootstrap.js';
-class MyCotizaDialog extends PolymerElement {
+class MyCotizaDialog extends UtilsMixin(PolymerElement) {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -18,9 +19,9 @@ class MyCotizaDialog extends PolymerElement {
             
             <div class="d-flex flex-wrap">
                 <data-simple style="padding:5px;"font-size="25px"dato="[[getId(coti.id)]]" titulo="Folio"></data-simple>
-                <data-simple style="padding:5px;"font-size="25px"dato="[[coti.estatus]]" titulo="Estatus"></data-simple>
-                <data-simple style="padding:5px;"font-size="25px"dato="[[coti.agente.displayName]]" titulo="Agente"></data-simple>
                 <data-simple style="padding:5px;"font-size="25px"dato="[[coti.cliente.razon]]" titulo="Razón Social"></data-simple>
+                <data-simple style="padding:5px;"font-size="25px"dato="[[getEstatus(coti)]]" titulo="Estatus"></data-simple>
+                <data-simple style="padding:5px;"font-size="25px"dato="[[coti.agente.displayName]]" titulo="Agente"></data-simple>
             </div>
             
             <paper-item>
@@ -68,6 +69,10 @@ class MyCotizaDialog extends PolymerElement {
             }
             
             return "GK-"+str;
+    }
+
+    getEstatus(obj){
+        return obj.estatus.nombreEstatus+" - "+ this.PolymerUtils_getDateString(obj.estatus.fecha)
     }
 }
 
