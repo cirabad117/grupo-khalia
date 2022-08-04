@@ -127,6 +127,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					font-size: 18px;
 					color: #f1f1f1;
 					transition: 0.3s;
+					cursor:pointer;
 				}
 				
 				/* When you mouse over the navigation links, change their color */
@@ -148,6 +149,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				@media screen and (max-height: 450px) {
 					.sidenav {padding-top: 15px;} 
 					.sidenav a {font-size: 18px;}
+				}
+
+				.nav-item .nav-link .dropdown{
+					cursor:pointer;
 				}
 
 			</style>
@@ -192,6 +197,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					</paper-icon-item>
 					
 					<iron-collapse opened="[[esArea]]" style="padding:15px;">
+						<a name="admin" href="[[rootPath]]sistemas">Sistemas</a>
 						<a name="sasisopa" href="[[rootPath]]sasisopa">SASISOPA</a>
 						<a name="sgm" href="[[rootPath]]sgm">SGM</a>
 						<a name="emisiones" href="[[rootPath]]emisiones">Emisiones</a>

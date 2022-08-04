@@ -20,7 +20,7 @@ class MyDropdownButton extends PolymerElement {
                     display: inline-block;
                     position: relative;
                     color:rgba(255, 255, 255, 0.5);
-                    cursor:pointer;
+                    
                     
                 }
                 
@@ -36,11 +36,12 @@ class MyDropdownButton extends PolymerElement {
 
                 .dropdown:hover{
                     color:#BEBDC0;
+                    cursor:pointer;
                 }
 
                 .dropdown:hover .dropdown-content {
                     display: block;
-                    
+                    cursor:pointer;
                    
                 }
                 .dropdown-content span {

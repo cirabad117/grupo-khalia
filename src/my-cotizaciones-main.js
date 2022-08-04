@@ -223,7 +223,8 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                                 nombreEstatus:"aceptada",
                                 fecha:firebase.firestore.FieldValue.serverTimestamp()
                             };
-                            t.modificaCoti(elegido.dato.id,dato,elegido.dato.cliente,dialog);
+                            t.modificaCoti(elegido.dato.id,dato,dialog);
+                            t.actualizaCliente(elegido.dato.cliente);
                         }
                     },
                     negativeButton: {
@@ -253,7 +254,7 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                                     fecha:firebase.firestore.FieldValue.serverTimestamp()
                                 }
                             };
-                            t.modificaCoti(elegido.dato.id,obj,elegido.dato.cliente,dialog);
+                            t.modificaCoti(elegido.dato.id,obj,dialog);
                         }
                     },
                     negativeButton: {
@@ -273,7 +274,7 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
     }
 
 
-    modificaCoti(id,objEditar,cliente,dialog){
+    modificaCoti(id,objEditar,dialog){
         var t=this;
         var idCoti=id;
         var obj=objEditar;
@@ -287,7 +288,7 @@ class MyCotizacionesMain extends DialogLayoutMixin(PolymerElement) {
                 t.DialogLayout_closeDialog();
             }
             
-            t.actualizaCliente(cliente);
+           // t.actualizaCliente(cliente);
         
         }).catch((error) => {
             PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");

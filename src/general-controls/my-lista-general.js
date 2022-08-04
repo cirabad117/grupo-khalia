@@ -90,9 +90,9 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 
             </div>
             
-            <div class="card table-responsive">
-                <table class="table table-hover table-sm">
-                    <thead class="thead-dark">
+            <div class="card table-responsive" style="max-height:450px;overflow-y:scroll;">
+                <table class="table table-hover table-sm" >
+                    <thead class="thead-dark" style="position: sticky;top: 0">
                         <tr>
                             <template is="dom-repeat" items="[[listaCols]]" as="col">
                                 <th>[[col.titulo]]</th>
@@ -115,7 +115,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                                         <template is="dom-if" if="[[esEstatusCoti(tit.dato)]]">
                                             <div style="font-size: 16px; font-weight: 500;">
                                                 <span class$="badge [[getEstiloEstatus(info)]]" >
-
                                                     [[getEstatus(info)]]
                                                 </span>
                                             </div>
@@ -124,7 +123,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
 
                                         <template is="dom-if" if="[[tit.listaAcciones]]">
                                             <div class="d-flex">
-                                            <template is="dom-repeat" items="[[tit.listaAcciones]]" as="ac">
+                                                <template is="dom-repeat" items="[[tit.listaAcciones]]" as="ac">
 
                                                 <my-botones-lista obj="[[info]]" icono="[[ac.icono]]" accion="[[ac.accion]]"
                                                 obj="[[info]]" texto="[[ac.texto]]" on-lanza-accion="activaAccionBoton">
