@@ -22,7 +22,7 @@ class MyProyectoItem extends PolymerElement {
             <h5 style="margin:5px;">[[titulo]]</h5>
 
             <paper-listbox>
-                <template is="dom-repeat" items="{{tareas}}" filter="{{_filtraTareasTipo(tipo)}}"
+                <template is="dom-repeat" items="{{itemsTareas}}" filter="{{_filtraTareasTipo(tipo)}}"
                 sort="_ordenaItems">
                     
                     <paper-item class="tarea" on-click="eligeTarea" style$="margin:3px; background-color:[[item.modulo.fondo]]; color:[[item.modulo.txtColor]];">
@@ -40,8 +40,20 @@ class MyProyectoItem extends PolymerElement {
         return {
             titulo:{type:String, notify:true},
             tipo:{type:String, notify:true},
-            tareas:{type:Array, notify:true, value:[]}
+            tareas:{type:Array, notify:true, value:[]},
+            itemsTareas:{type:Array, notify:true, value:[]},
         }
+    }
+
+    static get observers() {
+        return [
+            '_changed(tareas,tareas.*)'
+        ];
+    }
+
+    _changed(arr){
+        var nuevoArreglo=PolymerUtils.cloneObject(arr);
+        this.set("itemsTareas",nuevoArreglo);
     }
 
     eligeTarea(e){
