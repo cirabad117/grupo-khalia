@@ -6,6 +6,8 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-item/paper-item-body.js';
 
 import './my-proyecto-item.js';
 import './my-tarea.js';
@@ -48,15 +50,25 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                                 <h5>Módulos</h5>
 
                                 <div class="d-flex">
-                                <div class="d-flex flex-wrap">
-                                    <template is="dom-repeat" items="[[modulos]]">
-                                        <h4 style="margin:5px;"><span class="badge" style$="[[muestraEstilo(item)]]">[[item.nombre]]</span></h4>
-                                    </template>
-                                </div>
-                                <div class="ml-auto">
-                                <button type="button" class="btn btn-sm btn-primary m-1" on-click="abreNuevoModulo">Agregar modulo</paper-button>
-                                    <button type="button" class="btn btn-sm btn-primary m-1" on-click="abreNuevaTarea">Agregar tarea</paper-button>
-                                </div>
+                                    <div class="d-flex flex-wrap">
+                                        <template is="dom-repeat" items="[[modulos]]">
+                                            <!-- <h4 style="margin:5px;"><span class="badge" style$="[[muestraEstilo(item)]]"></span></h4> -->
+                                            
+                                            <paper-item style$="margin:5px; [[muestraEstilo(item)]]">
+                                                <paper-item-body>
+                                                    <div>[[item.nombre]]</div>
+                                                </paper-item-body>
+                                                
+                                                <paper-icon-button icon="clear" on-click="borraModulo"></paper-icon-button>
+                                                
+                                            </paper-item>
+                                            
+                                        </template>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <button type="button" class="btn btn-sm btn-primary m-1" on-click="abreNuevoModulo">Agregar módulo</paper-button>
+                                        <button type="button" class="btn btn-sm btn-primary m-1" on-click="abreNuevaTarea">Agregar tarea</paper-button>
+                                    </div>
                                 </div>
 
                                 
@@ -76,7 +88,7 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                                 </div>
                             </div>
                             <div name="tarea">
-                                <my-tarea tarea="{{tareaElegida}}" id-proyecto="{{proyecto.id}}"></my-tarea>
+                                <my-tarea tarea="{{tareaElegida}}" id-proyecto="{{proyecto.id}}" modulos="[[modulos]]"></my-tarea>
                             </div>
                         </iron-pages>
                     </div>
@@ -138,7 +150,7 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
 			element:"my-nueva-tarea",
 			title:"Agregar tarea",
             params:[id,arr],
-			// style:"width:500px;max-width:95%;",
+            style:"width:450px;max-width:95%;",
 			positiveButton: {
                 text: "guardar tarea",
                 style:"background-color:var(--paper-blue-500);color:white",
@@ -177,6 +189,44 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
                 }
             }
 		});
+    }
+
+    borraModulo(e){
+        var item=e.model.item;
+        var index=e.model.index;
+        var arreglo=PolymerUtils.cloneObject(this.modulos);
+        var t=this;
+        PolymerUtils.Dialog.createAndShow({
+            message:"¿desea eliminiar el módulo "+item.nombre+"? Esta acción no puede deshacerse.",
+			// style:"width:500px;max-width:95%;",
+			positiveButton: {
+                text: "Eliminar",
+                style:"background-color:var(--paper-blue-500);color:white",
+                action: function(dialog, element) {
+                    arreglo.splice(index,1);
+                    var id=t.proyecto.id;
+
+                    var washingtonRef = firebase.firestore().collection("estatus-area/sistemas/proyectos").doc(id);
+                    // Set the "capital" field of the city 'DC'
+                    return washingtonRef.update({
+                        modulos:arreglo
+                    }).then(() => {
+                        PolymerUtils.Toast.show("Módulos actualizados");
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
+                        console.error("Error updating document: ", error);
+                    });
+                }
+            },
+            negativeButton: {
+                text: "Cancelar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
+
     }
 
     _consultaDatos(obj){

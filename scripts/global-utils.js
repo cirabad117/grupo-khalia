@@ -1,13 +1,4 @@
 var PolymerUtils={
-    monthsNames:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
-
-    _bigUtilsMap:{},
-    isPrimitive: function(test) {
-        return (test !== Object(test)) || typeof(test)=="string";
-    },
-    isFunction: function(functionToCheck) {
-        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-    },
     convertFirebaseTimestamp: function(timestamp){
         var tiempo=0;
         if(typeof timestamp=="object" && timestamp!=null && timestamp.seconds){
@@ -27,7 +18,6 @@ var PolymerUtils={
     },
     getLastItemEstatusFecha:function(arreglo){
         
-        console.log("recibimos lsita de seguimiento",arreglo);
         var comparar=function(a,b){
             
             var nameA = a.fechaGuardado; 
@@ -53,6 +43,27 @@ var PolymerUtils={
         }
     
 },
+    getZeroHoursLocalDate:function(date){
+        var time=date.getTime();
+        time=time+(date.getTimezoneOffset()*60*1000);
+        var fecha=new Date(time);
+        fecha.setHours(0);
+        fecha.setMinutes(0);
+        fecha.setSeconds(0);
+        fecha.setMilliseconds(0);  
+        time=fecha.getTime();
+        
+        return new Date(time);
+    },
+    monthsNames:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
+
+    _bigUtilsMap:{},
+    isPrimitive: function(test) {
+        return (test !== Object(test)) || typeof(test)=="string";
+    },
+    isFunction: function(functionToCheck) {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+    },
     showFileInput:function(type,callback){
         var inputFile = document.createElement("input");
         inputFile.type="file";

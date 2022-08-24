@@ -69,9 +69,9 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
                                         <paper-radio-button name="oficina">oficina</paper-radio-button>
                                     </paper-radio-group>
                                     
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" value="{{tel::input}}" placeholder="Número telefónico" aria-describedby="button-addon4">
-                                        <div class="input-group-append" id="button-addon4">
+                                    <div class="input-group d-flex align-items-center">
+                                        <paper-input  value="{{tel::input}}" char-counter maxlength="10" placeholder="Número telefónico"></paper-input>
+                                        
                                             <paper-icon-button icon="icons:done" on-click="agregaTelefono" 
                                             onmouseover="PolymerUtils.Tooltip.show(event,'Aceptar')">
                                             </paper-icon-button>
@@ -79,7 +79,7 @@ class DialogoNuevoConta extends DialogLayoutMixin(PolymerElement) {
                                             <paper-icon-button icon="icons:clear" on-click="toggleTel"
                                             onmouseover="PolymerUtils.Tooltip.show(event,'Cancelar')">
                                             </paper-icon-button>
-                                        </div>
+                                        
                                     </div>
                                 </iron-collapse>
                                 

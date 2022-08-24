@@ -65,7 +65,7 @@ class MyNuevoCliente extends NotificacionMixin(UtilsMixin(DialogLayoutMixin(Poly
 								</vaadin-list-box>
 							</template>
 						</vaadin-select>
-                        <paper-input style="padding:8px;" id="txtTel" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
+                        <paper-input style="padding:8px;" char-counter maxlength="10" id="txtTel" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
 						</paper-input>
                 </div>
 

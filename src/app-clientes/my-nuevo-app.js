@@ -104,7 +104,7 @@ class MyNuevoApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
             fechaActual:{type:Object, notify:true},
             nuevaVigencia:{type:Object, notify:true},
             listaOpciones:{type:Array, notify:true, value:[
-                {"tipo":"Versión de prueba","explicacion":"15 días","cantidad":15},
+                {"tipo":"Versión de prueba","explicacion":"7 días","cantidad":7},
                 {"tipo":"Básica","explicacion":"1 mes","cantidad":30},
                 {"tipo":"Completa","explicacion":"1 año","cantidad":365}
             ]}

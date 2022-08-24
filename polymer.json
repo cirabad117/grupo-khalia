@@ -18,7 +18,9 @@
     "node_modules/html2canvas/dist/html2canvas.min.js",
     "node_modules/html2pdf.js/dist/html2pdf.min.js",
     "scripts/*.js",
-    "scripts/*.css"
+    "scripts/*.css",
+    "scripts/fullcalendar/*.js",
+    "scripts/fullcalendar/*.css"
   ],
   "builds": [
     

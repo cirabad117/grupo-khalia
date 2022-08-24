@@ -33,32 +33,63 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
             <div class="d-flex align-items-center">
                 <h4>
                     [[tarea.nombreTarea]]
-                    <template is="dom-if" if="{{!esNuevoEstatus}}" restamp>
-                        <span class="badge badge-primary" on-click="toggleEstatus" style="cursor:pointer;">
-                            {{textoEstatus}}
-                        </span>
-                    </template>
                 </h4>
                 
-                <template is="dom-if" if="{{esNuevoEstatus}}" restamp>
-                    <div class="ml-4 p-2 d-flex align-items-baseline">
-                        
-                        <vaadin-select class="p-2"id="comboPeriodoNom" label="Estado de la tarea"
-                        value="{{nuevoEstatus}}" error-message="seleccione una opción">
+                <div class="ml-2">
+                    <template is="dom-if" if="{{!esNuevoModulo}}" restamp>
+                        <paper-item style$="margin:5px; [[muestraEstilo(tareaActiva.modulo)]]" on-click="toggleModulo">
+                            <paper-item-body>
+                                <div>[[tareaActiva.modulo.nombre]]</div>
+                            </paper-item-body>
+                            <iron-icon icon="create"></iron-icon>
+                        </paper-item>
+                    </template>
+                    
+                    <template is="dom-if" if="{{esNuevoModulo}}" restamp>
+                        <vaadin-combo-box id="comboAgente" label="Módulo" selected-item="{{moduloElegido}}" items="[[modulos]]"
+                        item-value-path="id" item-label-path="nombre" error-message="seleccione una opción">
                             <template>
-                                <vaadin-list-box>
-                                    <vaadin-item value="backlog">Pendiente</vaadin-item>
-                                    <vaadin-item value="progress">En progreso</vaadin-item>
-                                    <vaadin-item value="validate">Validación</vaadin-item>
-                                    <vaadin-item value="complete">Completada</vaadin-item>
-                                </vaadin-list-box>
+                                <b style$="background-color:[[item.fondo]];color:[[item.txtColor]];">[[item.nombre]]</b>
                             </template>
-                        </vaadin-select>
+                        </vaadin-combo-box>
                         
-                        <button type="button" class="btn btn-primary m-1 p-2" raised on-click="modificaTarea">Aplicar estatus</button>
-                        <button type="button" class="btn btn-secondary m-1 p-2" raised on-click="toggleEstatus">Cancelar</button>
-                    </div>
-                </template>
+                        <button type="button" class="btn btn-success" on-click="editaModulo">Guardar módulo</button>
+                        <button type="button" class="btn btn-secondary" on-click="toggleModulo">Cancelar</button>
+                    </template>
+                
+                </div>
+
+                <div class="ml-auto">
+                    
+                    <template is="dom-if" if="{{!esNuevoEstatus}}" restamp>
+                        <paper-item class="ml-auto bg-primary text-white" on-click="toggleEstatus">
+                            <paper-item-body>
+                                <div>{{textoEstatus}}</div>
+                            </paper-item-body>
+                            <iron-icon icon="arrow-drop-down" ></iron-icon>
+                        </paper-item>
+                    </template>
+                    
+                    <template is="dom-if" if="{{esNuevoEstatus}}" restamp>
+                        <div class="d-flex align-items-baseline">
+                            <vaadin-select class="p-2"id="comboPeriodoNom" label="Estado de la tarea"
+                            value="{{nuevoEstatus}}" error-message="seleccione una opción">
+                                <template>
+                                    <vaadin-list-box>
+                                        <vaadin-item value="backlog">Pendiente</vaadin-item>
+                                        <vaadin-item value="progress">En progreso</vaadin-item>
+                                        <vaadin-item value="validate">Validación</vaadin-item>
+                                        <vaadin-item value="complete">Completada</vaadin-item>
+                                    </vaadin-list-box>
+                                </template>
+                            </vaadin-select>
+                            <button type="button" class="btn btn-primary m-1 p-2" raised on-click="modificaTarea">Aplicar estatus</button>
+                            <button type="button" class="btn btn-secondary m-1 p-2" raised on-click="toggleEstatus">Cancelar</button>
+                        </div>
+                    </template>
+                
+                </div>
+                
             
             </div>
             
@@ -161,7 +192,9 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
             esNuevaNota:{type:Boolean, notify:true, value:false},
             esSubirArchivo:{type:Boolean, notify:true, value:false},
             esNuevoEstatus:{type:Boolean, notify:true, value:false},
-            notas:{type:Array, notify:true, value:[]}
+            esNuevoModulo:{type:Boolean, notify:true, value:false},
+            notas:{type:Array, notify:true, value:[]},
+            modulos:{type:Array, notify:true, value:[]}
         }
     }
 
@@ -172,6 +205,10 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
     ready() {
         super.ready();
        
+    }
+
+    muestraEstilo(obj){
+        return "background-color:"+obj.fondo+";color:"+obj.txtColor+";"
     }
 
     guardaDesc(){
@@ -187,6 +224,28 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
         };
 
         this.updateTarea(objEditar,fnVista);
+    }
+
+    editaModulo(){
+        var t=this;
+        var col="estatus-area/sistemas/proyectos/"+t.idProyecto+"/tareas";
+        var tarea=t.tareaActiva.id;
+        var washingtonRef = firebase.firestore().collection(col).doc(tarea);
+
+        if(!t.moduloElegido || t.moduloElegido==null){
+            return PolymerUtils.Toast.show("selecciona un módulo válido");
+        }
+
+        return washingtonRef.update({
+            modulo:t.moduloElegido
+        }).then(() => {
+            PolymerUtils.Toast.show("Módulos actualizados");
+            t.toggleModulo();
+        }).catch((error) => {
+            PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
+            console.error("Error updating document: ", error);
+        });
+
     }
 
     guardaCampo(){
@@ -353,6 +412,10 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
         this.set("esNuevoEstatus",!this.esNuevoEstatus);        
     }
 
+    toggleModulo(){
+        this.set("esNuevoModulo",!this.esNuevoModulo);        
+    }
+
     _cambiaCampos(obj){
         if(obj && obj!=null){
             this.set("descripcion",obj.descripcion);
@@ -399,7 +462,6 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                 doc: "estatus-area/sistemas/proyectos/"+t.idProyecto+"/tareas/"+obj.id,
                 observer:function(data){
                     if(data){
-                        console.log("recibimos tarea",data);
                         t.set("tareaActiva",data);
                         
                     }else{

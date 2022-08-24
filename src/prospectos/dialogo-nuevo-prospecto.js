@@ -66,7 +66,7 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 								</vaadin-list-box>
 							</template>
 						</vaadin-select>
-						<paper-input style="padding:8px;" id="txtTel" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
+						<paper-input style="padding:8px;" id="txtTel" char-counter maxlength="10" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
 						</paper-input>
 				</div>
 

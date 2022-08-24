@@ -264,6 +264,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 									<a class="nav-link" href="[[rootPath]]usuarios">Usuarios</a>
 								</li>
 							</dom-access>
+							<li class="nav-item">
+								<a class="nav-link" href="[[rootPath]]calendario">Calendario</a>
+							</li>
 						</ul>
 						<div class="form-inline my-2 my-lg-0">
 							<my-icono-usuario tam="48px"></my-icono-usuario>
@@ -320,6 +323,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 						<my-sistemas-main name="sistemas"></my-sistemas-main>
 						<my-sistemas-proyecto name="proyecto"></my-sistemas-proyecto>
+
+						<my-calendario name="calendario"></my-calendario>
 					
 						<my-view404 name="view404"></my-view404>
 					</iron-pages>
@@ -344,7 +349,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			paginas:{type:Array, notify:true, value:[
 				'inicio','prospecto','prospectos','clientes','cliente',
 				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
-				'app-clientes','cotizacion','sistemas','proyecto']
+				'app-clientes','cotizacion','sistemas','proyecto','calendario']
 			},
 			nombrePagina:{type:String, notify:true, value:"Grupo Khalia"},
 			muestraBack:{type:Boolean, notify:true, value:false},
@@ -552,6 +557,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			case 'proyecto':
 				import('./sistemas/my-sistemas-proyecto.js');
 				this.set("nombrePagina","Departamento Sistemas");
+			break;
+			case 'calendario':
+				import('./portal/my-calendario.js');
+				this.set("nombrePagina","Calendario");
 			break;
 			case 'view404':
 				import('./my-view404.js');

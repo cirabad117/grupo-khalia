@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin';
 
@@ -23,7 +24,7 @@ class MyNuevaTarea extends DialogLayoutMixin(PolymerElement) {
 
             <paper-input style="width:250px;"label="nombre de la tarea" value="{{nombreTarea}}" ></paper-input>
             
-            <paper-input style="width:250px;"label="descripción" value="{{descripcion}}" ></paper-input>
+            <paper-textarea label="descripción" value="{{descripcion}}"></paper-textarea>
 
 
         `;
