@@ -206,7 +206,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
         if(valorInterno){
             
             var datoInterno=obj[dato];
-            console.log("interno",datoInterno);
             if(datoInterno && datoInterno!=null){
                 var encontrado=datoInterno[valorInterno];
                 console.log("encontrado",encontrado);

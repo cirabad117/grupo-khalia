@@ -62,7 +62,8 @@ class MyAppClientes extends PolymerElement {
                     <div name="elegido">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="card-title">
+                                
+                                <h3 class="card-title" on-click="navegaCliente">
                                     <span>
                                         <paper-icon-button icon="arrow-back" on-click="backLista"></paper-icon-button>
                                     </span>
@@ -89,6 +90,7 @@ class MyAppClientes extends PolymerElement {
                 {"titulo":"Clave de producto","dato":"_key"},
                 {"titulo":"Razón social","dato":"razon"},
                 {"titulo":"Fecha de creación","dato":"_timestamp"},
+                {"titulo":"Membresía","dato":"tipoMembresia","valorInterno":"tipo"},
                 {"titulo":"Estado","dato":"objCliente"},
                 {"titulo":"Acciones","listaAcciones":[
                     {"accion":"disparaAccionItem","icono":"icons:input","texto":"Ver detalles"},

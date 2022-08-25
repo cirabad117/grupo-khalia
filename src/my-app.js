@@ -264,9 +264,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 									<a class="nav-link" href="[[rootPath]]usuarios">Usuarios</a>
 								</li>
 							</dom-access>
-							<li class="nav-item">
+							<!-- <li class="nav-item">
 								<a class="nav-link" href="[[rootPath]]calendario">Calendario</a>
-							</li>
+							</li> -->
 						</ul>
 						<div class="form-inline my-2 my-lg-0">
 							<my-icono-usuario tam="48px"></my-icono-usuario>
