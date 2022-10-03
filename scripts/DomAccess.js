@@ -97,7 +97,7 @@ var StaticDomAccess={
                     }
                 },
                 "app-clientes":{
-                    "name":"aplicacion para clientes",
+                    "name":"App Bitácoras",
                     "description":"aplicacion ofrecida a clientes de grupo khalia"
                 }
                

@@ -190,7 +190,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<dom-access path="admin/cotizaciones">
 							<a name="cotizaciones" href="[[rootPath]]cotizaciones"><iron-icon style="margin:3px;" icon="icons:list"></iron-icon>Cotizaciones</a>
 						</dom-access>
-						<dom-access path="adminapp-clientes">
+						<dom-access path="admin/app-clientes">
 							<a name="app-clientes" href="[[rootPath]]app-clientes" ><iron-icon style="margin:3px;" icon="device:dvr"></iron-icon>App Bitácoras</a>
 						</dom-access>
 					</iron-collapse>
@@ -317,7 +317,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<my-usuarios name="usuarios" lista-usuarios="[[listaUsuarios]]"></my-usuarios>
 					</dom-access>
 					
-					<dom-access name="admin/app-clientes" path="app-clientes">
+					<dom-access name="app-clientes" path="admin/app-clientes">
 						<my-app-clientes name="app-clientes" lista-usuarios="[[listaUsuarios]]"></my-app-clientes>
 					</dom-access>
 					
