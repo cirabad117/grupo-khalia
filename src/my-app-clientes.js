@@ -1,10 +1,13 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { UtilsMixin } from "./mixins/utils-mixin.js";
 
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 
 import './general-controls/my-lista-general.js';
 import './app-clientes/my-nuevo-app.js';
@@ -13,7 +16,7 @@ import './app-clientes/my-comentarios-app.js';
 
 import './bootstrap.js';
 
-class MyAppClientes extends PolymerElement {
+class MyAppClientes extends UtilsMixin(PolymerElement) {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -48,8 +51,102 @@ class MyAppClientes extends PolymerElement {
                 
                 <iron-pages selected="{{selected}}" attr-for-selected="name">
                     <div name="lista">
+                        <!-- Content Row -->
+                        <div class="row m-1">
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    CLIENTES TOTALES
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{totalClientes}}</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                                                <iron-icon icon="supervisor-account"></iron-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    CLIENTES ÚLTIMO MES
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{totalMes}}</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <!-- <i class="fas fa-dollar-sign fa-2x text-gray-300"></i> -->
+                                                
+                                                <iron-icon icon="perm-contact-calendar"></iron-icon>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Earnings (Monthly) Card Example 
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Tasks
+                                                </div>
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="progress progress-sm mr-2">
+                                                            <div class="progress-bar bg-info" role="progressbar"
+                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Pending Requests
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div><!-- Content Row -->
+                        
+                        
                         <my-lista-general titulo-pagina="App Clientes" vista="appClientes" arreglo-items="{{listaClientesApp}}"
-             
                         lista-filtro="[[listaFiltroApp]]" lista-ordena="[[opcionesOrdena]]"
                         lista-cols="[[datosApp]]"
                         funcion-buscar="[[funcionFiltraApp]]" funcion-ordenar="[[funcionOrdena]]"
@@ -59,16 +156,20 @@ class MyAppClientes extends PolymerElement {
                     <div name="coment">
                         <my-comentarios-app></my-comentarios-app>
                     </div>
+                    <div name="nuevo">
+                        <my-nuevo-app usuarios-app="[[listaUsuarios]]" on-regresa-lista="backLista"></my-nuevo-app>
+                    </div>
                     <div name="elegido">
                         <div class="card">
                             <div class="card-body">
                                 
-                                <h3 class="card-title" on-click="navegaCliente">
+                                <h6 class="card-title" on-click="backLista">
                                     <span>
-                                        <paper-icon-button icon="arrow-back" on-click="backLista"></paper-icon-button>
+                                        <paper-icon-button icon="arrow-back" ></paper-icon-button>
                                     </span>
-                                    [[datosCliente.razon]]
-                                </h3>
+                                    Volver al listado
+                                    <!-- [[datosCliente.razon]] -->
+                                </h6>
                                 <my-datos-app cliente="[[datosCliente]]"></my-datos-app>
                             </div>
                         </div>
@@ -272,6 +373,12 @@ class MyAppClientes extends PolymerElement {
 
         }
     }
+    
+    static get observers() {
+        return [
+            '_revisaClientes(listaClientesApp,listaClientesApp.*)'
+        ];
+    }
 
     constructor() {
         super();
@@ -285,6 +392,43 @@ class MyAppClientes extends PolymerElement {
         
         binder.bindArray(this,this.listaClientesApp,"listaClientesApp");
     }
+
+    _revisaClientes(arr){
+        var fechaActual=new Date();
+        var fechaHoy=PolymerUtils.getZeroHoursLocalDate(fechaActual);
+
+        var nuevaFecha=new Date(fechaHoy.getTime());
+
+        var fechaAnte=Sugar.Date.rewind(nuevaFecha, '30 days', true);
+        var fechaAnterior=PolymerUtils.getZeroHoursLocalDate(fechaAnte);
+
+        if(arr && arr.length>0){
+            this.set("totalClientes",arr.length);
+            
+        
+            var actuales=0;
+            for(var i=0;i<=arr.length;i++){
+                var item=arr[i];
+                if(item && item._timestamp){
+                    var fechaItem=this.PolymerUtils_getDateFromTimestamp(item._timestamp);
+                    var fi=PolymerUtils.getZeroHoursLocalDate(fechaItem);
+                    if(fi>=fechaAnterior && fi<=fechaHoy){
+                        actuales++;
+                    }
+                }
+                
+            }
+
+            this.set("totalMes",actuales);
+
+        
+        }else{
+            this.set("totalClientes",0);
+        }
+
+    }
+
+
 
     showEstatus(obj){
         if(obj._cancelada && obj._cancelada==true){
@@ -333,26 +477,27 @@ class MyAppClientes extends PolymerElement {
     }
 
     abreNuevoApp(){
-        var arrUsers=PolymerUtils.cloneObject(this.listaUsuarios);
-       PolymerUtils.Dialog.createAndShow({
-			type: "modal",
-			element:"my-nuevo-app",
-			title:"Agregar cliente a plataforma",
-			style:"width:600px;max-width:95%;",
-            params:[arrUsers],
-			positiveButton: {
-                text: "Crear",
-                action: function(dialog, element) {
-                    element.accionBotonGuardar();
-                }
-            },
-            negativeButton: {
-                text: "Cerrar",
-                action: function(dialog, element) {
-                    dialog.close();
-                }
-            }
-		});
+        this.set("selected","nuevo");
+    //     var arrUsers=PolymerUtils.cloneObject(this.listaUsuarios);
+    //    PolymerUtils.Dialog.createAndShow({
+	// 		type: "modal",
+	// 		element:"my-nuevo-app",
+	// 		title:"Agregar cliente a plataforma",
+	// 		style:"width:600px;max-width:95%;",
+    //         params:[arrUsers],
+	// 		positiveButton: {
+    //             text: "Crear",
+    //             action: function(dialog, element) {
+    //                 element.accionBotonGuardar();
+    //             }
+    //         },
+    //         negativeButton: {
+    //             text: "Cerrar",
+    //             action: function(dialog, element) {
+    //                 dialog.close();
+    //             }
+    //         }
+	// 	});
     }
 
 

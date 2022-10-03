@@ -3,6 +3,8 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
+
+import '../general-controls/my-text-editor.js';
 import { DialogLayoutMixin } from '../mixins/dialog-layout-mixin';
 
 
@@ -12,6 +14,13 @@ class MyNuevaTarea extends DialogLayoutMixin(PolymerElement) {
             <style>
                 :host{
                     display:block;
+                    overflow-y:scroll;
+                    max-height:550px;
+                }
+
+                .titulo{
+                    border-bottom:1px solid var(--paper-blue-700);
+                 
                 }
             </style>
             
@@ -22,9 +31,14 @@ class MyNuevaTarea extends DialogLayoutMixin(PolymerElement) {
                 </template>
             </vaadin-combo-box>
 
-            <paper-input style="width:250px;"label="nombre de la tarea" value="{{nombreTarea}}" ></paper-input>
+            <paper-input label="nombre de la tarea" value="{{nombreTarea}}" maxlength="50"></paper-input>
             
-            <paper-textarea label="descripción" value="{{descripcion}}"></paper-textarea>
+            
+            <div class="titulo">
+                <h5>Descripción</h5>
+            </div>
+            <my-text-editor id="text-campos" texto-incrustar="{{campos}}"></my-text-editor>
+
 
 
         `;
@@ -53,10 +67,24 @@ class MyNuevaTarea extends DialogLayoutMixin(PolymerElement) {
     }
 
     guardaTarea(){
+
+        if(!this.moduloElegido || this.moduloElegido==null ){
+            return PolymerUtils.Toast.show("Selecciona un módulo");
+        }
+
+        if(!this.nombreTarea || this.nombreTarea==null || this.nombreTarea.trim()==""){
+            return PolymerUtils.Toast.show("Escribe un nombre a la tarea");
+        }
+
+        var texto=this.shadowRoot.querySelector("#text-campos").muestraTexto();
+
+        if(!texto || texto==null || texto.trim()=="" || texto=="<p></p>" || texto=="<p><br></p>"){
+            return PolymerUtils.Toast.show("escribe un texto válido para los campos");
+        }
         var tarea={
             modulo:this.moduloElegido,
-            descripcion:this.descripcion,
             nombreTarea:this.nombreTarea,
+            campos:texto,
             estatus:"backlog"
         }
         var id=this.idProyecto;

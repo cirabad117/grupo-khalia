@@ -42,11 +42,12 @@ class NuevaFecha extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
     static get properties() {
         return {
             listaTipos:{type:Array, notify:true,value:[
-                {"texto":"Salida","fondo":"var(--paper-green-600)","color":"white"},
-                {"texto":"Cumpleaños","fondo":"var(--paper-purple-600)","color":"white"},
-                {"texto":"Junta","fondo":"var(--paper-teal-700)","color":"white"},
-                {"texto":"Entrega mensual","fondo":"#0277BD","color":"white"},
-                {"texto":"Fiesta / evento","fondo":"var(--paper-pink-600)","color":"white"},
+                {"texto":"Salida","fondo":"var(--paper-blue-600)","color":"white"},
+                {"texto":"Cumpleaños","fondo":"var(--paper-yellow-500)","color":"black"},
+                {"texto":"Junta","fondo":"var(--paper-orange-700)","color":"black"},
+                {"texto":"Entrega mensual","fondo":"var(--paper-red-600)","color":"white"},
+                {"texto":"Fiesta / evento","fondo":"var(--paper-green-600)","color":"white"},
+                {"texto":"Asueto","fondo":"var(--paper-grey-700)","color":"white"},
             ]}
 
         }

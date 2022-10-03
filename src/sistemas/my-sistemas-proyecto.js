@@ -150,7 +150,7 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
 			element:"my-nueva-tarea",
 			title:"Agregar tarea",
             params:[id,arr],
-            style:"width:450px;max-width:95%;",
+            style:"width:600px;max-width:95%;",
 			positiveButton: {
                 text: "guardar tarea",
                 style:"background-color:var(--paper-blue-500);color:white",

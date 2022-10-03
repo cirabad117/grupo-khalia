@@ -37,16 +37,8 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 }
             </style>
             
-            <!-- <template is="dom-if" if="[[esOtros(tituloPagina)]]">
-                <nav class="navbar navbar-light" style$="[[estiloNavega]]">
-                    <a class="navbar-brand">
-                        
-                        <iron-icon icon="[[icono]]"></iron-icon>
-                        
-                        [[tituloPagina]]
-                    </a>
-                </nav>
-            </template> -->
+
+            <div class="container">
             
             <div class="card">
                 <div class="card-body" style="padding: 5px !important;">
@@ -81,7 +73,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                         <span>
                             <iron-icon icon="create"></iron-icon>
                         </span>
-                        Agregar cotización
+                        Agregar registro
                     </button>
                     
                 </template>
@@ -89,6 +81,10 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 </div>
                 
             </div>
+
+            
+
+           
             
             <div class="card table-responsive" style="max-height:450px;overflow-y:scroll;">
                 <table class="table table-hover table-sm" >
@@ -140,6 +136,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                 </table>
             </div>
             
+            
             <template is="dom-if" if="{{esPrincipal}}">
                 <div style="position: fixed; bottom: 24px; right: 24px;">
                     <div style="position: relative; cursor:pointer;" on-clicK="disparaAccionPrincipal">
@@ -147,7 +144,7 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
                     </div>
                 </div>
             </template>
-
+</div>
         `;
     }
 
@@ -208,7 +205,6 @@ class MyListaGeneral extends UtilsMixin(PolymerElement) {
             var datoInterno=obj[dato];
             if(datoInterno && datoInterno!=null){
                 var encontrado=datoInterno[valorInterno];
-                console.log("encontrado",encontrado);
                 if(!encontrado || encontrado==null){
                     return "-";
                 }else{

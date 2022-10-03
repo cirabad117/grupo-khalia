@@ -3,6 +3,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/communication-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/device-icons.js';
 
 import '../controles-extra/dom-access.js';
 

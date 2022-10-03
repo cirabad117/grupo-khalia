@@ -8,6 +8,8 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
 
 import '../general-controls/data-simple.js';
 
@@ -26,6 +28,12 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                     cursor:pointer;
                     --paper-listbox-background-color:#F5F5F5;
                 }
+
+                .link:hover{
+                    cursor:pointer;
+                    color:var(--paper-blue-600);
+                    text-decoration:underline;
+                }
             </style>
 
             <div class="container">
@@ -40,6 +48,9 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
                     <div class="col-md-9">
                         <iron-pages selected="{{vista}}">
                             <div>
+                                <h3 class="link" on-click="abreCliente">[[cliente.razon]]<span>
+                                <iron-icon icon="launch"></iron-icon>
+                                </span></h3>
                                 <div class="d-flex flex-wrap align-items-center">
                                     <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.id]]" titulo="Clave de producto"></data-simple>
                                     <data-simple  style="padding:5px;"font-size="25px"dato="[[cliente.tipoMembresia.tipo]]" titulo="Tipo de vigencia"></data-simple>
@@ -139,6 +150,12 @@ class MyDatosApp extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         
         binder.bindArray(this,this.listaUsuarios,"listaUsuarios");
        }
+   }
+
+   abreCliente(){
+    var cliente=this.cliente;
+    NavigationUtils.navigate("cliente",{"id":cliente._idCliente});
+
    }
 
     muestraNuevaFecha(fecha,dato){

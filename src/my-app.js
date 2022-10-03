@@ -33,6 +33,7 @@ import '@polymer/paper-item/paper-item.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/communication-icons.js';
+import '@polymer/iron-icons/device-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 
 import './general-controls/my-dropdown-button.js';
@@ -189,6 +190,9 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<dom-access path="admin/cotizaciones">
 							<a name="cotizaciones" href="[[rootPath]]cotizaciones"><iron-icon style="margin:3px;" icon="icons:list"></iron-icon>Cotizaciones</a>
 						</dom-access>
+						<dom-access path="adminapp-clientes">
+							<a name="app-clientes" href="[[rootPath]]app-clientes" ><iron-icon style="margin:3px;" icon="device:dvr"></iron-icon>App Bitácoras</a>
+						</dom-access>
 					</iron-collapse>
 					
 					<paper-icon-item class="item-collapse" on-click="toggleArea">
@@ -204,9 +208,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 						<a name="seg" href="[[rootPath]]seg" >Seguridad</a>
 						<a name="admin" href="[[rootPath]]admin" >Administración</a>
 					</iron-collapse>
-					<dom-access path="app-clientes">
-						<a name="app-clientes" href="[[rootPath]]app-clientes" >App Clientes</a>
-					</dom-access>
+					
 					<dom-access path="usuarios">
 						<a name="usuarios" href="[[rootPath]]usuarios" >Usuarios</a>
 					</dom-access>
@@ -254,19 +256,19 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							<li class="nav-item dropdown">
 								<my-dropdown-button titulo="Estatus por departamento" items="[[listaDepa]]"></my-dropdown-button>
 							</li>
-							<dom-access path="app-clientes">
+							<!-- <dom-access path="app-clientes">
 								<li class="nav-item">
 									<a class="nav-link" href="[[rootPath]]app-clientes">App clientes</a>
 								</li>
-							</dom-access>
+							</dom-access> -->
 							<dom-access path="usuarios">
 								<li class="nav-item">
 									<a class="nav-link" href="[[rootPath]]usuarios">Usuarios</a>
 								</li>
 							</dom-access>
-							<!-- <li class="nav-item">
+							<li class="nav-item">
 								<a class="nav-link" href="[[rootPath]]calendario">Calendario</a>
-							</li> -->
+							</li>
 						</ul>
 						<div class="form-inline my-2 my-lg-0">
 							<my-icono-usuario tam="48px"></my-icono-usuario>
@@ -281,54 +283,51 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					</div>
 				</nav>
 				
-				<div class="container">
-					<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-
-						<my-inicio name="inicio"></my-inicio>
-						
-						<dom-access name="prospectos" path="admin/prospectos">
-							<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]" lista-usuarios="[[listaUsuarios]]"></my-prospectos-main>
-						</dom-access>
-						
-						<my-datos-prospecto  name="prospecto" lista-usuarios="[[listaUsuarios]]" cotizaciones="[[mainCotizaciones]]"></my-datos-prospecto>
-						
-						<dom-access name="clientes" path="admin/clientes">
-							<my-clientes-main name="clientes" lista-clientes="[[listaClientes]]" lista-usuarios="[[listaUsuarios]]"></my-clientes-main>
-						</dom-access>
-
-						<my-cliente name="cliente" lista-usuarios="[[listaUsuarios]]" cotizaciones="[[mainCotizaciones]]"></my-cliente>
-
-						<dom-access name="productos" path="admin/productos">
-							<my-productos-main name="productos" lista-productos="[[arregloProductos]]"></my-productos-main>
-						</dom-access>
-
-						<my-vista-producto  name="producto"></my-vista-producto>
-
-						<dom-access name="cotizaciones" path="admin/cotizaciones">
-							<my-cotizaciones-main name="cotizaciones" lista-cotizaciones="{{mainCotizaciones}}"></my-cotizaciones-main>
-						</dom-access>
-
-						<my-vista-cotiza name="cotizacion"></my-vista-cotiza>
-
-						<my-nueva-cotizacion name="nueva-cotizacion" lista-clientes="[[arregloClientes]]"
-						lista-productos="[[arregloProductos]]" lista-usuarios="[[listaUsuarios]]"></my-nueva-cotizacion>
-
-						<dom-access name="usuarios" path="usuarios">
-							<my-usuarios name="usuarios" lista-usuarios="[[listaUsuarios]]"></my-usuarios>
-						</dom-access>
-
-						<dom-access name="app-clientes" path="app-clientes">
-							<my-app-clientes name="app-clientes" lista-usuarios="[[listaUsuarios]]"></my-app-clientes>
-						</dom-access>
-
-						<my-sistemas-main name="sistemas"></my-sistemas-main>
-						<my-sistemas-proyecto name="proyecto"></my-sistemas-proyecto>
-
-						<my-calendario name="calendario"></my-calendario>
+				<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+					<my-inicio name="inicio"></my-inicio>
 					
-						<my-view404 name="view404"></my-view404>
-					</iron-pages>
-				</div>
+					<dom-access name="prospectos" path="admin/prospectos">
+						<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]" lista-usuarios="[[listaUsuarios]]"></my-prospectos-main>
+					</dom-access>
+					
+					<my-datos-prospecto  name="prospecto" lista-usuarios="[[listaUsuarios]]" cotizaciones="[[mainCotizaciones]]"></my-datos-prospecto>
+					
+					<dom-access name="clientes" path="admin/clientes">
+						<my-clientes-main name="clientes" lista-clientes="[[listaClientes]]" lista-usuarios="[[listaUsuarios]]"></my-clientes-main>
+					</dom-access>
+					
+					<my-cliente name="cliente" lista-usuarios="[[listaUsuarios]]" cotizaciones="[[mainCotizaciones]]"></my-cliente>
+					
+					<dom-access name="productos" path="admin/productos">
+						<my-productos-main name="productos" lista-productos="[[arregloProductos]]"></my-productos-main>
+					</dom-access>
+					
+					<my-vista-producto  name="producto"></my-vista-producto>
+					
+					<dom-access name="cotizaciones" path="admin/cotizaciones">
+						<my-cotizaciones-main name="cotizaciones" lista-cotizaciones="{{mainCotizaciones}}"></my-cotizaciones-main>
+					</dom-access>
+					
+					<my-vista-cotiza name="cotizacion"></my-vista-cotiza>
+					
+					<my-nueva-cotizacion name="nueva-cotizacion" lista-clientes="[[arregloClientes]]"
+					lista-productos="[[arregloProductos]]" lista-usuarios="[[listaUsuarios]]"></my-nueva-cotizacion>
+					
+					<dom-access name="usuarios" path="usuarios">
+						<my-usuarios name="usuarios" lista-usuarios="[[listaUsuarios]]"></my-usuarios>
+					</dom-access>
+					
+					<dom-access name="admin/app-clientes" path="app-clientes">
+						<my-app-clientes name="app-clientes" lista-usuarios="[[listaUsuarios]]"></my-app-clientes>
+					</dom-access>
+					
+					<my-sistemas-main name="sistemas" lista-usuarios="[[listaUsuarios]]"></my-sistemas-main>
+					<my-sistemas-proyecto name="proyecto"></my-sistemas-proyecto>
+					<my-calendario name="calendario"></my-calendario>
+					<my-portal-main name="portal"></my-portal-main>
+					<my-view404 name="view404"></my-view404>
+				</iron-pages>
+				
 			
 			</div><!--div main-->
 			
@@ -349,7 +348,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			paginas:{type:Array, notify:true, value:[
 				'inicio','prospecto','prospectos','clientes','cliente',
 				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
-				'app-clientes','cotizacion','sistemas','proyecto','calendario']
+				'app-clientes','cotizacion','sistemas','proyecto','calendario','portal']
 			},
 			nombrePagina:{type:String, notify:true, value:"Grupo Khalia"},
 			muestraBack:{type:Boolean, notify:true, value:false},
@@ -362,6 +361,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				{"nombre":"Clientes","icono":"icons:assignment-ind","link":"clientes","permiso":"admin/clientes"},
 				{"nombre":"Productos","icono":"icons:book","link":"productos","permiso":"admin/productos"},
 				{"nombre":"Cotizaciones","icono":"icons:list","link":"cotizaciones","permiso":"admin/cotizaciones"},
+				{"nombre":"App Bitácoras","icono":"device:dvr","link":"app-clientes","permiso":"admin/app-clientes"},
+
 			]},
 			listaDepa:{type:Array, notify:true, value:[
 				{"nombre":"SASISOPA","link":""},
@@ -369,7 +370,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				{"nombre":"Emisiones","link":""},
 				{"nombre":"Seguridad","link":""},
 				{"nombre":"Administración","link":""},
-				{"nombre":"Sistemas","link":"sistemas","icono":"polymer","permiso":"areas/sistemas"}
+				{"nombre":"Sistemas","link":"sistemas","icono":"icons:polymer","permiso":"areas/sistemas"}
 			]},
 
 			listaUsuarios:{type:Array, notify:true, value:[]},
@@ -561,6 +562,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			case 'calendario':
 				import('./portal/my-calendario.js');
 				this.set("nombrePagina","Calendario");
+			break;
+			case 'portal':
+				import('./portal/my-portal-main.js');
+				this.set("nombrePagina","Portal Khalia");
 			break;
 			case 'view404':
 				import('./my-view404.js');

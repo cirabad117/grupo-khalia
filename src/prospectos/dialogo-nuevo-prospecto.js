@@ -36,43 +36,40 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 				}
 			</style>
 			
-			<paper-input id="txtRazon" label="Nombre o Razón social" value="{{razon}}" error-message="valor inválido"></paper-input>
+			<paper-input id="txtRazon" label="Nombre o Razón social" value="{{razon}}"
+			error-message="valor inválido"></paper-input>
 			
-			<div class="row">
-				<div class="col-md-6">
-					<vaadin-combo-box id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
-                    item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
-				</div>
-				<div class="col-md-6">
-				<vaadin-combo-box class="m-2" id="comboAgente" label="Agente" selected-item="{{agente}}" items="[[listaUsuarios]]"
-                        item-value-path="id" item-label-path="displayName" error-message="seleccione una opción"></vaadin-combo-box>
-				</div>
+			<div class="d-flex flex-wrap">
+				<vaadin-combo-box class="m-1" id="comboEstado" label="Estado" selected-item="{{estado}}" items="[[_estados]]"
+				item-value-path="codigo" item-label-path="nombre" error-message="seleccione una opción"></vaadin-combo-box>
+				
+				<vaadin-combo-box class="m-1" id="comboAgente" label="Agente" selected-item="{{agente}}" items="[[listaUsuarios]]"
+				item-value-path="id" item-label-path="displayName" error-message="seleccione una opción"></vaadin-combo-box>
 			</div>
 			
 			<div class="relative">
+				
 				<div class="absolute">Información de contacto</div>
 				
 				<div class="d-flex flex-wrap align-items-center">
 					<paper-input style="padding:8px;" id="txtNombre" label="Nombre" error-message="valor inválido" value="{{nombre}}"></paper-input>
 					<paper-input style="padding:8px;" label="puesto" value="{{puesto}}"></paper-input>
 				</div>
-
-				<div class="d-flex flex-wrap align-items-center">
-				<vaadin-select label="tipo de telefono" value="{{tipoTel}}">
-							<template>
-								<vaadin-list-box>
-									<vaadin-item value="celular">celular</vaadin-item>
-									<vaadin-item value="oficina">oficina</vaadin-item>
-								</vaadin-list-box>
-							</template>
-						</vaadin-select>
-						<paper-input style="padding:8px;" id="txtTel" char-counter maxlength="10" label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
-						</paper-input>
-				</div>
-
-
 				
-
+				<div class="d-flex flex-wrap align-items-center">
+					<vaadin-select label="tipo de telefono" value="{{tipoTel}}">
+						<template>
+							<vaadin-list-box>
+								<vaadin-item value="celular">celular</vaadin-item>
+								<vaadin-item value="oficina">oficina</vaadin-item>
+							</vaadin-list-box>
+						</template>
+					</vaadin-select>
+					<paper-input style="padding:8px;" id="txtTel" char-counter maxlength="10"
+					label="número telefónico" value="{{tel}}" error-message="ingresa un valor válido">
+					</paper-input>
+				</div>
+				
 				<paper-input style="padding:8px;" label="Correo electrónico" value="{{email}}">
 				</paper-input>
 
@@ -199,19 +196,31 @@ class DialogoNuevoProspecto extends UtilsMixin(DialogLayoutMixin(PolymerElement)
 			console.log("docref",docRef);
 
 			
-			PolymerUtils.Toast.show("prospecto agregado con éxito");
+			PolymerUtils.Toast.show("registro agregado con éxito");
 			t.despachaProspecto(docRef.id,cliente);
 			
 			if(t._dialog){
 				t._dialog.close();
 			}
-		
+
+			t.limpiaCampos();
 			
 		})
 		.catch(function(error) {
 			console.error("Error adding document: ", error);
 			PolymerUtils.Toast.show("Error al guardar. Intentalo más tarde.");
 		});
+
+	}
+
+	limpiaCampos(){
+		this.set("razon",null);
+		this.set("estado",null);
+		this.set("agente",null);
+		this.set("nombre",null);
+		this.set("puesto",null);
+		this.set("tipoTel",null);
+		this.set("email",null);
 
 	}
 

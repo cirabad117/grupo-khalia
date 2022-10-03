@@ -1,14 +1,10 @@
 {
-  "functions": {
-    "source": "functions"
-  },
   "hosting": {
     "public": "build/es6-bundled",
     "site": "khalia-beta",
     "ignore": [
       "firebase.json",
       "**/.*"
-      
     ],
     "rewrites": [
       {
@@ -16,5 +12,17 @@
         "destination": "/index.html"
       }
     ]
-  }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ]
 }

@@ -7,6 +7,8 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const cors = require('cors')({ origin: true });
+
 
 admin.initializeApp();
 
@@ -59,7 +61,7 @@ function updateDatabaseUser(user){
     if(user.photoURL){
         userData.photoURL=user.photoURL;
     }
-
+    
     return admin.firestore().collection('_clientes').doc(id).collection("usuarios").doc(user.uid).update(userData);
 }
 
@@ -157,41 +159,27 @@ exports.actualizaPassword=functions.https.onCall((data,context)=>{
         return {"result":"Error updating user: ","error":error};
     });
 });
- 
- 
-//////////////////////////////////////////////////////////////////////////////////////////////
-/** aqui van las funciones para la aplicaicon interna */
 
-function guardaUsuario(user,permisos,ps){
-    var userData={
-        "displayName":user.displayName,
-        "enabled":true,
-        "email":user.email,
-        "uid":user.uid,
-        "_timestamp":admin.firestore.FieldValue.serverTimestamp(),
-        "accessList":permisos,
-        "password":ps
-    };
-     
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+/** aqui van las funciones para la aplicacion interna */
+
+function guardaUsuario(user,data){
+    var datos=data;
+    datos["uid"]=user.uid;
+    datos["_timestamp"]=admin.firestore.FieldValue.serverTimestamp();
+
+
     if(user.photoURL){
         userData.photoURL=user.photoURL;
     }
     
-    return admin.firestore().collection('usuarios').doc(user.uid).set(userData);
+    return admin.firestore().collection('usuarios').doc(user.uid).set(data);
 }//guardaUsuario
 
-function updateDatabaseKhalia(user,permisos){
-    var userData={
-        "displayName":user.displayName,
-        "enabled":true,
-        "email":user.email,
-        "uid":user.uid,
-        "_timestamp":admin.firestore.FieldValue.serverTimestamp(),
-        "accessList":permisos
-    };
-    
-    
-    return admin.firestore().collection('usuarios').doc(user.uid).update(userData);
+function updateDatabaseKhalia(user,data){
+ 
+    return admin.firestore().collection('usuarios').doc(user.uid).update(data);
 }//updateDatabaseKhalia
 
 function deleteDatabaseKhalia(user){
@@ -205,7 +193,7 @@ exports.agregaUsuarioKhalia = functions.https.onCall((data, context) => {
     const name = data.name;
     const passwd = data.password;
     const permisos=data.accessList;
-
+    
     var json={
         email: email,
         emailVerified: false,
@@ -215,7 +203,7 @@ exports.agregaUsuarioKhalia = functions.https.onCall((data, context) => {
     };
     
     return admin.auth().createUser(json).then(function(userRecord){
-        return guardaUsuario(userRecord,permisos,passwd).then((snapshot) => {
+        return guardaUsuario(userRecord,data).then((snapshot) => {
             console.log("Successfully created new user:", userRecord.uid);
             return {"result":"Successfully created new user:"+userRecord.uid,"user":userRecord};
         });
@@ -231,14 +219,12 @@ exports.actualizaUsuarioKhalia = functions.https.onCall((data, context) => {
     var photo=data.photoURL;
     const uid=data.uid;
     
-    const lista=data.accessList;
-
     var update={
         email: email,
         displayName: name,
         disabled: false
     };
-     
+    
     if(data.password){
         update.password=data.password;
     }
@@ -247,7 +233,7 @@ exports.actualizaUsuarioKhalia = functions.https.onCall((data, context) => {
     }
     
     return admin.auth().updateUser(uid,update).then(function(userRecord){
-        return updateDatabaseKhalia(userRecord,lista).then((snapshot) => {
+        return updateDatabaseKhalia(userRecord,data).then((snapshot) => {
             console.log("Successfully updated user:", userRecord.uid);
             return {"result":"Successfully updated user:"+userRecord.uid,"user":userRecord};
         });

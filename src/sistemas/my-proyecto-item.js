@@ -22,7 +22,7 @@ class MyProyectoItem extends PolymerElement {
             <h5 style="margin:5px;">[[titulo]]</h5>
 
             <paper-listbox>
-                <template is="dom-repeat" items="{{itemsTareas}}" filter="{{_filtraTareasTipo(tipo)}}"
+                <template is="dom-repeat" id="lista" items="{{itemsTareas}}" filter="{{_filtraTareasTipo(tipo)}}"
                 sort="_ordenaItems">
                     
                     <paper-item class="tarea" on-click="eligeTarea" style$="margin:3px; background-color:[[item.modulo.fondo]]; color:[[item.modulo.txtColor]];">
@@ -66,7 +66,9 @@ class MyProyectoItem extends PolymerElement {
     }
 
     _filtraTareasTipo(tipo){
+        this.$.lista.render();
         return function(item) {
+            
                 return item.estatus==tipo;
             }
         

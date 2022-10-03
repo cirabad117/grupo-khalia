@@ -33,16 +33,16 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                 </span>
             </nav>
 
-            <div class="container mt-3">
-                <div class="row">
-                    <div class="col-md-12">
+           
+              
                         <iron-pages selected="{{selected}}" attr-for-selected="name">
                             <div name="lista">
+                                <div class="container mt-3">
                                 <div class="row text-center">
                                     <template is="dom-repeat" items="[[listaUsuarios]]" sort="_sortInstalaciones">
                                         <div class="col-xl-3 col-sm-6 mb-5">
                                             <div class="bg-white rounded shadow-sm py-5 px-4 text-center">
-                                                <img src="../../images/user.png" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                                                <img src$="[[getImagen(item.fotoUrl)]]" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                                                 <h5 class="mb-0">{{item.displayName}}</h5>
                                                 <div class="d-flex justify-content-center mb-0 mt-3">
                                                 <paper-icon-button style="color:var(--paper-blue-500);" onmouseover="PolymerUtils.Tooltip.show(event,'Eliminar')"
@@ -66,6 +66,7 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                                         
                                     </template>
                                 </div>
+                                </div>
                                 <div style="position: fixed; bottom: 24px; right: 24px;">
                                     <div style="position: relative; cursor:pointer;" on-clicK="abreNuevoUsuario">
                                         <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
@@ -74,10 +75,9 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                             </div><!--div name="lista"-->
                             
                             <div name="editar">
-                                <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]" campo-activo="[[!esEditarUsuario]]"
-                                main-tree="[[listaPermisos]]" uid="[[usuarioActivo.id]]" nombre="[[usuarioActivo.displayName]]"
-                                email="[[usuarioActivo.email]]" perfil="[[usuarioActivo.accessList]]"
-                                pass="[[usuarioActivo.password]]" pass2="[[usuarioActivo.password]]"></my-nuevo-usuario>
+                                <my-nuevo-usuario on-cierra-vista="abreListaUsuario" es-editar="[[esEditarUsuario]]"
+                                campo-activo="[[!esEditarUsuario]]" main-tree="[[listaPermisos]]"
+                                usuario="[[usuarioActivo]]"></my-nuevo-usuario>
                                     
                             </div><!--div name="editar"-->
                             
@@ -87,9 +87,7 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
                                    
                             </div>
                         </iron-pages>
-                    </div>
-                </div>
-            </div>
+        
             
             
             
@@ -120,6 +118,14 @@ class MyUsuarios extends AuthMixin(PolymerElement) {
             return false;
         }
 
+    }
+
+    getImagen(str){
+        if(str && str!=null){
+            return str;
+        }else{
+            return "../../images/user.png";
+        }
     }
 
     muestraTitulo(ti){

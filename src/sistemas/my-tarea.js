@@ -95,7 +95,7 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
             
             <div class="row">
                 <div class="col-md-8" style="background-color:var(--paper-grey-100);">
-                    <div class="titulo">
+                    <!-- <div class="titulo">
                         <h5>Descripción</h5>
                         
                         <div class="ml-auto">
@@ -104,19 +104,19 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
                             </template>
                             <paper-icon-button  icon$="{{getIcono(esEditaDesc)}}" on-click="toggleDesc"></paper-icon-button>
                         </div>
-                    </div>
+                    </div> -->
                     
-                    <div class="carta">
+                    <!-- <div class="carta">
                         <template is="dom-if" if="{{!esEditaDesc}}">
                             {{descripcion}}
                         </template>
                         <template is="dom-if" if="{{esEditaDesc}}">
                             <paper-input label="Descripción" value="{{descripcion}}"></paper-input>
                         </template>
-                    </div>
+                    </div> -->
 
                     <div class="titulo">
-                        <h5>Campos requeridos</h5>
+                        <h5>Descripción</h5>
                         <div class="ml-auto">
                             
                             <template is="dom-if" if="{{esEditaCampo}}">
@@ -211,20 +211,20 @@ class MyTarea extends DialogLayoutMixin(PolymerElement) {
         return "background-color:"+obj.fondo+";color:"+obj.txtColor+";"
     }
 
-    guardaDesc(){
-        if(!this.descripcion || this.descripcion==null){
-            return PolymerUtils.Toast.show("escribe una descripción válida");
-        }
+    // guardaDesc(){
+    //     if(!this.descripcion || this.descripcion==null){
+    //         return PolymerUtils.Toast.show("escribe una descripción válida");
+    //     }
 
-        var objEditar={descripcion:this.descripcion};
+    //     var objEditar={descripcion:this.descripcion};
 
-        var t=this;
-        var fnVista=function() {
-            t.toggleDesc();
-        };
+    //     var t=this;
+    //     var fnVista=function() {
+    //         t.toggleDesc();
+    //     };
 
-        this.updateTarea(objEditar,fnVista);
-    }
+    //     this.updateTarea(objEditar,fnVista);
+    // }
 
     editaModulo(){
         var t=this;
