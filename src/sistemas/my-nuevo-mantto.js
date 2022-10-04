@@ -190,7 +190,8 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
         }
         var registro={
             _timestamp:firebase.firestore.FieldValue.serverTimestamp(),
-            equipos:mantto
+            equipos:mantto,
+            tipo:this.tipo
         };
 
         if(this.tipo=="CORRECTIVO"){
