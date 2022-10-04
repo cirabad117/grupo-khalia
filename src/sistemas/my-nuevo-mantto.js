@@ -5,6 +5,8 @@ import '@polymer/paper-radio-button/paper-radio-button.js';
 import '@polymer/paper-radio-group/paper-radio-group.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-item/paper-item-body.js';
 
 import './my-mantto-item.js';
 
@@ -39,17 +41,23 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
 
                         
                         <iron-pages selected="{{selected}}" attr-for-selected="name">
-                            <div name="inventario">
+                            <div name="inventario" style="overflow-y:scroll;max-height:200px;">
                                 <paper-listbox>
                                     <template is="dom-repeat" items="[[inventario]]" as="equipo">
                                         <paper-item on-click="agregaEquipo">
-                                            [[equipo.tipo]] - [[equipo.marca]]
+                                            <paper-item-body>
+                                                <div>[[equipo.tipo]] - [[equipo.marca]]</div>
+                                                <div secondary>
+                                                    [[equipo.ns]]
+                                                </div>
+                                            </paper-item-body>
+                                            
                                         </paper-item>
                                     </template>
                                 </paper-listbox>
 
                             </div>
-                            <div name="personal">
+                            <div name="personal" style="overflow-y:scroll;max-height:200px;">
                                 responsable
                                 <paper-listbox>
                                     <template is="dom-repeat" items="[[listaEmpleados]]" as="emp">
@@ -61,7 +69,12 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
                                 <paper-listbox>
                                     <template is="dom-repeat" items="[[listaEquipo]]" as="equipo">
                                         <paper-item on-click="agregaEquipo">
-                                            [[equipo.tipo]] - [[equipo.marca]]
+                                        <paper-item-body>
+                                                <div>[[equipo.tipo]] - [[equipo.marca]]</div>
+                                                <div secondary>
+                                                    [[equipo.ns]]
+                                                </div>
+                                            </paper-item-body>
                                         </paper-item>
                                     </template>
                                 </paper-listbox>

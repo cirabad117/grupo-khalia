@@ -112,10 +112,10 @@ class MyInicio extends AuthMixin(PolymerElement) {
 								[[fechaActual]]
 							</nav>
 						</div>
-						<div class="col-sm-10">
+						<div class="col-lg-10 col-md-8 col-sm-12">
 							<my-carrusel></my-carrusel>
 						</div>
-						<div class="col-sm-2" style="overflow-y:scroll;max-height:350px;">
+						<div class="col-lg-2 col-md-4 col-sm-12">
 							<template is="dom-repeat" items="[[itemsPortal]]">
 								<div class="card card-body bg-light" on-click="navegaPortal">
 									[[item.nombre]]
@@ -123,11 +123,11 @@ class MyInicio extends AuthMixin(PolymerElement) {
 							</template>
 						</div>
 					</div>
-					<hr>
+					<!-- <hr> -->
 				</div>
 				
-				<div class="container-fluid text-center">
-					<h3>Acerca de Grupo Khalia</h3>
+				<div class="container-fluid text-center bg-light">
+					<h3 class="mt-3">Acerca de Grupo Khalia</h3>
 					<br>
 					<div class="row">
 						<div class="col-sm-3">
@@ -150,8 +150,8 @@ class MyInicio extends AuthMixin(PolymerElement) {
 					<hr>
 				</div>
 				<br>
-				<div class="container-fluid text-center">
-					<h3>Conoce a tus compañeros</h3>
+				<div class="container-fluid text-center bg-light">
+					<h3 class="mt-3">Conoce a tus compañeros</h3>
 					<paper-button raised on-click="carga">cargar</paper-button>
 					<div id="chart-container"></div>
 				</div>

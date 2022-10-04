@@ -15,7 +15,7 @@ class MyCarrusel extends PolymerElement {
                 }
                 
                 .slides-container {
-                    height: 350px;
+                    height: 530px;
                     width: 100%;
                     display: flex;
                     list-style: none;
