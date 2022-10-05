@@ -48,6 +48,8 @@ class MySistemasInventario extends PolymerElement {
                 {"opcion":"nsDe","texto":"Número de serie (Z - A)"},
                 {"opcion":"marcaAs","texto":"Marca (A - Z)"},
                 {"opcion":"marcaDe","texto":"Marca (Z - A)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (más antiguo)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (más reciente)"}
                 
             ]},
             funcionFiltraEquipo:{
@@ -85,6 +87,9 @@ class MySistemasInventario extends PolymerElement {
                         var textoB=b.ns.toLowerCase();
                         var codA=a.marca.toLowerCase();
                         var codB=b.marca.toLowerCase();
+
+                        var at=PolymerUtils.convertFirebaseTimestamp(a._timestamp);
+                        var bt=PolymerUtils.convertFirebaseTimestamp(b._timestamp);
                     
                         switch (str) {
                             case "nsAs":
@@ -115,6 +120,20 @@ class MySistemasInventario extends PolymerElement {
                                 }else{
                                     return (textoA>textoB ? -1 : 1);
                                 } 
+                            break;
+                            case "fechaAs":
+                                if(at==bt){
+                                    return 0;
+                                }else{
+                                    return (at<bt ? -1 : 1);
+                                }
+                            break;
+                            case "fechaDe":
+                                if(at==bt){
+                                    return 0;
+                                }else{
+                                    return (at>bt ? -1 : 1);
+                                }
                             break;
 
                             default:

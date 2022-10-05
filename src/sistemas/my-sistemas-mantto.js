@@ -24,7 +24,7 @@ class MySistemasMantto extends PolymerElement {
             registros:{type:Array, notify:true, value:[]},
             datosMantto:{type:Array, notify:true, value:[
                 {"titulo":"Fecha de registro","dato":"_timestamp"},
-                {"titulo":"Tipo de mantenimiento","dato":"nombre"},
+                {"titulo":"Tipo de mantenimiento","dato":"tipo"},
                 {"titulo":"Acciones","listaAcciones":[
                     {"accion":"accionItem","icono":"icons:input","texto":"Abrir detalles"},
                     {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
@@ -53,6 +53,11 @@ class MySistemasMantto extends PolymerElement {
 
     ready() {
         super.ready();
+
+        var binder=new QueryBinder("mantenimiento",{
+            "specialRef":firebase.firestore().collection("estatus-area").doc("sistemas").collection("mantenimiento")
+        });
+        binder.bindArray(this,this.registros,"registros");
     }
 
     abreNuevoMantto(){
