@@ -284,7 +284,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				</nav>
 				
 				<iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-					<my-inicio name="inicio"></my-inicio>
+					<my-inicio name="inicio" lista-usuarios="[[listaUsuarios]]"></my-inicio>
 					
 					<dom-access name="prospectos" path="admin/prospectos">
 						<my-prospectos-main name="prospectos" lista-prospectos="[[listaProspectos]]" lista-usuarios="[[listaUsuarios]]"></my-prospectos-main>
@@ -316,15 +316,22 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 					<dom-access name="usuarios" path="usuarios">
 						<my-usuarios name="usuarios" lista-usuarios="[[listaUsuarios]]"></my-usuarios>
 					</dom-access>
+
+					<my-usuario name="usuario"></my-usuario>
 					
 					<dom-access name="app-clientes" path="admin/app-clientes">
 						<my-app-clientes name="app-clientes" lista-usuarios="[[listaUsuarios]]"></my-app-clientes>
 					</dom-access>
 					
-					<my-sistemas-main name="sistemas" lista-usuarios="[[listaUsuarios]]"></my-sistemas-main>
-					<my-sistemas-proyecto name="proyecto"></my-sistemas-proyecto>
-					<my-calendario name="calendario"></my-calendario>
-					<my-portal-main name="portal"></my-portal-main>
+					<dom-access name="sistemas" path="areas/sistemas">
+						<my-sistemas-main name="sistemas" lista-usuarios="[[listaUsuarios]]"></my-sistemas-main>
+					</dom-access>
+
+					<dom-access name="proyecto" path="areas/sistemas">
+						<my-sistemas-proyecto name="proyecto"></my-sistemas-proyecto>
+					</dom-access>
+					<my-calendario name="calendario" lista-usuarios="[[listaUsuarios]]" lista-actividades="[[fechasKhalia]]"></my-calendario>
+					<my-portal-main name="portal" lista-actividades="[[fechasKhalia]]" lista-usuarios="[[listaUsuarios]]"></my-portal-main>
 					<my-view404 name="view404"></my-view404>
 				</iron-pages>
 				
@@ -347,7 +354,7 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 			},
 			paginas:{type:Array, notify:true, value:[
 				'inicio','prospecto','prospectos','clientes','cliente',
-				'productos','producto','cotizaciones','nueva-cotizacion','usuarios',
+				'productos','producto','cotizaciones','nueva-cotizacion','usuarios','usuario',
 				'app-clientes','cotizacion','sistemas','proyecto','calendario','portal']
 			},
 			nombrePagina:{type:String, notify:true, value:"Grupo Khalia"},
@@ -379,7 +386,8 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 
 			listaProspectos:{type:Array, notify:true, value:[]},
 			listaClientes:{type:Array, notify:true, value:[]},
-			mainCotizaciones:{type:Array, notify:true, value:[]}
+			mainCotizaciones:{type:Array, notify:true, value:[]},
+			fechasKhalia:{type:Array, notify:true, value:[]},
 
 		};
 	}
@@ -410,6 +418,10 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 		var binder3=new QueryBinder("_cotizaciones-khalia");
         
         binder3.bindArray(this,this.mainCotizaciones,"mainCotizaciones");
+
+		var binder3=new QueryBinder("_fechas-khalia");
+        
+        binder3.bindArray(this,this.fechasKhalia,"fechasKhalia");
 
 	}
 
@@ -546,6 +558,11 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 				import ('./auth/my-usuarios.js');
 				this.set("nombrePagina","Usuarios");
 				this.set("muestraBack",false);
+			break;
+			case 'usuario':
+				import ('./auth/my-usuario.js');
+				this.set("nombrePagina","Usuario");
+				this.set("muestraBack",true);
 			break;
 			case 'app-clientes':
 				import ('./my-app-clientes.js');

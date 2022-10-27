@@ -162,7 +162,8 @@ class MyInicioSesion extends DialogLayoutMixin(UtilsMixin(AuthMixin(PolymerEleme
             t.set("pass",null);
             
         };
-        var er=function() {
+        var er=function(err) {
+            console.error("error",err);
             PolymerUtils.Toast.show("error al iniciar sesion");
         };
 

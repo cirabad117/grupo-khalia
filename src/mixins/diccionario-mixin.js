@@ -39,6 +39,15 @@ let internalMixinDiccionario = function(superClass) {
                     "se comparten datos de contacto al cliente",
                     "seguimiento de cotización",
                     "seguimiento de servicios"
+                ]},
+
+                areasKhalia:{type:Array, notify:true, value:[
+                    {tipo:"admin",nombre:"Administración y Ventas",logo:"../../images/areas/admin.png"},
+                    {tipo:"sasisopa",nombre:"SASISOPA",logo:"../../images/areas/sasisopa.png"},
+                    {tipo:"sgm",nombre:"SGM",logo:"../../images/areas/sgm.png"},
+                    {tipo:"emisiones",nombre:"Emisiones",logo:"../../images/areas/emisiones.png"},
+                    {tipo:"seguridad",nombre:"Seguridad",logo:"../../images/areas/seguridad.png"},
+                    {tipo:"sistemas",nombre:"Sistemas",logo:"../../images/areas/sistemas.png"},
                 ]}
             };
         }

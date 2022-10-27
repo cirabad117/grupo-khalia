@@ -73,17 +73,22 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
 
                                 
                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <my-proyecto-item class="item" tipo="backlog" on-elige-tarea="selectTarea" titulo="Pendientes" tareas="{{listaTareas}}"></my-proyecto-item>
+                                    <div class="col-md-12">
+                                        
+                                        <paper-checkbox class="m-3" checked="{{muestraTodos}}">Mostrar tareas ocultas</paper-checkbox>
+                                        
                                     </div>
                                     <div class="col-md-3">
-                                        <my-proyecto-item class="item" tipo="progress" on-elige-tarea="selectTarea" titulo="En progreso" tareas="{{listaTareas}}"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="backlog" on-elige-tarea="selectTarea" titulo="Pendientes" tareas="{{listaTareas}}" id-proyecto="[[proyecto.id]]"></my-proyecto-item>
                                     </div>
                                     <div class="col-md-3">
-                                        <my-proyecto-item class="item" tipo="validate" on-elige-tarea="selectTarea" titulo="Validación" tareas="{{listaTareas}}"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="progress" on-elige-tarea="selectTarea" titulo="En progreso" tareas="{{listaTareas}}" id-proyecto="[[proyecto.id]]"></my-proyecto-item>
                                     </div>
                                     <div class="col-md-3">
-                                        <my-proyecto-item class="item" tipo="complete" on-elige-tarea="selectTarea" titulo="Completadas" tareas="{{listaTareas}}"></my-proyecto-item>
+                                        <my-proyecto-item class="item" tipo="validate" on-elige-tarea="selectTarea" titulo="Validación" tareas="{{listaTareas}}" id-proyecto="[[proyecto.id]]"></my-proyecto-item>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <my-proyecto-item class="item" tipo="complete" on-elige-tarea="selectTarea" titulo="Completadas" tareas="{{listaTareas}}" id-proyecto="[[proyecto.id]]"></my-proyecto-item>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +105,7 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
 
     static get properties() {
         return {
-            proyecto:{type:Object, notify:true, observer:"_consultaDatos"},
+            proyecto:{type:Object, notify:true},
             modulos:{type:Array, notify:true, value:[]},
             listaTareas:{type:Array, notify:true, value:[]},
             _routeParams:{observer: "_routeChanged"},
@@ -108,6 +113,16 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
             selected:{type:String, notify:true, value:"vista"},
             tareaElegida:{type:Object, notify:true}
         }
+    }
+
+    /**
+      * Array of strings describing multi-property observer methods and their
+      * dependant properties
+      */
+    static get observers() {
+        return [
+            '_consultaDatos(proyecto,muestraTodos)'
+        ];
     }
 
     constructor() {
@@ -118,6 +133,8 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
         super.ready();
     
     }
+
+
 
     muestraEstilo(obj){
         return "background-color:"+obj.fondo+";color:"+obj.txtColor+";"
@@ -229,19 +246,34 @@ class MySistemasProyecto extends NavigationMixin(PolymerElement) {
 
     }
 
-    _consultaDatos(obj){
-        console.log("_consultaDatos",obj);
+    _consultaDatos(obj,bol){
+        console.log("_consultaDatos",obj,bol);
         if(obj && obj!=null){
             
             this.set("modulos",obj.modulos);
 
             var id=obj.id;
 
-            var binder=new QueryBinder("tareas",{
-                "specialRef":firebase.firestore().collection("estatus-area/sistemas/proyectos/"+id+"/tareas")
-            });
+            if(this.lastTareas){
+                this.lastTareas();
+            }
+            this.set("lastTareas",DataHelper.queryCollection(this,{
+                "includeDeleted":bol,
+                "specialRef": firebase.firestore().collection("estatus-area/sistemas/proyectos/"+id+"/tareas"),
+                "array":this.listaTareas,
+                "arrayName":"listaTareas"
+                
+              }));
+
+		
             
-            binder.bindArray(this,this.listaTareas,"listaTareas");
+            // var binder=new QueryBinder("tareas",{
+            //         "specialRef":firebase.firestore().collection("estatus-area/sistemas/proyectos/"+id+"/tareas")
+            //     });
+                
+            //     binder.bindArray(this,this.listaTareas,"listaTareas");
+            
+            
 
         }
     }

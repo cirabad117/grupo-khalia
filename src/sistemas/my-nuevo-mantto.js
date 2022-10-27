@@ -23,73 +23,104 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
 
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4">
-                        <paper-radio-group selected="{{tipo}}">
-                            <paper-radio-button name="PREVENTIVO">MANTENIMIENTO PREVENTIVO</paper-radio-button>
-                            <paper-radio-button name="CORRECTIVO">MANTENIMIENTO CORRECTIVO</paper-radio-button>
-                        </paper-radio-group>
+                    <div class="col-md-12">
+                        <div class="d-flex flex-wrap">
+                            <div>
+                                <paper-radio-group selected="{{tipo}}">
+                                    <paper-radio-button name="PREVENTIVO">MANTENIMIENTO PREVENTIVO</paper-radio-button>
+                                    <paper-radio-button name="CORRECTIVO">MANTENIMIENTO CORRECTIVO</paper-radio-button>
+                                </paper-radio-group>
+                            </div>
+                        </div>
+                        
                         <template is="dom-if" if="{{esCorrectivo(tipo)}}">
                             <paper-input label="Motivo de la inspección" value="{{motivo}}"></paper-input>
                         </template>
-
-                        <paper-tabs selected="{{selected}}" attr-for-selected="name">
-                            
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:var(--paper-cyan-100);">
                             <paper-tab name="inventario">inventario</paper-tab>
                             <paper-tab name="personal">personal</paper-tab>
-                            
                         </paper-tabs>
-
                         
                         <iron-pages selected="{{selected}}" attr-for-selected="name">
-                            <div name="inventario" style="overflow-y:scroll;max-height:200px;">
-                                <paper-listbox>
+                            <div name="inventario">
+                                <paper-listbox style="overflow-y:scroll;max-height:200px;">
                                     <template is="dom-repeat" items="[[inventario]]" as="equipo">
                                         <paper-item on-click="agregaEquipo">
                                             <paper-item-body>
                                                 <div>[[equipo.tipo]] - [[equipo.marca]]</div>
-                                                <div secondary>
-                                                    [[equipo.ns]]
-                                                </div>
+                                                <div secondary>[[equipo.ns]]</div>
                                             </paper-item-body>
-                                            
                                         </paper-item>
                                     </template>
                                 </paper-listbox>
-
                             </div>
+                            
                             <div name="personal" style="overflow-y:scroll;max-height:200px;">
-                                responsable
-                                <paper-listbox>
-                                    <template is="dom-repeat" items="[[listaEmpleados]]" as="emp">
-                                        <paper-item on-click="muestraEquipo">
-                                            [[emp.displayName]]
-                                        </paper-item>
-                                    </template>
-                                </paper-listbox>
-                                <paper-listbox>
-                                    <template is="dom-repeat" items="[[listaEquipo]]" as="equipo">
-                                        <paper-item on-click="agregaEquipo">
-                                        <paper-item-body>
-                                                <div>[[equipo.tipo]] - [[equipo.marca]]</div>
-                                                <div secondary>
-                                                    [[equipo.ns]]
-                                                </div>
-                                            </paper-item-body>
-                                        </paper-item>
-                                    </template>
-                                </paper-listbox>
+                                <div>
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center" on-click="toggleEmp">
+                                            <h5>Búsqueda por personal</h5>
+                                            <h6 class="ml-auto">[[empleado.displayName]]
+                                            <iron-icon icon$="{{muestraIcono(abierto)}}"></iron-icon>
+                                            </h6>
+                                        </div>
+                                        <iron-collapse id="lista-user" opened="{{abierto}}">
+                                        <div class="card-body">
+                                            
+                                                <paper-listbox>
+                                                    <template is="dom-repeat" items="[[listaEmpleados]]" as="emp">
+                                                        <paper-item on-click="muestraEquipo">
+                                                            [[emp.displayName]]
+                                                        </paper-item>
+                                                    </template>
+                                                </paper-listbox>
+                                            
+                                        </div>
+                                    </iron-collapse>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Equipo asignado</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            
+                                            
+                                            <paper-listbox>
+                                                <template is="dom-repeat" items="[[listaEquipo]]" as="equipo">
+                                                    <paper-item on-click="agregaEquipo">
+                                                        <paper-item-body>
+                                                            <div>[[equipo.tipo]] - [[equipo.marca]]</div>
+                                                            <div secondary>
+                                                                [[equipo.ns]]
+                                                            </div>
+                                                        </paper-item-body>
+                                                    </paper-item>
+                                                </template>
+                                            </paper-listbox>
+                                                
+                                           
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </iron-pages>
-                        
-                        
-                        
-                        
+
                     </div>
-                    <div class="col-md-8" style="max-height:350px; overflow-y:scroll;">
-                        <template is="dom-repeat" items="[[equipoElegido]]" as="revisar">
-                            <my-mantto-item equipo="[[revisar]]"></my-mantto-item>
+
+
+                    <div class="col-md-6" style="max-height:350px; overflow-y:scroll;">
+                        <template is="dom-repeat" items="[[equipoElegido]]" as="revisar" items-index-as="numero">
+                            <my-mantto-item class="m-1" style="border-radius:15px;border:solid 1px var(--paper-blue-400);" equipo="[[revisar]]" num="[[numero]]" on-quita-item="quitaEquipo"></my-mantto-item>
                         </template>
                     </div>
+
+
                 </div>
             </div>
             
@@ -107,6 +138,8 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
 
             listaEquipo:{type:Array, notify:true,value:[]},
             equipoElegido:{type:Array, notify:true,value:[]},
+
+            abierto:{type:Boolean, notify:true,value:true}
 
 
         }
@@ -128,6 +161,14 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
         binder.bindArray(this,this.inventario,"inventario");
     }
 
+    toggleEmp(){
+        this.set("abierto",!this.abierto);
+    }
+
+    muestraIcono(bol){
+        return bol==true?"arrow-drop-up":"arrow-drop-down";
+    }
+
     esCorrectivo(str){
         return str=="CORRECTIVO";
     }
@@ -139,9 +180,13 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
     }
 
     _buscaEquipo(emp){
+        this.set("abierto",false);
         if(emp && emp.equipoAsignado){
+            
             this.set("listaEquipo",emp.equipoAsignado);
             this.DialogLayout_notifyResize();
+        }else{
+            this.set("listaEquipo",[]);
         }
     }
 
@@ -163,6 +208,15 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
 
         this.set("equipoElegido",nuevoArr);
         this.DialogLayout_notifyResize();
+    }
+
+    quitaEquipo(e){
+        var nuevoArr=PolymerUtils.cloneObject(this.equipoElegido);
+        var i=e.detail.equipo;
+
+        nuevoArr.splice(i,1);
+
+        this.set("equipoElegido",nuevoArr);
     }
 
     guardaMantto(){

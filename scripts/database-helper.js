@@ -865,12 +865,12 @@ class DataHelperClass {
                     user: DataHelper.getUserRef()
                 }
             }).then(function() {
-                console.warn("EXITO!", collection, docId);
+                
                 if (success) {
                     success()
                 }
             }).catch(function(errorObject) {
-                console.error("ERRORRRRR!", collection, docId);
+                console.error("error", collection, docId);
                 if (error) {
                     error(errorObject)
                 }

@@ -104,10 +104,11 @@ let internalMixinAuth = function(superClass) {
 			}).catch(function(error) {
 				var errorCode = error.code;
 				var errorMessage = error.message;
-				var returnError=DataHelper.auth.showErrorToast(error);
+				console.log("error",error);
+				DataHelper.auth.showErrorToast(error);
 				dialog.close();
 				if(errorCallback){
-					errorCallback(returnError);
+					errorCallback(error);
 				}
 			});
 		}
@@ -116,7 +117,7 @@ let internalMixinAuth = function(superClass) {
 
 		creaNuevoUsuario(objUser,callbacks) {
 			var t=this;
-			console.log("Inserting user", objUser.name);
+			console.log("Inserting user", objUser.displayName);
 			var agregaUsuarioKhalia = firebase.functions().httpsCallable('agregaUsuarioKhalia');
 			agregaUsuarioKhalia(objUser).then(function (result) {
 				if (callbacks && callbacks.finished) {

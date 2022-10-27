@@ -41,6 +41,7 @@ class NuevaFecha extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 
     static get properties() {
         return {
+            objFecha:{type:Object, notify:true},
             listaTipos:{type:Array, notify:true,value:[
                 {"texto":"Salida","fondo":"var(--paper-blue-600)","color":"white"},
                 {"texto":"Cumpleaños","fondo":"var(--paper-yellow-500)","color":"black"},
@@ -53,8 +54,17 @@ class NuevaFecha extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         }
     }
 
-    constructor() {
+    constructor(obj) {
         super();
+
+        if(obj){
+            this.set("objFecha",obj);
+
+            this.set("tipoFecha",obj.tipo);
+            this.set("fecha",obj.fecha);
+            this.set("nombre",obj.nombre);
+
+        }
     }
 
     ready() {
@@ -89,7 +99,31 @@ class NuevaFecha extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
         }
 
         var t=this;
-		sharedFirebase.collection("_fechas-khalia").add(item)
+
+        if(this.objFecha && this.objFecha.id){
+            var idFecha=t.objFecha.id;
+            var washingtonRef = firebase.firestore().collection("_fechas-khalia").doc(idFecha);
+            // Set the "capital" field of the city 'DC'
+            return washingtonRef.update({
+                tipo:t.tipoFecha,
+                nombre:t.nombre,
+                fecha:t.fecha
+            }).then(() => {
+                PolymerUtils.Toast.show("fecha guardada");
+                t.set("tipoFecha",null);
+                t.set("nombre",null);
+                t.set("fecha",null);
+                
+                
+                t.DialogLayout_closeDialog();
+            
+            }).catch((error) => {
+                PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
+                console.error("Error updating document: ", error);
+            });
+
+        }else{
+            sharedFirebase.collection("_fechas-khalia").add(item)
 		.then(function(docRef) {
 			
 			PolymerUtils.Toast.show("fecha guardada");
@@ -106,6 +140,13 @@ class NuevaFecha extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
 			console.error("Error adding document: ", error);
 			PolymerUtils.Toast.show("Error al guardar. Intentalo más tarde.");
 		});
+
+        }
+
+
+
+
+		
     }
 }
 

@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '../general-controls/my-lista-general.js';
 import './my-nuevo-mantto.js';
+import './my-registro-mantto.js';
 class MySistemasMantto extends PolymerElement {
     static get template() {
         return html`
@@ -14,7 +15,7 @@ class MySistemasMantto extends PolymerElement {
             lista-filtro="[[listaTipo]]" lista-ordena="[[opcionesOrdena]]"
             lista-cols="[[datosMantto]]"
             funcion-ordenar="[[funcionOrdenaEquipo]]" funcion-buscar="[[funcionFiltraEquipo]]"
-            on-ejecuta-accion="abreNuevoMantto" on-ejecuta-item="ejecutaAccionItem"></my-lista-general>
+            on-ejecuta-accion="abreNuevoMantto" on-ejecuta-item="abreRegistro"></my-lista-general>
 
         `;
     }
@@ -24,10 +25,11 @@ class MySistemasMantto extends PolymerElement {
             registros:{type:Array, notify:true, value:[]},
             datosMantto:{type:Array, notify:true, value:[
                 {"titulo":"Fecha de registro","dato":"_timestamp"},
+                {"titulo":"Empleado","dato":"empleado","valorInterno":"displayName"},
                 {"titulo":"Tipo de mantenimiento","dato":"tipo"},
                 {"titulo":"Acciones","listaAcciones":[
                     {"accion":"accionItem","icono":"icons:input","texto":"Abrir detalles"},
-                    {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
+                    // {"accion":"eliminar","icono":"icons:delete-forever","texto":"Eliminar"}
                 ]}
             ]},
             listaTipo:{type:Array, notify:true,value:[
@@ -35,12 +37,62 @@ class MySistemasMantto extends PolymerElement {
                 {color:"#FFEB3B",base:"black",texto:"CORRECTIVO"},
             ]},
             opcionesOrdena:{type:Array, notify:true, value:[
-                // {"opcion":"nsAs","texto":"Número de serie (A - Z)"},
-                // {"opcion":"nsDe","texto":"Número de serie (Z - A)"},
-                {"opcion":"fechaAs","texto":"fecha de registro(A - Z)"},
-                {"opcion":"fechaDe","texto":"fecha de registro(Z - A)"},
+                {"opcion":"fechaAs","texto":"Fecha de creación (más antiguo)"},
+                {"opcion":"fechaDe","texto":"Fecha de creación (más reciente)"}
                 
             ]},
+            funcionFiltraEquipo:{
+                type:Object,
+                notify:true,
+                value:{
+                    nombre:"funcionFiltraProd",
+                    funcion:function(item,texto,filtro) {
+                        var busca=texto.toLowerCase();
+                        if(filtro=="todos"){
+                            return item;
+                            
+                        }else{
+                            if(item.tipo==filtro){
+                                return item.tipo;
+                                
+                            }
+                            
+                        }
+                    }
+                }
+            },
+            funcionOrdenaEquipo:{
+                type:Object,
+                notify:true,
+                value:{
+                    nombre:"funcionOrdenaProd",
+                    funcion:function(a,b,str) {
+                        var at=PolymerUtils.convertFirebaseTimestamp(a._timestamp);
+                        var bt=PolymerUtils.convertFirebaseTimestamp(b._timestamp);
+                    
+                        switch (str) {
+                           
+                            case "fechaAs":
+                                if(at==bt){
+                                    return 0;
+                                }else{
+                                    return (at<bt ? -1 : 1);
+                                }
+                            break;
+                            case "fechaDe":
+                                if(at==bt){
+                                    return 0;
+                                }else{
+                                    return (at>bt ? -1 : 1);
+                                }
+                            break;
+
+                            default:
+                            break;
+                        }
+                    }
+                }
+            },
 
             listaUsuarios:{type:Array, notify:true, value:[]}
 
@@ -55,9 +107,28 @@ class MySistemasMantto extends PolymerElement {
         super.ready();
 
         var binder=new QueryBinder("mantenimiento",{
-            "specialRef":firebase.firestore().collection("estatus-area").doc("sistemas").collection("mantenimiento")
+            "specialRef":firebase.firestore().collection("estatus-area").doc("sistemas").collection("mantenimiento").orderBy("_timestamp", "desc")
         });
         binder.bindArray(this,this.registros,"registros");
+    }
+
+    abreRegistro(e){
+        console.log("abreRegistro",e.detail.objeto.dato);
+        var dato=e.detail.objeto.dato;
+        PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			element:"my-registro-mantto",
+            params:[dato],
+			
+			style:"width:95%;",
+			
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
 
     abreNuevoMantto(){

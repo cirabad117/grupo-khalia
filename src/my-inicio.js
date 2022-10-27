@@ -1,102 +1,36 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { AuthMixin } from './mixins/auth-mixin.js';
+import { DiccionarioMixin } from './mixins/diccionario-mixin.js';
+
+import '@polymer/paper-fab/paper-fab.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 
 import './auth/my-inicio-sesion.js';
 import './portal/my-carrusel.js';
+import './portal/my-reporte.js';
+import './portal/my-organigrama.js';
 
 
 import './bootstrap.js';
-import './orgchart.js';
 
-class MyInicio extends AuthMixin(PolymerElement) {
+
+class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 	static get template() {
 		return html`
-			<style include="bootstrap orgchart">
+			<style include="bootstrap">
 				:host{
 					display:block;
-				}
-				::-webkit-scrollbar {
-					width: 10px;
-				}
-				::-webkit-scrollbar-track {
-					background: #f1f1f1;
-				}
-				::-webkit-scrollbar-thumb {
-					background: #888;
-				}
-				::-webkit-scrollbar-thumb:hover {
-					background: #555;
-				}
-				.chart-container {
-					float: left;
-					position: relative;
-					display: inline-block;
-					top: 10px;
-					left: 0px;
-					height: 1100px;
-					width: 50%;
-					overflow: hidden;
-					text-align: center;
-				}
-				
-				.orgchart {
-					background: #fff;
-					border: 0;
-					padding: 0;
-				}
-				
-				.orgchart>.spinner {
-					color: rgba(255, 255, 0, 0.75);
-				}
-				
-				.orgchart .node .title {
-					background-color: #fff;
-					color: #000;
-					height: 120px;
-					border-radius: 0;
-				}
-				
-				.orgchart .node .content {
-					border: 0;
-					background-color: #b80036;
-					color: #fff;
-					font-weight: bold;
-				}
-				
-				.orgchart .node>.spinner {
-					color: rgba(184, 0, 54, 0.75);
-				}
-				
-				.orgchart.r2l .node,
-				.orgchart.l2r .node {
-					width: 130px;
+					background-color:white;
 				}
 
-				.orgchart .node:hover {
-					background-color: rgba(255, 255, 0, 0.6);
+				.item-menu:hover{
+					cursor:pointer;
+					text-decoration:underline;
+					color:var(--paper-blue-500);
 				}
 				
-				.orgchart .node.focused {
-					background-color: rgba(255, 255, 0, 0.6);
-				}
-				
-				.orgchart .node .edge {
-					color: rgba(0, 0, 0, 0.6);
-				}
-				
-				.orgchart .edge:hover {
-					color: #000;
-				}
-				
-				.orgchart td.left,
-				.orgchart td.top,
-				.orgchart td.right {
-					border-color: #999;
-				}
-				
-				.orgchart td>.down {
-					background-color: #999;
-				}
 			</style>
 			
 			<template is="dom-if" if="[[_loggedUser]]">
@@ -104,12 +38,21 @@ class MyInicio extends AuthMixin(PolymerElement) {
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
-							<nav class="navbar navbar-light" >
+							<nav class="navbar">
 								<a class="navbar-brand">
 									<iron-icon icon="icons:list"></iron-icon>
 									Tablero de avisos
 								</a>
-								[[fechaActual]]
+
+								<div class="item-menu" on-click="veCalendario">
+									
+									<iron-icon icon="event"></iron-icon>
+									
+									<span>[[fechaActual]]</span>
+								</div>
+
+
+								
 							</nav>
 						</div>
 						<div class="col-lg-10 col-md-8 col-sm-12">
@@ -117,18 +60,18 @@ class MyInicio extends AuthMixin(PolymerElement) {
 						</div>
 						<div class="col-lg-2 col-md-4 col-sm-12">
 							<template is="dom-repeat" items="[[itemsPortal]]">
-								<div class="card card-body bg-light" on-click="navegaPortal">
+								<div class="card card-body bg-light item-menu" on-click="navegaPortal">
 									[[item.nombre]]
 								</div>
 							</template>
 						</div>
 					</div>
-					<!-- <hr> -->
+					<hr>
 				</div>
-				
-				<div class="container-fluid text-center bg-light">
+				<br>
+				<div class="container-fluid text-center ">
 					<h3 class="mt-3">Acerca de Grupo Khalia</h3>
-					<br>
+					
 					<div class="row">
 						<div class="col-sm-3">
 							<img src="../images/fair.png" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
@@ -150,11 +93,17 @@ class MyInicio extends AuthMixin(PolymerElement) {
 					<hr>
 				</div>
 				<br>
-				<div class="container-fluid text-center bg-light">
+				<div class="container-fluid text-center">
 					<h3 class="mt-3">Conoce a tus compañeros</h3>
-					<paper-button raised on-click="carga">cargar</paper-button>
-					<div id="chart-container"></div>
+					
+					<my-organigrama obj-empleados="[[objOrganigrama]]"></my-organigrama>
 				</div>
+
+				<div style="position: fixed; bottom: 24px; right: 24px;">
+                <div style="position: relative; cursor:pointer;" on-clicK="abreReporte">
+                    <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="announcement"></paper-fab>
+                </div>
+            </div>
 			</template>
 			<template is="dom-if" if="[[!_loggedUser]]">
 				<div class="background-container" style="display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100vh;">
@@ -168,11 +117,15 @@ class MyInicio extends AuthMixin(PolymerElement) {
 					</div>
 				</div>
 			</template>
+
+			
 		`;
 	}
 	
 	static get properties() {
 		return {
+			objOrganigrama:{type:Object, notify:true},
+			listaUsuarios:{type:Array, notify:true, value:[]},
 			itemsPortal:{type:Array, notify:true,value:[
 				{nombre:"Vida Khaliana",vista:"vida-khaliana"},
 				{nombre:"Reconocimientos",vista:"reconocimiento"},
@@ -184,6 +137,12 @@ class MyInicio extends AuthMixin(PolymerElement) {
 		}
 	}
 	
+	static get observers() {
+		return [
+			'_carga(listaUsuarios,listaUsuarios.*)'
+		];
+	}
+	
 	constructor(){
 		super();
 	}
@@ -191,51 +150,217 @@ class MyInicio extends AuthMixin(PolymerElement) {
 	ready(){
 		super.ready();
 		this.set("fechaActual",Sugar.Date.medium(new Date(),'es'));
+
+		this._carga(this.listaUsuarios);
 	}
 	navegaPortal(e){
 		var elegido=e.model.item;
 		console.log("navegaPortal",elegido);
 		NavigationUtils.navigate("portal",{vista:elegido.vista});
 	}
+
+	veCalendario(){
+		NavigationUtils.navigate("calendario")
+	}
 	
-	carga(){
-		var datascource = {
-			'name': 'Lao Lao',
-			'title': 'general manager',
-			'children': [
-				{'name': 'Bo Miao', 'title': 'department manager', 'className': 'middle-level',
-				'children': [
-					{ 'name': 'Li Jing', 'title': 'senior engineer', 'className': 'product-dept' },
-					{ 'name': 'Li Xin', 'title': 'senior engineer', 'className': 'product-dept',
-					'children': [
-						{ 'name': 'To To', 'title': 'engineer', 'className': 'pipeline1' },
-							{ 'name': 'Fei Fei', 'title': 'engineer', 'className': 'pipeline1' },
-							{ 'name': 'Xuan Xuan', 'title': 'engineer', 'className': 'pipeline1' }
-						]
-					}
-				]},
-				{ 'name': 'Su Miao', 'title': 'department manager', 'className': 'middle-level',
-				'children': [
-					{ 'name': 'Pang Pang', 'title': 'senior engineer', 'className': 'rd-dept' },
-					{ 'name': 'Hei Hei', 'title': 'senior engineer', 'className': 'rd-dept',
-					'children': [
-						{ 'name': 'Xiang Xiang', 'title': 'UE engineer', 'className': 'frontend1' },
-						{ 'name': 'Dan Dan', 'title': 'engineer', 'className': 'frontend1' },
-						{ 'name': 'Zai Zai', 'title': 'engineer', 'className': 'frontend1' }
-					]}
-				]}
-			]
-		};
-		var cc=this.shadowRoot.querySelector('#chart-container');
-		console.log("cc",cc);
-		$(cc).orgchart({
-			'data' : datascource,
-			'depth': 2,
-			'nodeTitle': 'name',
-			'nodeContent': 'name',
-			'createNode': function($node, data) {
-				$node.children('.title').html('<img src="https://dabeng.github.io/OrgChart/img/2016nba/raptors.jpg" widht="100%" height="100%">');
+	_carga(arr){
+		
+		if(arr && arr!=null && arr.length>0){
+			var datascource={
+				'name':"Grupo Khalia",
+				'title': 'general manager',
+				'fotoUrl':'../images/logo-khalia.jpeg',
+				'relationship':'100'
 			}
+			
+			var areas=this.areasKhalia;
+
+			var jefes=[];
+			var lideres=[];
+			var empleados=[];
+			
+			for(var i=0;i<arr.length;i++){
+				
+				var usuario=arr[i];
+				console.log("usuario",usuario);
+				
+				if(usuario.puesto.tipo=="jefe"){
+					console.log("usuario.tipo==jefe",usuario.puesto.tipo=="jefe");
+					var jefe =this.creaItemOrg(usuario);
+					jefes.push(jefe);
+				}else{
+
+					if(usuario.puesto.cargo=="liderArea"){
+						var lider=this.creaItemOrg(usuario);
+						lideres.push(lider);
+					}else{
+						var emp=this.creaItemOrg(usuario);
+						empleados.push(emp);
+					}
+					
+				}
+			}
+
+			console.log("jefes",jefes);
+			console.log("lideres",lideres);
+			console.log("empleados",empleados);
+
+			var orga=[];
+
+			for(var j=0;j<areas.length;j++){
+				var area=areas[j];
+				var liderActual={
+					'name': area.nombre,
+					'title': 'general manager'
+				};
+
+				var empArea=[];
+				if(lideres && lideres.length>0){
+					for(var l=0;l<lideres.length;l++){
+						
+						if(lideres[l].area==area.tipo){
+							liderActual=lideres[l];
+							break;
+						}
+
+					}
+				}
+
+				if(empleados && empleados.length>0){
+					for(var ll=0; ll<empleados.length;ll++){
+						if(empleados[ll].area==area.tipo){
+							empArea.push(empleados[ll]);
+
+						}
+					}
+
+					if(empArea && empArea.length>0){
+						liderActual["children"]=empArea;
+						
+					}
+				}
+
+				console.log(liderActual);
+
+				orga.push(liderActual);
+
+
+			}
+
+			console.log("orga",orga);
+
+			if(jefes && jefes.length>0){
+				var middle=Math.floor(jefes.length/2);
+			console.log("middle",middle);
+
+			if(middle>0){
+				middle=middle-1;
+			}
+
+			var nuevoJefe=jefes[middle];
+
+			console.log("jefes",jefes);
+
+			console.log("nuevoJefe",nuevoJefe);
+
+			nuevoJefe["children"]=orga;
+			jefes[middle]=nuevoJefe;
+
+			datascource["children"]=jefes;
+			console.log("data",datascource);
+
+			this.set("objOrganigrama",datascource);
+
+		
+			
+
+			}
+
+		
+
+			
+
+
+
+
+
+
+			
+		
+		
+		
+
+		}
+
+
+		// var datascource = {
+		// 	'name': 'Lao Lao',
+		// 	'title': 'general manager',
+		// 	'children': [
+		// 		{'name': 'Bo Miao', 'title': 'department manager', 'className': 'middle-level',
+		// 		'children': [
+		// 			{ 'name': 'Li Jing', 'title': 'senior engineer', 'className': 'product-dept' },
+		// 			{ 'name': 'Li Xin', 'title': 'senior engineer', 'className': 'product-dept',
+		// 			'children': [
+		// 				{ 'name': 'To To', 'title': 'engineer', 'className': 'pipeline1' },
+		// 					{ 'name': 'Fei Fei', 'title': 'engineer', 'className': 'pipeline1' },
+		// 					{ 'name': 'Xuan Xuan', 'title': 'engineer', 'className': 'pipeline1' }
+		// 				]
+		// 			}
+		// 		]},
+				
+		// 		{ 'name': 'Su Miao', 'title': 'department manager', 'className': 'middle-level',
+		// 		'children': [
+		// 			{ 'name': 'Pang Pang', 'title': 'senior engineer', 'className': 'rd-dept' },
+		// 			{ 'name': 'Hei Hei', 'title': 'senior engineer', 'className': 'rd-dept',
+		// 			'children': [
+		// 				{ 'name': 'Xiang Xiang', 'title': 'UE engineer', 'className': 'frontend1' },
+		// 				{ 'name': 'Dan Dan', 'title': 'engineer', 'className': 'frontend1' },
+		// 				{ 'name': 'Zai Zai', 'title': 'engineer', 'className': 'frontend1' }
+		// 			]}
+		// 		]}
+		// 	]
+		// };
+		
+	}
+
+	creaItemOrg(obj){
+		var item={
+			'name':obj.displayName
+			// 'relationship':'110'
+		};
+
+		if(obj.puesto.nombrePuesto){
+			item['title']=obj.puesto.nombrePuesto;
+			item["className"]="jefe";
+		}else{
+			item['area']=obj.puesto.area;
+			item["className"]=obj.puesto.area;
+		}
+		
+		if(obj.fotoUrl){
+			item['fotoUrl']=obj.fotoUrl;
+		}else{
+			item['fotoUrl']='../images/user.png';
+		}
+
+		return item;
+	}
+
+
+	abreReporte(){
+		PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			title:"Nuevo reporte",
+			element:"my-reporte",
+			style:"width:800px;max-width:95%;",
+			
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
 		});
 	}
 

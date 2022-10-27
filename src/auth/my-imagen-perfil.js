@@ -23,8 +23,9 @@ class MyImagenPerfil extends PolymerElement {
             <input id="file-input" accept="image/*" type='file' id="imgInp" on-change="asignaVista"/>
         </div>
 
-        <template is="dom-if" if="[[activaGuarda]]">
-            <paper-button raised on-click="cargaImagen">cargar imagen</paper-button>
+
+        <template is="dom-if" if="{{muestraBoton(activaGuarda,esNuevo)}}">
+            <paper-button raised on-click="cargaImagen">Actualizar imagen</paper-button>
         </template>
         
 
@@ -37,7 +38,8 @@ class MyImagenPerfil extends PolymerElement {
             nuevaImagen:{type:Object, notify:true,observer:"_muestraGuardar"},
             activaGuarda:{type:Boolean, notify:true, value:false},
 
-            idEmpleado:{type:String, notify:true},
+            esNuevo:{type:Boolean, notify:true, value:false},
+
             nombreFoto:{type:String, notify:true}
            
 
@@ -50,6 +52,16 @@ class MyImagenPerfil extends PolymerElement {
 
     ready() {
         super.ready();
+    }
+
+    muestraBoton(activo,nuevo){
+
+        if(activo==true && nuevo==false){
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
     returnImagen(url){
@@ -91,52 +103,83 @@ class MyImagenPerfil extends PolymerElement {
             return PolymerUtils.Toast.show("Selecciona una imagen");
 
         }
+
+        console.log("guardar",guardar);
+        
+        var t=this;
+        var options={
+            "path": "_grupo-khalia/personal",
+            "name": guardar.name,
+            "success": function(downloadUrl) {
+                t.disparaFoto(downloadUrl,guardar.name);
+
+                
+            },
+            "onProgress": function(p) {
+                //   context.updateProgress(p);
+                //  context.updateProgress(p);
+            },
+            "onPaused": function() {    
+
+            },
+            "onResumed": function() {
+
+            },
+            "error": function(err) {
+                PolymerUtils.Toast.show("Error al cargar el archivo");
+                console.error("firebase storage", err);
+            }
+        };
+
+        var file=guardar.file;
+        
+        DataHelper.Storage._actualFirebaseUpload(options,guardar);
         
      
-        var t=this;
-        var uploadTask = storageRef.child('_grupo-khalia/personal/' + guardar.name).put(guardar);
+        // var t=this;
+        // var uploadTask = storageRef.child('_grupo-khalia/personal/' + guardar.name).put(guardar);
       
 
-        var idEditar=this.idEmpleado;
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,(snapshot) => {
-            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        // var idEditar=this.idEmpleado;
+        // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,(snapshot) => {
+        //     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
            
-            switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused');
-                break;
-                case firebase.storage.TaskState.RUNNING:
-                    console.log('Upload is running');
-                    break;
-                }
-            },(error) => {
-                console.log("error carga",error);
-                PolymerUtils.Toast.show("Error al cargar la imagen");
+        //     switch (snapshot.state) {
+        //         case firebase.storage.TaskState.PAUSED: // or 'paused'
+        //         console.log('Upload is paused');
+        //         break;
+        //         case firebase.storage.TaskState.RUNNING:
+        //             console.log('Upload is running');
+        //             break;
+        //         }
+        //     },(error) => {
+        //         console.log("error carga",error);
+        //         PolymerUtils.Toast.show("Error al cargar la imagen");
 
-            },() => {
-                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    var washingtonRef = firebase.firestore().collection("usuarios").doc(idEditar);
-                    // Set the "capital" field of the city 'DC'
-                    return washingtonRef.update(
-                        {
-                            fotoUrl:downloadURL,
-                            nombreFoto:guardar.name
-                        }
-                    ).then(() => {
-                        PolymerUtils.Toast.show("Foto actualizada con éxito");
-                        t.set("nuevaImagen",null);
+        //     },() => {
+        //         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        //             var washingtonRef = firebase.firestore().collection("usuarios").doc(idEditar);
+        //             // Set the "capital" field of the city 'DC'
+        //             return washingtonRef.update(
+        //                 {
+        //                     fotoUrl:downloadURL,
+        //                     nombreFoto:guardar.name
+        //                 }
+        //             ).then(() => {
+        //                 PolymerUtils.Toast.show("Foto actualizada con éxito");
+        //                 t.set("nuevaImagen",null);
                        
                         
-                       // t.actualizaCliente(cliente);
+        //                // t.actualizaCliente(cliente);
                     
-                    }).catch((error) => {
-                        PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
-                        console.error("Error updating document: ", error);
-                    });
+        //             }).catch((error) => {
+        //                 PolymerUtils.Toast.show("Error al actualizar; intentalo más tarde");
+        //                 console.error("Error updating document: ", error);
+        //             });
                     
-                });
-            }
-        );
+        //         });
+        //     }
+        // );
     }
 
     asignaVista(e){
@@ -149,6 +192,15 @@ class MyImagenPerfil extends PolymerElement {
             this.shadowRoot.querySelector("#user-photo").src = URL.createObjectURL(file);
             this.set("nuevaImagen",file);
         }
+    }
+
+    disparaFoto(url, nombre){
+        this.dispatchEvent(new CustomEvent('foto-guardada', {
+            detail: {
+                direccion:url,
+                nombreArchivo:nombre
+            }
+        }));
     }
 
     borraImagen(){
