@@ -169,7 +169,7 @@ class MySelectorPerfil extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
     
                 var nom=this.buscaObjectoArreglo(areas,"tipo",obj.area);
     
-                if(obj.puesto=="liderArea"){
+                if(obj.cargo=="liderArea"){
                     return "Líder" + " "+nom.nombre;
                 }else{
                     return "Gestor" + " "+nom.nombre;
