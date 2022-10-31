@@ -84,7 +84,7 @@ class MyAventuraItem extends UtilsMixin(PolymerElement) {
             
             <div class="item">
                 <div class="item-header" on-click="disparaAbre">
-                    <img id="foto-aven" src="../../images/logo-khalia.jpeg" alt="img" />
+                    <img id="foto-aven" src="../../images/khalia.jpeg" alt="img" />
                 </div>
                 <div class="item-body">
                     <h4 on-click="disparaAbre">[[aventura.titulo]] </h4>

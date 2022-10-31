@@ -30,7 +30,7 @@ class MyReconocimiento extends PolymerElement {
                     background-position: center; /* Center the image */
                     background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
-                    background-image: url('../../images/logo-khalia.jpeg');
+                    background-image: url('../../images/khalia.jpeg');
                 }
                 /* .card--2 .card__img, .card--2 .card__img--hover {
                     background-image: url('https://images.pexels.com/photos/307008/pexels-photo-307008.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');

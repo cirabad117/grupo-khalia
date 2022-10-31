@@ -166,7 +166,7 @@ class VidaKhaliana extends PolymerElement {
         if(obj && obj.fotoUrl && obj.fotoUrl!="ninguno"){
             return obj.fotoUrl;
         }else{
-            return "../../images/logo-khalia.jpeg";
+            return "../../images/khalia.jpeg";
         }
     }
 

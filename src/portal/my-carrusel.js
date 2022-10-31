@@ -208,7 +208,7 @@ class MyCarrusel extends PolymerElement {
         return {
             opened:{type:Boolean, notify:true,value:false},
             listaImagenes:{type:Array, notify:true, value:[
-                {fotoUrl:"../../images/logo-khalia.jpeg",texto:"Bienvenido a Grupo Khalia"}
+                {fotoUrl:"../../images/khalia.jpeg",texto:"Bienvenido a Grupo Khalia"}
             ]},
             nombreFoto:{type:String,notify:true, value:"Seleccionar imagen"}
 

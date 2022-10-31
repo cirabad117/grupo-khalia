@@ -54,6 +54,8 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                     color:white;
                 }
             </style>
+
+            <div class="container-fluid">
             
             <nav class="navbar navbar-light titulo" style="background-color:var(--paper-blue-50);">
                 <span class="navbar-brand" on-click="navegaLista">
@@ -209,6 +211,7 @@ class MyDatosProspecto extends UtilsMixin(NavigationMixin(DialogLayoutMixin(Poly
                 </div><!--card-body-->
         
             </div><!--card-->
+            </div>
 
           
 

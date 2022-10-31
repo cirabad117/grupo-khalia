@@ -56,7 +56,7 @@ class AventuraDialog extends DialogLayoutMixin(PolymerElement) {
         if(str && str!=null && str!="ninguno"){
             return str;
         }else{
-            return "../../images/logo-khalia.jpeg";
+            return "../../images/khalia.jpeg";
         }
     }
 }

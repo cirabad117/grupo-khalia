@@ -186,7 +186,7 @@ class MyActItem extends PolymerElement {
             
             <div class="card">
                 <div class="card__thumb">
-                    <img id="img-item" src="../../images/logo-khalia.jpeg" />
+                    <img id="img-item" src="../../images/khalia.jpeg" />
                 </div>
                 <div class="card__date" style$="background-color:[[colorFecha]];">
                     <span class="card__date__day">[[dia]]</span>
@@ -266,7 +266,7 @@ class MyActItem extends PolymerElement {
         if(str && str!=null){
             itemImg.src=str;
         }else{
-            itemImg.src="../../images/logo-khalia.jpeg";
+            itemImg.src="../../images/khalia.jpeg";
         }
 
         console.log("itemImg",itemImg.src);

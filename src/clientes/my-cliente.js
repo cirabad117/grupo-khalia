@@ -48,13 +48,13 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                     color:white;
                 }
 
-                .collapse:hover{
-                    cursor:pointer;
-                    text-decoration:underline;
-                }
+               
                 
             </style>
             
+            
+
+            <div class="container-fluid">
             <nav class="navbar" style="background-color:var(--paper-green-100);color:#000000; cursor:pointer;">
                 <span class="navbar-brand" on-click="navegaLista">
                     <iron-icon icon="arrow-back"></iron-icon>
@@ -155,7 +155,7 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             <div class="row">
                 <div class="col-lg-6 col-sm-12">
                     <div class="card mt-2">
-                        <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleConta">
+                        <h5 class="card-header d-flex justify-content-between align-items-center" on-click="toggleConta">
                             Información de contacto
                             <span><iron-icon icon="[[muestraIcono(bolConta)]]"></iron-icon></span>
                         </h5>
@@ -170,7 +170,7 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                 
                 <div class="col-lg-6 col-sm-12">
                     <div class="card mt-2">
-                        <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleExtra">
+                        <h5 class="card-header d-flex justify-content-between align-items-center" on-click="toggleExtra">
                             Seguimiento
                             <span class="btn-label"><iron-icon icon="[[muestraIcono(bolExtra)]]"></iron-icon></span>
                         </h5>
@@ -187,7 +187,7 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
             </div>
 
             <div class="card mt-2">
-                <h5 class="collapse card-header d-flex justify-content-between align-items-center" on-click="toggleCoti">
+                <h5 class="card-header d-flex justify-content-between align-items-center" on-click="toggleCoti">
                     Cotizaciones
                     <span class="btn-label"><iron-icon icon="[[muestraIcono(bolCoti)]]"></iron-icon></span>
                 </h5>
@@ -197,6 +197,8 @@ class MyCliente extends NavigationMixin(UtilsMixin(PolymerElement)) {
                         cliente-activo="{{prospecto.id}}"></my-cotizaciones-main>
                     </iron-collapse>
                 </div>
+            </div>
+
             </div>
 
 

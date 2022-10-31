@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { AuthMixin } from './mixins/auth-mixin.js';
 import { DiccionarioMixin } from './mixins/diccionario-mixin.js';
+import { UtilsMixin } from './mixins/utils-mixin.js';
 
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/iron-icons/iron-icons.js';
@@ -12,11 +13,9 @@ import './portal/my-carrusel.js';
 import './portal/my-reporte.js';
 import './portal/my-organigrama.js';
 
-
 import './bootstrap.js';
 
-
-class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
+class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 	static get template() {
 		return html`
 			<style include="bootstrap">
@@ -34,7 +33,6 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 			</style>
 			
 			<template is="dom-if" if="[[_loggedUser]]">
-				<!-- <img class="img img-fluid mx-auto d-block" src="../images/logo-khalia10.jpeg"> -->
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
@@ -45,14 +43,9 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 								</a>
 
 								<div class="item-menu" on-click="veCalendario">
-									
 									<iron-icon icon="event"></iron-icon>
-									
 									<span>[[fechaActual]]</span>
 								</div>
-
-
-								
 							</nav>
 						</div>
 						<div class="col-lg-10 col-md-8 col-sm-12">
@@ -71,7 +64,6 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 				<br>
 				<div class="container-fluid text-center ">
 					<h3 class="mt-3">Acerca de Grupo Khalia</h3>
-					
 					<div class="row">
 						<div class="col-sm-3">
 							<img src="../images/fair.png" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
@@ -96,15 +88,16 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 				<div class="container-fluid text-center">
 					<h3 class="mt-3">Conoce a tus compañeros</h3>
 					
-					<my-organigrama obj-empleados="[[objOrganigrama]]"></my-organigrama>
+					<my-organigrama obj-empleados="[[objOrganigrama]]" empleados="[[listaUsuarios]]"></my-organigrama>
 				</div>
 
 				<div style="position: fixed; bottom: 24px; right: 24px;">
-                <div style="position: relative; cursor:pointer;" on-clicK="abreReporte">
-                    <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="announcement"></paper-fab>
-                </div>
-            </div>
+					<div style="position: relative; cursor:pointer;" on-clicK="abreReporte">
+						<paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="announcement"></paper-fab>
+					</div>
+				</div>
 			</template>
+
 			<template is="dom-if" if="[[!_loggedUser]]">
 				<div class="background-container" style="display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100vh;">
 					<div style="width: 450px; max-width: 95%; height: auto; max-width: 95%; background-color: white; border-radius: 10px; border: 1px solid var(--paper-grey-100);">
@@ -169,9 +162,9 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 			var datascource={
 				'name':"Grupo Khalia",
 				'title': 'general manager',
-				'fotoUrl':'../images/logo-khalia.jpeg',
+				'fotoUrl':'../images/khalia.jpeg',
 				'relationship':'100'
-			}
+			};
 			
 			var areas=this.areasKhalia;
 
@@ -211,18 +204,18 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 				var area=areas[j];
 				var liderActual={
 					'name': area.nombre,
-					'title': 'general manager'
+					'title': 'general manager',
+					'className':area.tipo,
+					'fotoUrl':'../images/khalia.jpeg',
 				};
 
 				var empArea=[];
 				if(lideres && lideres.length>0){
 					for(var l=0;l<lideres.length;l++){
-						
 						if(lideres[l].area==area.tipo){
 							liderActual=lideres[l];
 							break;
 						}
-
 					}
 				}
 
@@ -230,110 +223,57 @@ class MyInicio extends DiccionarioMixin(AuthMixin(PolymerElement)) {
 					for(var ll=0; ll<empleados.length;ll++){
 						if(empleados[ll].area==area.tipo){
 							empArea.push(empleados[ll]);
-
 						}
 					}
 
 					if(empArea && empArea.length>0){
 						liderActual["children"]=empArea;
-						
 					}
 				}
-
 				console.log(liderActual);
-
 				orga.push(liderActual);
-
-
 			}
 
 			console.log("orga",orga);
-
+			
 			if(jefes && jefes.length>0){
 				var middle=Math.floor(jefes.length/2);
-			console.log("middle",middle);
-
-			if(middle>0){
-				middle=middle-1;
-			}
-
-			var nuevoJefe=jefes[middle];
-
-			console.log("jefes",jefes);
-
-			console.log("nuevoJefe",nuevoJefe);
-
-			nuevoJefe["children"]=orga;
-			jefes[middle]=nuevoJefe;
-
-			datascource["children"]=jefes;
-			console.log("data",datascource);
-
-			this.set("objOrganigrama",datascource);
-
-		
-			
-
-			}
-
-		
-
-			
-
-
-
-
-
-
-			
-		
-		
-		
-
-		}
-
-
-		// var datascource = {
-		// 	'name': 'Lao Lao',
-		// 	'title': 'general manager',
-		// 	'children': [
-		// 		{'name': 'Bo Miao', 'title': 'department manager', 'className': 'middle-level',
-		// 		'children': [
-		// 			{ 'name': 'Li Jing', 'title': 'senior engineer', 'className': 'product-dept' },
-		// 			{ 'name': 'Li Xin', 'title': 'senior engineer', 'className': 'product-dept',
-		// 			'children': [
-		// 				{ 'name': 'To To', 'title': 'engineer', 'className': 'pipeline1' },
-		// 					{ 'name': 'Fei Fei', 'title': 'engineer', 'className': 'pipeline1' },
-		// 					{ 'name': 'Xuan Xuan', 'title': 'engineer', 'className': 'pipeline1' }
-		// 				]
-		// 			}
-		// 		]},
+				console.log("middle",middle);
 				
-		// 		{ 'name': 'Su Miao', 'title': 'department manager', 'className': 'middle-level',
-		// 		'children': [
-		// 			{ 'name': 'Pang Pang', 'title': 'senior engineer', 'className': 'rd-dept' },
-		// 			{ 'name': 'Hei Hei', 'title': 'senior engineer', 'className': 'rd-dept',
-		// 			'children': [
-		// 				{ 'name': 'Xiang Xiang', 'title': 'UE engineer', 'className': 'frontend1' },
-		// 				{ 'name': 'Dan Dan', 'title': 'engineer', 'className': 'frontend1' },
-		// 				{ 'name': 'Zai Zai', 'title': 'engineer', 'className': 'frontend1' }
-		// 			]}
-		// 		]}
-		// 	]
-		// };
+				// if(middle>0){
+					// 	middle=middle-1;
+				// }
+				
+				var nuevoJefe=jefes[middle];
+				console.log("jefes",jefes);
+				console.log("nuevoJefe",nuevoJefe);
+				nuevoJefe["children"]=orga;
+				jefes[middle]=nuevoJefe;
+				datascource["children"]=jefes;
+				console.log("data",datascource);
+				this.set("objOrganigrama",datascource);
+			}
+		}
 		
 	}
 
 	creaItemOrg(obj){
 		var item={
-			'name':obj.displayName
-			// 'relationship':'110'
+			'id':obj.uid
 		};
 
 		if(obj.puesto.nombrePuesto){
+			item["name"]=obj.puesto.nombrePuesto+"<br>"+obj.displayName;
 			item['title']=obj.puesto.nombrePuesto;
 			item["className"]="jefe";
 		}else{
+			if(obj.puesto.cargo=="liderArea"){
+				var nombreDep=this.buscaObjectoArreglo(this.areasKhalia,"tipo",obj.puesto.area);
+				var nuevoNombre=nombreDep.nombre+"<br>"+obj.displayName;
+				item["name"]=nuevoNombre;
+			}else{
+				item["name"]=obj.displayName;
+			}
 			item['area']=obj.puesto.area;
 			item["className"]=obj.puesto.area;
 		}
