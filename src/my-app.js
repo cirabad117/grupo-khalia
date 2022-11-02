@@ -39,6 +39,7 @@ import '@polymer/iron-icon/iron-icon.js';
 import './general-controls/my-dropdown-button.js';
 import './auth/my-icono-usuario.js';
 import './controles-extra/dom-access.js';
+import './auth/my-vista-empleado.js';
 
 import './bootstrap.js';
 
@@ -271,10 +272,13 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 							</li>
 						</ul>
 						<div class="form-inline my-2 my-lg-0">
+							<div class="d-flex align-items-center" on-click="abreEditaPerfil">
 							<my-icono-usuario tam="48px"></my-icono-usuario>
 							<div style="padding: 4px 12px;">
 								<div style="font-size: 16px; font-weight: 500;color:#FFFFFF;">[[_loggedUser.displayName]]</div>
 							</div>
+							</div>
+							
 
 							<template is="dom-if" if="[[_loggedUser]]">
 								<paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'Cerrar sesión')" style="color:var(--paper-red-200);" icon="power-settings-new" on-click="cierraSesion"></paper-icon-button>
@@ -456,6 +460,24 @@ class MyApp extends AuthMixin(NavigationMixin(PolymerElement)) {
 	/* Set the width of the side navigation to 0 */
 	closeNav() {
 		this.shadowRoot.querySelector("#mySidenav").style.width = "0";
+	}
+
+	abreEditaPerfil(){
+		console.log("_loggedUser",this._loggedUser);
+		var elegido=this._loggedUser;
+		PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			element:"my-vista-empleado",
+			style:"width:500px;max-width:95%;",
+			params:[elegido,true],
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                
+                    dialog.close();
+                }
+            }
+		});
 	}
 
 	getIcono(bol){

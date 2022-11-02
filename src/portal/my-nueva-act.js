@@ -24,8 +24,8 @@ class MyNuevaAct extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
             <paper-checkbox checked="{{esImagen}}">Agregar imagen</paper-checkbox>
 
             <template is="dom-if" if="{{esImagen}}">
-            <my-doc-upload id="carga-item" carpeta-guardar="_grupo-khalia/actividades"
-                    on-archivo-guardado="guardaAct" style="margin:10px;"></my-doc-upload>
+                <my-doc-upload id="carga-item" carpeta-guardar="_grupo-khalia/actividades"
+                on-archivo-guardado="guardaAct" style="margin:10px;"></my-doc-upload>
             </template>
 
 
@@ -34,18 +34,16 @@ class MyNuevaAct extends DialogLayoutMixin(UtilsMixin(PolymerElement)) {
             <paper-input id="txt-tit" label="Título" value="{{titulo}}" error-message="Información inválida"></paper-input>
 
             <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content: space-between;">
-            <vaadin-date-picker i18n="[[vaadinDateConfig]]" id="combo-fe" label="Fecha" value="{{fecha}}" error-message="Información inválida"></vaadin-date-picker>
-            <paper-checkbox checked="{{esCalendario}}">Incluir en el calendario</paper-checkbox>
+            
+                <vaadin-date-picker i18n="[[vaadinDateConfig]]" id="combo-fe" label="Fecha"
+                value="{{fecha}}" error-message="Información inválida"></vaadin-date-picker>
+                
+                <paper-checkbox checked="{{esCalendario}}">Incluir en el calendario</paper-checkbox>
 
             </div>
             
 
             <paper-textarea id="txt-desc" label="Descripción" value="{{desc}}" error-message="Información inválida"><paper-textarea>
-            
-            
-            
-            
-
 
 
         `;

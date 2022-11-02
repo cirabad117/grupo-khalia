@@ -46,8 +46,11 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
                         
                         <iron-pages selected="{{selected}}" attr-for-selected="name">
                             <div name="inventario">
+                                
+                                <paper-input label="busqueda" value="{{texto}}"></paper-input>
+                                
                                 <paper-listbox style="overflow-y:scroll;max-height:200px;">
-                                    <template is="dom-repeat" items="[[inventario]]" as="equipo">
+                                    <template is="dom-repeat" items="[[inventario]]" as="equipo" filter="[[_filtraEquipo(texto)]]">
                                         <paper-item on-click="agregaEquipo">
                                             <paper-item-body>
                                                 <div>[[equipo.tipo]] - [[equipo.marca]]</div>
@@ -286,6 +289,26 @@ class MyNuevoMantto extends DialogLayoutMixin(PolymerElement) {
 
 
 
+    }
+
+    _filtraEquipo(str){
+        
+        return function(item){
+
+            if(!str || str==null || str.trim()==""){
+                return item;
+            }else{
+                if(item.ns.toLowerCase().indexOf(str)!=-1||
+                item.marca.toLowerCase().indexOf(str)!=-1||
+                item.modelo.toLowerCase().indexOf(str)!=-1){
+                    return item;
+                }
+            }
+
+
+
+            
+        }
     }
 
     
