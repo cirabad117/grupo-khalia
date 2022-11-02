@@ -147,8 +147,8 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 				}
 				$(cc).orgchart({
 					'data' : obj,
-					'depth': 4,
-					'verticalDepth':3,
+					'verticalLevel': 4,
+					'visibleLevel': 4,
 					'nodeTitle': 'name',
 					'nodeContent': 'name',
 					'createNode': function(node, data) {
