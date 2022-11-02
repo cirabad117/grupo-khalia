@@ -34,7 +34,7 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 				}
 				
 				.orgchart {
-					background: #fff; 
+					background: #fff;
 				}
 				
 				.orgchart .second-menu-icon {
@@ -72,6 +72,13 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 					float: left;
 					margin: 5px;
 				}
+
+				/* .orgchart .node{
+					display:flex;
+					align-items:center;
+					max-width:200px;
+
+				} */
 				
 				.orgchart .node .title {
 					height: 120px;
@@ -140,7 +147,8 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 				}
 				$(cc).orgchart({
 					'data' : obj,
-					'depth': 2,
+					'depth': 4,
+					'verticalDepth':3,
 					'nodeTitle': 'name',
 					'nodeContent': 'name',
 					'createNode': function(node, data) {
