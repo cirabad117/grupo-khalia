@@ -1,5 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
+import '../controles-extra/dom-access.js';
 
 class MyActItem extends PolymerElement {
     static get template() {
@@ -195,9 +196,9 @@ class MyActItem extends PolymerElement {
                 </div>
 
                 <div class="card_boton">
-                    
+                <dom-access path="portal/edita">
                     <paper-icon-button style="background-color:white;color:var(--paper-red-500);border-radius:50%;" icon="delete" on-click="borraItem"></paper-icon-button>
-                    
+                    </dom-access>
                 </div>
 
                 <div class="card__body">

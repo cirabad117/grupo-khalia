@@ -42,7 +42,8 @@ let internalMixinDiccionario = function(superClass) {
                 ]},
 
                 areasKhalia:{type:Array, notify:true, value:[
-                    {tipo:"admin",nombre:"Administración y Ventas",logo:"../../images/areas/admin.png"},
+                    {tipo:"admin",nombre:"Administración",logo:"../../images/areas/admin.png"},
+                    {tipo:"ventas",nombre:"Ventas y Marketing",logo:"../../images/areas/campana_digital.png"},
                     {tipo:"sasisopa",nombre:"SASISOPA",logo:"../../images/areas/sasisopa.png"},
                     {tipo:"sgm",nombre:"SGM",logo:"../../images/areas/sgm.png"},
                     {tipo:"emisiones",nombre:"Emisiones",logo:"../../images/areas/emisiones.png"},

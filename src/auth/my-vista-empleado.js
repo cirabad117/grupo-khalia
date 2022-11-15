@@ -21,24 +21,25 @@ class MyVistaEmpleado extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
             </style>
             
             <template is="dom-if" if="[[!esEditar]]">
-                <div class="container d-flex justify-content-center align-items-center">
-                    <div class="card py-4">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="round-image">
-                                <img src$="[[muestraImagen(perfil.fotoUrl)]]" class="rounded-circle" width="97">
-                            </div>
+                <div class="container" >
+                    <div class="row">
+                        <div class="col-md-3 d-flex flex-column justify-content-center text-center">
+                            <img src$="[[muestraImagen(perfil.fotoUrl)]]" class="img-fluid">
+                            <h6 class="mt-1 ml-auto mr-auto text-center">[[perfil.displayName]]</h6>
                         </div>
-                        
-                        <div class="text-center">
-                            <h4 class="mt-3">[[perfil.displayName]]</h4>
-                            <span>[[getPuesto(perfil.puesto)]]</span>
-                        
-                            <div class="px-5">
-                                <p class="content">Fecha de nacimiento:[[muestraFecha(perfil.fechaNac)]]</p>
-                                <p class="content">[[perfil.bio]]</p>
-                            </div>
+                        <div class="col-md-9" style$="[[muestraEstilo(perfil)]]">
+                        <div>
+                            
+                            <h3 class="mt-2 font-weight-bold">[[perfil.nombrePuesto]]</h3>
+                            <h6 class="mt-3">[[perfil.descPuesto]]</h6>
+
+                            <div class="blockquote-footer text-light"><cite>"[[perfil.bio]]"</cite></div>
+                           
+                         
+                        </div>
                         </div>
                     </div>
+                
                 </div>
             </template>
             
@@ -49,12 +50,12 @@ class MyVistaEmpleado extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
                     </div>
                 </div>
                 
-                <paper-input label="Nombre" value="{{nombre}}"></paper-input>
+               
+
+                <paper-textarea label="Nombre de puesto" value="{{nombrePuesto}}"></paper-textarea>
+                <paper-textarea label="descripción" value="{{descPuesto}}"></paper-textarea>
                 
-                <vaadin-date-picker label="Fecha de nacimiento" i18n="[[vaadinDateConfig]]" value="{{nuevaFecha}}"
-                error-message="selecciona una fecha válida"></vaadin-date-picker>
-                
-                <paper-textarea label="Mi presentación" value="{{bio}}"></paper-textarea>
+                <paper-textarea label="Presentación" value="{{bio}}"></paper-textarea>
                 
                 <paper-button style="background-color:var(--paper-blue-500);color:white;"
                 on-click="guardaCambios">guardar cambios</paper-button>
@@ -75,8 +76,9 @@ class MyVistaEmpleado extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
 
         if(obj){
             this.set("perfil",obj);
-            this.set("nombre",obj.displayName);
-            this.set("nuevaFecha",obj.fechaNac);
+            
+            this.set("nombrePuesto",obj.nombrePuesto);
+            this.set("descPuesto",obj.descPuesto);
             this.set("bio",obj.bio);
         }
 
@@ -87,6 +89,14 @@ class MyVistaEmpleado extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
 
     ready() {
         super.ready();
+    }
+
+    
+
+    muestraEstilo(obj){
+        console.log("obj estilo",obj);
+
+        return obj.puesto.tipo=="jefe" || obj.puesto.cargo=="liderArea"?"color:white;background-color:#11273c;":"color:#071c51;background-color:white;";
     }
 
     muestraImagen(str){
@@ -120,12 +130,16 @@ class MyVistaEmpleado extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
 
     guardaCambios(){
 
-        if(!this.nombre || this.nombre==null || this.nombre.trim()==""){
-            return PolymerUtils.Toast.show("Agrega un nombre válido");
+      
+        if(!this.nombrePuesto || this.nombrePuesto==null || this.nombrePuesto.trim()==""){
+            return PolymerUtils.Toast.show("escribe un adescripcion válida");
         }
-        if(!this.nuevaFecha || this.nuevaFecha==null || this.nuevaFecha.trim()==""){
-            return PolymerUtils.Toast.show("Selecciona una fecha válida");
+
+        if(!this.descPuesto || this.descPuesto==null || this.descPuesto.trim()==""){
+            return PolymerUtils.Toast.show("escribe un adescripcion válida");
         }
+
+
         if(!this.bio || this.bio==null || this.bio.trim()==""){
             return PolymerUtils.Toast.show("escribe un adescripcion válida");
         }
@@ -135,8 +149,9 @@ class MyVistaEmpleado extends DiccionarioMixin(UtilsMixin(PolymerElement)) {
         var washingtonRef = firebase.firestore().collection("usuarios").doc(id);
         // Set the "capital" field of the city 'DC'
         return washingtonRef.update({
-            displayName:t.nombre,
-            fechaNac:t.nuevaFecha,
+      
+            nombrePuesto:t.nombrePuesto,
+            descPuesto:t.descPuesto,
             bio:t.bio
         }).then(() => {
             PolymerUtils.Toast.show("Usuario actualizado con éxito");

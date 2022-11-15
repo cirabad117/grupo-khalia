@@ -2,6 +2,7 @@ import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import './my-act-item.js';
 import './my-nueva-act.js';
+import '../controles-extra/dom-access.js';
 
 import '../bootstrap.js';
 class MyCursos extends PolymerElement {
@@ -22,12 +23,13 @@ class MyCursos extends PolymerElement {
                 </template>
             </div>
 
-            <div style="position: fixed; bottom: 24px; right: 24px;">
-                <div style="position: relative; cursor:pointer;" on-clicK="abreEvent">
-                    <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
+            <dom-access path="portal/edita">
+                <div style="position: fixed; bottom: 24px; right: 24px;">
+                    <div style="position: relative; cursor:pointer;" on-clicK="abreEvent">
+                        <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
+                    </div>
                 </div>
-            </div>
-   
+            </dom-access>
         `;
     }
 

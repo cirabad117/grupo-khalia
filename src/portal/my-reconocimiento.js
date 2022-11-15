@@ -1,7 +1,8 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import '../bootstrap.js';
-import './my-edita-rec.js'
+import './my-edita-rec.js';
+import '../controles-extra/dom-access.js';
 
 // • Reconocimientos
 // - Departamento del mes
@@ -175,12 +176,13 @@ class MyReconocimiento extends PolymerElement {
                 </div>
             </div>
             
+            <dom-access path="portal/edita">
             <div style="position: fixed; bottom: 24px; right: 24px;">
                 <div style="position: relative; cursor:pointer;" on-clicK="editaRecs">
                     <paper-fab icon="create" style$="color:white;background-color:var(--paper-green-500);"></paper-fab>
                 </div>
             </div>
-
+</dom-access>
          
 
         `;

@@ -6,9 +6,10 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/paper-fab/paper-fab.js';
-import './my-calendar-item.js';
 
+import './my-calendar-item.js';
 import './nueva-fecha.js';
+import '../controles-extra/dom-access.js';
 
 import '../calendar-css.js';
 import '../bootstrap.js';
@@ -88,13 +89,15 @@ class MyCalendario extends PolymerElement {
                 </div>
 
             </div>
+
+            <dom-access path="portal/edita">
             
             <div style="position: fixed; bottom: 24px; right: 24px;">
                 <div style="position: relative; cursor:pointer;" on-clicK="abreNuevo">
                     <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
                 </div>
             </div>
-
+</dom-access>
         `;
     }
 

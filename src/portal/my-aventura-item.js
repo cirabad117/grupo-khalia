@@ -4,6 +4,8 @@ import { UtilsMixin } from "../mixins/utils-mixin.js";
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 
+import '../controles-extra/dom-access.js';
+
 class MyAventuraItem extends UtilsMixin(PolymerElement) {
     static get template() {
         return html`
@@ -94,8 +96,9 @@ class MyAventuraItem extends UtilsMixin(PolymerElement) {
                             <h5>[[aventura._user.displayName]]</h5>
                             <small>2h ago</small>
                         </div>
+                        <dom-access path="portal/edita">
                         <paper-icon-button icon="delete" on-click="borraItem"></paper-icon-button>
-                        
+                        </dom-access>
                         
                     </div>
                 </div>

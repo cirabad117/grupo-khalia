@@ -13,7 +13,7 @@ class MySistemasMantto extends PolymerElement {
             
             <my-lista-general arreglo-items="[[registros]]"
             lista-filtro="[[listaTipo]]" lista-ordena="[[opcionesOrdena]]"
-            lista-cols="[[datosMantto]]"
+            lista-cols="[[datosMantto]]" color-boton="var(--paper-green-600)"
             funcion-ordenar="[[funcionOrdenaEquipo]]" funcion-buscar="[[funcionFiltraEquipo]]"
             on-ejecuta-accion="abreNuevoMantto" on-ejecuta-item="abreRegistro"></my-lista-general>
 

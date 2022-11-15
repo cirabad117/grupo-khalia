@@ -56,7 +56,7 @@ class MyUsuarios extends DiccionarioMixin(UtilsMixin(AuthMixin(PolymerElement)))
                                         <paper-item-body>
                                             <div>[[getNombrePerfil(perfil)]]</div>
                                         </paper-item-body>
-                                        <paper-icon-button icon="delete"></paper-icon-button>
+                                        <paper-icon-button icon="delete" on-click="abreBorraPerfil"></paper-icon-button>
                                     </paper-item>
                                 </template>
                             </div>
@@ -234,6 +234,47 @@ class MyUsuarios extends DiccionarioMixin(UtilsMixin(AuthMixin(PolymerElement)))
     abreEditaUsuario(e){
         var usuario=e.model.item;
         NavigationUtils.navigate("usuario",{id:usuario.uid})
+    }
+
+    abreBorraPerfil(e){
+        var perfil=e.model.perfil;
+        console.log("borra perfil",perfil);
+
+        var t=this;
+
+        PolymerUtils.Dialog.createAndShow({
+            type: "modal",
+            title:"Eliminar perfil - "+t.getNombrePerfil(perfil),
+            message:"¿Desea eliminar el perfil seleccionado?",
+			style:"width:600px; max-width:95% !important;",
+            saveSpinner:{
+				message:"Eliminando perfil"
+			  },
+			positiveButton: {
+                text: "eliminar perfil",
+                action: function(dialog, element) {
+                    dialog.setSaving(true);
+
+                    var id=perfil.id;
+                    firebase.firestore().collection("perfiles").doc(id).delete().then(() => {
+                        PolymerUtils.Toast.show("Perfil eliminado con éxito");
+                        
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+                        dialog.setSaving(false);
+                        console.error("Error removing document: ", error);
+                    });
+                }
+            },
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
     }
     
     abreBorraUsuario(e){

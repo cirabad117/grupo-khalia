@@ -5,6 +5,8 @@ import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 
+import '../controles-extra/dom-access.js';
+
 class MyCarrusel extends PolymerElement {
     static get template() {
         return html`
@@ -154,12 +156,14 @@ class MyCarrusel extends PolymerElement {
                 
                 
                 
-                <!-- background-image: url([[item.fotoUrl]]); background-repeat: no-repeat;background-size: cover; -->
                 <ul class="slides-container" id="slides-container">
                     <template is="dom-repeat" items="[[listaImagenes]]">
                         <li class="slide" style$="position: relative;
                         background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.6) 100%), url([[item.fotoUrl]]) no-repeat;background-size: cover;">
+
+                        <dom-access path="portal/edita">
                         <paper-icon-button class="slide-boton" id="boton-borra" icon="delete" on-click="borraImagen"></paper-icon-button>
+                        </dom-access>
                             <p class="texto-banner">[[item.texto]]</p>
                         </li>
                     </template>
@@ -176,6 +180,7 @@ class MyCarrusel extends PolymerElement {
 
 
 
+            <dom-access path="portal/edita">
             <button type="button" class="btn btn-primary" on-click="toggleImagen">Agregar imagen</button>
             
             <iron-collapse opened="{{opened}}">
@@ -200,6 +205,7 @@ class MyCarrusel extends PolymerElement {
             
                
             </iron-collapse>
+            </dom-access>
 
         `;
     }
@@ -235,25 +241,27 @@ class MyCarrusel extends PolymerElement {
         
         binder.bindArray(this,this.listaImagenes,"listaImagenes");
 
-        //var position=0;
+        var position=0;
 
-        // setInterval(() => {
+        setInterval(() => {
             
-        //     const slidesContainer = this.shadowRoot.querySelector("#slides-container");
-          
-        //     const slide = this.shadowRoot.querySelector(".slide");
-        //     const slides=this.shadowRoot.querySelectorAll(".slide");
-        //     const slideWidth = slide.clientWidth;
-        //     slidesContainer.scrollLeft += slideWidth;
-        //     position++;
-        //     if(position==slides.length){
-        //         position=0;
-        //         slidesContainer.scrollLeft=0;
-
-        //     }
+            const slidesContainer = this.shadowRoot.querySelector("#slides-container");
+            const slide = this.shadowRoot.querySelector(".slide");
+            const slides=this.shadowRoot.querySelectorAll(".slide");
+            if(slides && slides.length && slides.length>0){
+                const slideWidth = slide.clientWidth;
+                slidesContainer.scrollLeft += slideWidth;
+                position++;
+                if(position==slides.length){
+                    position=0;
+                    slidesContainer.scrollLeft=0;
+    
+                }
+            }
+            
           
        
-        // }, 4000);
+        }, 5000);
     }
 
     currentSlide(e){
@@ -320,6 +328,17 @@ class MyCarrusel extends PolymerElement {
             return PolymerUtils.Toast.show("Selecciona una imagen");
 
         }
+
+
+        var dialog=PolymerUtils.Dialog.createAndShow({
+            type: "modal",
+            saveSpinner:{
+                message: "Agregando banner...",
+                saving: true
+            },
+            style:"width: 400px; height: 300px;",
+            smallStyle: "width: 95% !important;"
+        });
         
      
         var t=this;
@@ -359,9 +378,11 @@ class MyCarrusel extends PolymerElement {
                         PolymerUtils.Toast.show("banner agergado con exito");
                         t.toggleImagen();
                         t.set("nuevaImagen",null);
+                        dialog.close();
                     })
                     .catch(function(error) {
                         console.error("Error adding document: ", error);
+                        dialog.close();
                         PolymerUtils.Toast.show("Error al guardar");
                     });
 

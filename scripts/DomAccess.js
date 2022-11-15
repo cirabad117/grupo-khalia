@@ -154,6 +154,17 @@ var StaticDomAccess={
 
             }
         },
+        "portal":{
+            "name":"Portal Khalia",
+            "description":"Controles de visualizacion del protal de inicio",
+            "children":{
+                "edita":{
+                    "name":"Editar elementos",
+                    "description":"Configuración de imagenes e información a mostrar"
+                }
+
+            }
+        }
         
        
     

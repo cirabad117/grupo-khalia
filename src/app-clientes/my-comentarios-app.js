@@ -30,8 +30,8 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
                                             <h5 class="mt-0 mb-1">[[item._idCliente]] - [[PolymerUtils_getDateString(item._timestamp)]]</h5>
                                             <my-muestra-mensaje mensaje="[[item.coment]]"></my-muestra-mensaje>
                                         </div>
-                                        <paper-icon-button icon="create"></paper-icon-button>
-                                        <paper-icon-button icon="delete"></paper-icon-button>
+                                        
+                                        <paper-icon-button icon="delete" on-click="borraMensaje"></paper-icon-button>
                                     </li>
                                     <hr>
                                 </template>
@@ -63,6 +63,20 @@ class MyComentariosApp extends UtilsMixin(PolymerElement) {
         });
         
         binder.bindArray(this,this.listaComentarios,"listaComentarios");
+    }
+
+    borraMensaje(e){
+        var mensaje=e.model.item;
+        var id=mensaje.id;
+        firebase.firestore().collection("_comentarios-app").doc(id).delete().then(() => {
+            PolymerUtils.Toast.show("Mensaje eliminado con éxito");
+           
+        }).catch((error) => {
+            PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+           
+            console.error("Error removing document: ", error);
+        });
     }
 }
 

@@ -29,25 +29,24 @@ class MyAppClientes extends UtilsMixin(PolymerElement) {
                 }
             </style>
             
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" >
+                    <iron-icon icon="important-devices"></iron-icon>
+                    App Clientes
+                </a>
+                <div class="form-inline my-2 my-lg-0">
+                    <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:white;">
+                        <paper-tab name="lista" onmouseover="PolymerUtils.Tooltip.show(event,'Clientes activos')">
+                            <span><iron-icon icon="supervisor-account"></iron-icon></span>
+                        </paper-tab>
+                        <paper-tab name="coment" onmouseover="PolymerUtils.Tooltip.show(event,'Comentarios')">
+                            <span><iron-icon icon="feedback"></iron-icon></span>
+                        </paper-tab>
+                    </paper-tabs>
+                </div>
+            </nav>
+            
             <div class="container">
-                <nav class="navbar navbar-light bg-light">
-                    <a class="navbar-brand" >
-                        <iron-icon icon="important-devices"></iron-icon>
-                        App Clientes
-                    </a>
-                    <div class="form-inline my-2 my-lg-0">
-                        <paper-tabs selected="{{selected}}" attr-for-selected="name" style="background-color:white;">
-                            <paper-tab name="lista" onmouseover="PolymerUtils.Tooltip.show(event,'Clientes activos')">
-                                <span><iron-icon icon="supervisor-account"></iron-icon></span>
-                                
-                            </paper-tab>
-                            <paper-tab name="coment" onmouseover="PolymerUtils.Tooltip.show(event,'Comentarios')">
-                                <span><iron-icon icon="feedback"></iron-icon></span>
-                                
-                            </paper-tab>
-                        </paper-tabs>
-                    </div>
-                </nav>
                 
                 <iron-pages selected="{{selected}}" attr-for-selected="name">
                     <div name="lista">

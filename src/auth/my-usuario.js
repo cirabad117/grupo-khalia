@@ -10,9 +10,11 @@ import './my-imagen-perfil.js';
 import '../controles-extra/checkbox-tree.js';
 import '../sistemas/my-sistemas-inventario.js';
 import './my-selector-perfil.js';
+import '../auth/my-vista-empleado.js';
 
 import '../bootstrap.js';
-class MyUsuario extends NavigationMixin(PolymerElement) {
+import { UtilsMixin } from '../mixins/utils-mixin.js';
+class MyUsuario extends UtilsMixin(NavigationMixin(PolymerElement)) {
     static get template() {
         return html`
             <style include="bootstrap">
@@ -35,6 +37,7 @@ class MyUsuario extends NavigationMixin(PolymerElement) {
                                 
                                 <paper-item name="datos">información del empleado</paper-item>
                                 <paper-item name="imagen">Imagen</paper-item>
+                                <paper-item name="present">Presentación</paper-item>
                                 <paper-item name="pass">Modificar contraseña</paper-item>
                             
                             </paper-listbox>
@@ -105,6 +108,10 @@ class MyUsuario extends NavigationMixin(PolymerElement) {
                                     on-foto-guardada="actualizaFoto"></my-imagen-perfil>
 
                                 </div>
+                                <div name="present">
+                                    <my-vista-empleado perfil="[[usuario]]" nombre-puesto="[[usuario.nombrePuesto]]"
+                                    desc-puesto="[[usuario.descPuesto]]" bio="[[usuario.bio]]" es-editar="[[edita]]"></my-vista-empleado>
+                                </div>
                                 <div name="pass">
                                     <paper-input id="txtContra" class="m-1" value="{{pass}}" type="password" label="Contraseña" error-message="valor inválido"></paper-input>
                                     <paper-input id="txtConfirm" class="m-1" value="{{pass2}}" type="password" label="Confirmar contraseña" error-message="valor inválido"></paper-input>
@@ -141,6 +148,8 @@ class MyUsuario extends NavigationMixin(PolymerElement) {
                     {"accion":"accionItem","icono":"icons:add","texto":"agregar equipo"},
                 ]}
             ]},
+
+            edita:{type:Boolean, notify:true, value:true}
         }
     }
 

@@ -16,6 +16,7 @@ import './my-act-item.js';
 import './my-nueva-act.js';
 import './my-aventura-item.js';
 import './aventura-dialog';
+import '../controles-extra/dom-access.js';
 
 import '../bootstrap.js';
 class VidaKhaliana extends PolymerElement {
@@ -53,7 +54,9 @@ class VidaKhaliana extends PolymerElement {
                     <div class="col-md-8">
                         <div style="width:100%;" class="d-flex flex-wrap align-items-center">
                             <h3>Aventuras</h3>
+                            <dom-access path="portal/edita">
                             <paper-icon-button class="ml-auto" icon="add" on-click="creaAvent"></paper-icon-button>
+                        </dom-access>
                         </div>
                         
                         <div class="items">
@@ -88,8 +91,9 @@ class VidaKhaliana extends PolymerElement {
                         <div class="card">
                             <div class="card-header d-flex flex-wrap align-items-center">
                                 <span>Aniversarios</span>
-                                <paper-icon-button class="ml-auto" icon="add" on-click="abreAni"></paper-icon-button>
-
+                                <dom-access path="portal/edita">
+                                    <paper-icon-button class="ml-auto" icon="add" on-click="abreAni"></paper-icon-button>
+                                </dom-access>
                             </div>
                             <div class="card-body">
                                 <paper-listbox>
@@ -119,9 +123,9 @@ class VidaKhaliana extends PolymerElement {
             <div class="container">
                 <div class="d-flex flex-wrap align-items-center">
                     <h3>Proximos eventos</h3>
-                    
+                    <dom-access path="portal/edita">
                     <paper-icon-button class="ml-auto" icon="add" on-click="abreEvent"></paper-icon-button>
-                    
+                    </dom-access>
                 </div>
                 
                 <div class="d-flex flex-wrap">

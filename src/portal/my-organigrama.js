@@ -34,7 +34,7 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 				}
 				
 				.orgchart {
-					background: #fff;
+					background: var(--paper-blue-50);
 				}
 				
 				.orgchart .second-menu-icon {
@@ -151,6 +151,8 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 					'visibleLevel': 4,
 					'nodeTitle': 'name',
 					'nodeContent': 'name',
+					'pan': true,
+					'zoom': true,
 					'createNode': function(node, data) {
 						if(data.fotoUrl=="../images/khalia.jpeg"){
 							node.children('.title').html('<img src="'+data.fotoUrl+'" class="img img-fluid">');
@@ -187,7 +189,7 @@ class MyOrganigrama extends UtilsMixin(PolymerElement) {
 		PolymerUtils.Dialog.createAndShow({
 			type: "modal",
 			element:"my-vista-empleado",
-			style:"width:500px;max-width:95%;",
+			style:"width:700px;max-width:95%;",
 			params:[elegido],
             negativeButton: {
                 text: "Cerrar",

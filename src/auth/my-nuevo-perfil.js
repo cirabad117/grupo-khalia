@@ -39,7 +39,8 @@ class MyNuevoPerfil extends DialogLayoutMixin(PolymerElement) {
                     value="{{area}}" error-message="seleccione una opción">
                         <template>
                             <vaadin-list-box>
-                                <vaadin-item value="admin">Administración y Ventas</vaadin-item>
+                                <vaadin-item value="admin">Administración</vaadin-item>
+                                <vaadin-item value="ventas">Ventas y Marketing</vaadin-item>
                                 <vaadin-item value="sasisopa">SASISOPA</vaadin-item>
                                 <vaadin-item value="sgm">SGM</vaadin-item>
                                 <vaadin-item value="emisiones">Emisiones</vaadin-item>

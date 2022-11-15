@@ -1,6 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 
 import './nueva-fecha.js';
+import '../controles-extra/dom-access.js';
 
 class MyCalendarItem extends PolymerElement {
     static get template() {
@@ -10,6 +11,8 @@ class MyCalendarItem extends PolymerElement {
                     display:block;
                 }
             </style>
+
+<dom-access path="portal/edita">
 
             <template is="dom-if" if="[[objFecha.id]]">
                 <paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'Renovar actividad')"
@@ -21,12 +24,12 @@ class MyCalendarItem extends PolymerElement {
                 <paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'Borrar')"
                 icon="delete" on-click="eliminaTarea"></paper-icon-button>
             </template>
-
+</dom-access>
             <template is="dom-if" if="[[objFecha.uid]]">
                 <paper-icon-button onmouseover="PolymerUtils.Tooltip.show(event,'Ver empleado')"
                 icon="open-in-new" on-click="navegaUser"></paper-icon-button>
             </template>
-                
+
         
 
         `;

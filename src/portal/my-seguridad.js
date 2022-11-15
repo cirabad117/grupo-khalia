@@ -8,6 +8,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-item/paper-item-body.js';
 
 import './my-nuevo-seg.js';
+import '../controles-extra/dom-access.js';
 
 import '../bootstrap.js';
 class MySeguridad extends UtilsMixin(PolymerElement) {
@@ -44,69 +45,64 @@ class MySeguridad extends UtilsMixin(PolymerElement) {
             </style>
 
             <div class="container">
-                <div class="row">
-                    
-                    <div class="col-md-3">
-                        <paper-listbox selected="{{selected}}" attr-for-selected="name">
-                            <paper-item name="normas">Normas</paper-item>
-                            <paper-item name="avisos">Avisos de seguridad</paper-item>
-                        </paper-listbox>
-                    </div>
+                
+                <iron-pages selected="{{vista}}" attr-for-selected="name">
+                    <div name="lista">
+                        <div class="row">
 
-                    <div class="col-md-9">
-
-                        
-                        <iron-pages selected="{{vista}}" attr-for-selected="name">
-                            <div name="lista">
+                            <div class="col-md-3">
+                                <paper-listbox selected="{{selected}}" attr-for-selected="name">
+                                    <paper-item name="normas">Normas</paper-item>
+                                    <paper-item name="avisos">Avisos de seguridad</paper-item>
+                                </paper-listbox>
+                            </div>
+                            
+                            <div class="col-md-9">
                                 <template is="dom-repeat" items="[[listaDocs]]" filter="{{_separaSecciones(selected)}}">
-                                    <div class="carta"  on-click="abreArchivo">
+                                    <div class="carta">
                                         <paper-icon-item>
-                                            <paper-item-body two-line>
+                                            <paper-item-body two-line on-click="abreArchivo">
                                                 <div style="color: var(--paper-blue-grey-600); font-weight: 500; font-size: 20px;">[[item.titulo]]</div>
                                                 <div secondary>[[PolymerUtils_getDateString(item._timestamp)]]</div>
                                             </paper-item-body>
-                                            <!-- <paper-icon-button class="botonSube" icon="file-upload" on-click="activaCambio"></paper-icon-button> -->
-                                        </paper-icon-item>
+                                            <dom-access path="portal/edita">
+                                                <paper-icon-button class="botonSube" icon="delete" on-click="borraItem"></paper-icon-button>
+                                            </dom-access>
+                                       </paper-icon-item> 
                                     </div>
                                 </template>
-                          
                             </div>
-
-                            <div name="lector">
-                                <div class="card">
-                                    <div class="card-header d-flex flex-wrap align-items-center link" on-click="cierraLector">
-                                        
-                                        <iron-icon icon="arrow-back" ></iron-icon>
-                                        <h4>[[objeto.titulo]]</h4>
-                                        
-                                    </div>
-                                    <div class="card-body">
-                                        <template is="dom-if" if="{{esArchivo(objeto)}}" restamp>
-                                            <div class="embed-responsive embed-responsive-1by1">
-                                                <iframe class="embed-responsive-item" src='[[objeto.archivoUrl]]' height='400px'></iframe>
-                                            </div>
-                                        </template>
-                                        <template is="dom-if" if="{{!esArchivo(objeto)}}" restamp>
-                                            <div id="doc-texto"></div>
-                                        </template>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </iron-pages>
-                        
+                        </div>
                     </div>
-
-                </div>
+                    <div name="lector">
+                        <div class="card">
+                            <div class="card-header d-flex flex-wrap align-items-center link" on-click="cierraLector">
+                                <iron-icon icon="arrow-back"></iron-icon>
+                                <h4>[[objeto.titulo]]</h4>
+                            </div>
+                            <div class="card-body">
+                                <template is="dom-if" if="{{esArchivo(objeto)}}" restamp>
+                                    <div class="embed-responsive embed-responsive-1by1">
+                                        <iframe class="embed-responsive-item" src='[[objeto.archivoUrl]]' height='400px'></iframe>
+                                    </div>
+                                </template>
+                                <template is="dom-if" if="{{!esArchivo(objeto)}}" restamp>
+                                    <div id="doc-texto"></div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </iron-pages>
+            
             </div>
-
-            <div style="position: fixed; bottom: 24px; right: 24px;">
-                <div style="position: relative; cursor:pointer;" on-clicK="abreNuevoDoc">
-                    <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
+            
+            <dom-access path="portal/edita">
+                <div style="position: fixed; bottom: 24px; right: 24px;">
+                    <div style="position: relative; cursor:pointer;" on-clicK="abreNuevoDoc">
+                        <paper-fab style="color:white; background-color:var(--paper-blue-500);" icon="add"></paper-fab>
+                    </div>
                 </div>
-            </div>
-
+            </dom-access>
         `;
     }
 
@@ -159,6 +155,61 @@ class MySeguridad extends UtilsMixin(PolymerElement) {
     cierraLector(){
         this.set("objeto",null);
         this.set("vista","lista");
+    }
+
+    borraItem(e){
+        var elegido=e.model.item;
+        console.log("elegido",elegido);
+
+        PolymerUtils.Dialog.createAndShow({
+            type: "modal",
+            
+            title:"Eliminar comunicado",
+            message:"El item seleccionado no podra recuperarse. ¿Desea continuar?",
+            style:"width:800px;max-width:95%;",
+            saveSpinner:{
+				message:"Eliminando item.."
+			  },
+            positiveButton: {
+                text: "Eliminar",
+                action: function(dialog, element) {
+                    dialog.setSaving(true);
+                    
+                    var storage = firebase.storage();
+                    var storageRef = storage.ref();
+                    if(elegido.nombreArchivo && elegido.nombreArchivo!=null){
+                        var desertRef = storageRef.child('_grupo-khalia/docs/' + elegido.nombreArchivo);
+                        desertRef.delete().then(() => {
+                            console.log("se borró el archivo");
+                        }).catch((error) => {
+                            console.log("error al eliminar la foto",error);
+                        });
+                    }
+                    
+                    var id=elegido.id;
+                    
+                    firebase.firestore().collection("documentos").doc(id).delete().then(() => {
+                        PolymerUtils.Toast.show("Comunicado eliminado con éxito");
+                        
+                        dialog.close();
+                    }).catch((error) => {
+                        PolymerUtils.Toast.show("Error al eliminiar. Intentalo más tarde.");
+
+                        dialog.setSaving(false);
+                        console.error("Error removing document: ", error);
+                    });
+                }
+            },
+          
+        
+            negativeButton: {
+                text: "Cancelar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+        });
+
     }
 
   

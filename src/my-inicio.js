@@ -12,6 +12,7 @@ import './auth/my-inicio-sesion.js';
 import './portal/my-carrusel.js';
 import './portal/my-reporte.js';
 import './portal/my-organigrama.js';
+import './portal/my-dialogo-gk.js';
 
 import './bootstrap.js';
 
@@ -65,28 +66,20 @@ class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 				<div class="container-fluid text-center ">
 					<h3 class="mt-3">Acerca de Grupo Khalia</h3>
 					<div class="row">
-						<div class="col-sm-3">
-							<img src="../images/fair.png" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
-							<p>POLÍTICA</p>
-						</div>
-						<div class="col-sm-3">
-							<img src="../images/leadership.png" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
-							<p>MISIÓN Y VISIÓN</p>
-						</div>
-						<div class="col-sm-3">
-							<img src="../images/value.png" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
-							<p>VALORES</p>
-						</div>
-						<div class="col-sm-3">
-							<img src="../images/workspace.png" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
-							<p>TU LUGAR DE TRABAJO</p>
-						</div>
+						<template is="dom-repeat" items="[[itemsGk]]" as="gk">
+							<div class="col-sm-3" on-click="abreGk">
+								<img src$="[[gk.imagen]]" class="img-fluid rounded-circle bg-secondary m-4" style="width:60%" alt="Image">
+								<p>[[gk.titulo]]</p>
+							</div>
+						</template>
+						
+						
 					</div>
 					<hr>
 				</div>
 				<br>
-				<div class="container-fluid text-center">
-					<h3 class="mt-3">Conoce a tus compañeros</h3>
+				<div class="container-fluid text-center" style="background-color: var(--paper-blue-50);">
+					<h3 class="mt-3" >Conoce a tus compañeros</h3>
 					
 					<my-organigrama obj-empleados="[[objOrganigrama]]" empleados="[[listaUsuarios]]"></my-organigrama>
 				</div>
@@ -126,7 +119,16 @@ class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 				{nombre:"Medio Ambiente",vista:"ambiente"},
 				{nombre:"Cursos",vista:"cursos"},
 				{nombre:"Buzón",vista:"buzon"},
+			]},
+
+			itemsGk:{type:Array, notify:true, value:[
+				{nombre:"politica",titulo:"POLÍTICA",imagen:"../images/fair.png"},
+				{nombre:"mision",titulo:"MISIÓN Y VISIÓN",imagen:"../images/leadership.png"},
+				{nombre:"valores",titulo:"VALORES",imagen:"../images/value.png"},
+				{nombre:"lugar",titulo:"TU LUGAR DE TRABAJO",imagen:"../images/workspace.png"},
 			]}
+
+
 		}
 	}
 	
@@ -153,7 +155,25 @@ class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 	}
 
 	veCalendario(){
-		NavigationUtils.navigate("calendario")
+		NavigationUtils.navigate("calendario");
+	}
+
+	abreGk(e){
+		var elegido=e.model.gk;
+		console.log("abreGk",elegido);
+
+		PolymerUtils.Dialog.createAndShow({
+			type: "modal",
+			element:"my-dialogo-gk",
+			style:"width:80%;max-width:95%;",
+			params:[elegido],
+            negativeButton: {
+                text: "Cerrar",
+                action: function(dialog, element) {
+                    dialog.close();
+                }
+            }
+		});
 	}
 	
 	_carga(arr){
@@ -175,10 +195,8 @@ class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 			for(var i=0;i<arr.length;i++){
 				
 				var usuario=arr[i];
-				console.log("usuario",usuario);
 				
 				if(usuario.puesto.tipo=="jefe"){
-					console.log("usuario.tipo==jefe",usuario.puesto.tipo=="jefe");
 					var jefe =this.creaItemOrg(usuario);
 					jefes.push(jefe);
 				}else{
@@ -194,9 +212,6 @@ class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 				}
 			}
 
-			console.log("jefes",jefes);
-			console.log("lideres",lideres);
-			console.log("empleados",empleados);
 
 			var orga=[];
 
@@ -230,27 +245,21 @@ class MyInicio extends UtilsMixin(DiccionarioMixin(AuthMixin(PolymerElement))) {
 						liderActual["children"]=empArea;
 					}
 				}
-				console.log(liderActual);
+				
 				orga.push(liderActual);
 			}
 
-			console.log("orga",orga);
+			
 			
 			if(jefes && jefes.length>0){
 				var middle=Math.floor(jefes.length/2);
-				console.log("middle",middle);
-				
-				// if(middle>0){
-					// 	middle=middle-1;
-				// }
-				
+			
 				var nuevoJefe=jefes[middle];
-				console.log("jefes",jefes);
-				console.log("nuevoJefe",nuevoJefe);
+				
 				nuevoJefe["children"]=orga;
 				jefes[middle]=nuevoJefe;
 				datascource["children"]=jefes;
-				console.log("data",datascource);
+				
 				this.set("objOrganigrama",datascource);
 			}
 		}
